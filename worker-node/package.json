@@ -1,0 +1,26 @@
+{
+  "name": "puppeteer_engine",
+  "version": "1.0.1",
+  "description": "Puppeteer engine for Project Argus",
+  "main": "scraper.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node puppeteer_engine/scraper.js",
+    "lint": "eslint puppeteer_engine/scraper.js",
+    "lint:fix": "eslint puppeteer_engine/scraper.js --fix"
+  },
+  "author": "Argus",
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer": "^22.10.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "puppeteer": {
+    "note": "Puppeteer >= 24.9.0 recommended for best compatibility. Current version works but is deprecated."
+  },
+  "devDependencies": {
+    "eslint": "^9.33.0"
+  }
+}

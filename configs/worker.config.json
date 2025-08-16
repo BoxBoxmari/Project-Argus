@@ -1,0 +1,3 @@
+{
+  "reviewsTabSelectors": ["button[aria-label*=\"Reviews\"]"]
+}
