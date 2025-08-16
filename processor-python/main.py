@@ -91,7 +91,7 @@ def parse_args(argv=None):
     p.add_argument("--url-file", help="Path to a text file containing URLs (one per line)")
     p.add_argument("--max-workers", type=int, default=1, help="(Reserved) Parallel workers; currently runs sequentially")
     p.add_argument("--node-script", default=str(Path(__file__).resolve().parents[1] / "worker-node" / "puppeteer_engine" / "scraper.js"),
-                   help="Path to scraper.js node worker")
+                   help="Path to scraper.js node worker (env ARGUS_NODE_SCRIPT overrides)")
     p.add_argument("--outdir", default=str(Path.cwd() / "outputs"), help="Output directory")
     return p.parse_args(argv)
 

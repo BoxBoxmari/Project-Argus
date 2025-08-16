@@ -109,6 +109,42 @@ const result = {
 };
 
 // ---------- Puppeteer boot
+async function clickConsentIfPresent(page){
+  const SELS = [
+    'button[aria-label*="I agree"]',
+    'button[aria-label*="Tôi đồng ý"]',
+    'button[aria-label*="Accept all"]',
+    'button[aria-label*="Chấp nhận"]',
+    'form[action*="consent"] button[type="submit"]'
+  ];
+  for (const s of SELS) {
+    const el = await page.$(s);
+    if (el) { 
+      try { 
+        await el.click({delay:40}); 
+        await page.waitForTimeout(600); 
+      } catch(e) {
+        jlog("DEBUG", "consent_click_failed", { selector: s, error: String(e) });
+      }
+    }
+  }
+}
+
+async function expandAllMore(page, panelSel){
+  await page.evaluate(async (panelSel)=>{
+    const panel = document.querySelector(panelSel);
+    if (!panel) return;
+    const moreBtns = panel.querySelectorAll('button[aria-label*="More"], button[aria-label*="Thêm"], span[role="button"][aria-label*="More"]');
+    for (const btn of moreBtns) { 
+      try { 
+        btn.click(); 
+      } catch(e) {
+        console.warn('[Argus] More button click failed:', e);
+      }
+    }
+  }, panelSel);
+  await page.waitForTimeout(300);
+}
 
 
 
@@ -471,14 +507,13 @@ async function main() {
       || '[data-review-id], div.jftiEf, div.gZ9Ghe';
 
     const SEE_ALL_SELECTORS = [
-      'a[role="tab"][href*="/reviews"]',
-      'button[aria-label^="See all reviews"]',
-      'button[jsaction*="pane.reviewChart.moreReviews"]',
-      'a[href*="/reviews"][aria-label]',
-      'a[aria-label^="Reviews"][href*="/reviews"]',
-      // VN fallback
-      'button[aria-label^="Xem tất cả"]'
-    ];
+  'button[aria-label^="See all reviews"]',
+  'button[aria-label*="Xem tất cả đánh giá"]',
+  'button[jsaction*="pane.reviewChart.moreReviews"]',
+  'a[href*="/reviews"][aria-label]',
+  'a[aria-label^="Reviews"][href*="/reviews"]',
+  'a[aria-label*="Đánh giá"][href*="/reviews"]'
+];
 
     const REVIEWS_TAB_SELECTORS = [
       'button[role="tab"][aria-controls*="reviews"]',
@@ -533,9 +568,10 @@ async function main() {
       }
     }
 
-    if (!panelSelUsed) {
-      throw new Error(`waitAny timeout after ${Math.max(15000, 20000)}ms for: ${SEE_ALL_SELECTORS.join(' | ')}`);
-    }
+    await clickConsentIfPresent(page);
+if (!panelSelUsed) {
+  throw new Error(`waitAny timeout after ${Math.max(15000, 20000)}ms for: ${SEE_ALL_SELECTORS.join(' | ')}`);
+}
 
     // Đợi render trong fallback (chống rỗng giả)
     try {
@@ -573,31 +609,34 @@ async function main() {
     }
 
     // ---- Scroll logic
-    async function scrollPanelToEnd() {
-      let steps = 0;
-      let lastCount = 0;
-      let lastHeight = 0;
-      while (steps < SCROLL_STEPS) {
-        const info = await safeEvaluate(page, (panelSel) => {
-          const panel = document.querySelector(panelSel);
-          if (!panel) return { count: 0, height: 0, ok: false };
-          const items = panel.querySelectorAll('div.gZ9Ghe, div.jftiEf, div[jscontroller][data-review-id], div[data-review-id]');
-          panel.scrollTo(0, panel.scrollHeight);
-          return { count: items.length, height: panel.scrollHeight, ok: true };
-        }, panelSelUsed);
+await expandAllMore(page, panelSelUsed);
+async function scrollPanelToEnd() {
+  let steps = 0, lastCount = 0, lastHeight = 0, stagnant = 0;
+  while (steps < SCROLL_STEPS) {
+    const info = await safeEvaluate(page, (panelSel) => {
+      const panel = document.querySelector(panelSel);
+      if (!panel) return { count: 0, height: 0, ok: false };
+      const items = panel.querySelectorAll('div.jftiEf, div[jscontroller][data-review-id]');
+      panel.scrollTo(0, panel.scrollHeight);
+      return { count: items.length, height: panel.scrollHeight, ok: true };
+    }, panelSelUsed);
 
-        steps++;
-        jlog("DEBUG", "scroll_step", { step: steps, count: info.count, height: info.height });
-        // Tối ưu nhỏ: jitter khi cuộn
-        await sleepCompat(page, SCROLL_PAUSE + Math.floor(Math.random()*120));
+    steps++;
+    jlog("DEBUG", "scroll_step", { step: steps, count: info.count, height: info.height });
+    await sleepCompat(page, SCROLL_PAUSE);
 
-        if (!info.ok) break;
-        if (info.count === lastCount && info.height === lastHeight) break; // reached end
-        lastCount = info.count;
-        lastHeight = info.height;
-      }
-      jlog("INFO", "scroll_complete", { steps: steps, finalItems: lastCount, finalHeight: lastHeight });
-    }
+    if (!info.ok) break;
+    if (info.count === lastCount && info.height === lastHeight) stagnant++;
+    else stagnant = 0;
+
+    // Dừng nếu 2 vòng không tăng + đã vượt 60% số bước
+    if (stagnant >= 2 && steps > Math.max(5, Math.floor(SCROLL_STEPS*0.6))) break;
+
+    lastCount = info.count;
+    lastHeight = info.height;
+  }
+  jlog("INFO", "scroll_complete", { steps, finalItems: lastCount, finalHeight: lastHeight });
+}
     await scrollPanelToEnd();
 
     // Expand truncated "More" reviews where possible

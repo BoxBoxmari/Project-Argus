@@ -1504,111 +1504,20 @@ function armLinksMiner(){
     }
 
     async function updateProgress() {
-  const totalExpected = await GM_getValue(KV.TOTAL_EXPECT, 0);
-  const progressContainer = document.getElementById('argus-progress-container');
-  if (!progressContainer) return;
-  if (totalExpected === 0) { progressContainer.style.display = 'none'; return; }
-
-  window.__argusProg__ = window.__argusProg__ || { per: new Map(), total: 0 };
-  const per = window.__argusProg__.per;
-
-  const allKeys = await GM_listValues();
-  // (1) apply(final) + (2) apply(live) như hiện tại ...
-  for (const key of allKeys) {
-    if (!/^https?:\/\//i.test(key)) continue;
-    try {
-      const payload = await GM_getValue(key);
-      if (payload && payload.reviews) {
-        const prev = per.get(key) || 0;
-        if (payload.reviews.length > prev) {
-          const delta = payload.reviews.length - prev;
-          try {
-            const kv = (await GM_getValue('argus.progress')) || { collected: 0, total: 0, seen: [] };
-            kv.collected += Math.max(0, delta);
-            await GM_setValue('argus.progress', kv);
-            const ui = (window.__argus_ui_progress__ ||= { collected: 0, total: 0 });
-            ui.collected = kv.collected; ui.total = kv.total;
-            try { window.dispatchEvent(new CustomEvent('argus:progress:update', { detail: { ...ui, reason: 'final-sync' } })); } catch (e) { /* ignore */ }
-          } catch (e) { /* ignore */ }
-          window.__argusProg__.total += Math.max(0, delta);
-          per.set(key, payload.reviews.length);
-        }
-      }
-    } catch (e) { /* ignore */ }
-  }
-  for (const key of allKeys) {
-    if (!key.startsWith('progress:')) continue;
-    try {
-      const url = key.slice('progress:'.length);
-      const prog = await GM_getValue(key);
-      if (!prog || typeof prog.count !== 'number') continue;
-      const prev = per.get(url) || 0;
-      if (prog.count > prev) {
-        const delta = prog.count - prev;
-        window.__argusProg__.total += Math.max(0, delta);
-        per.set(url, prog.count);
-      }
-    } catch (e) { /* ignore */ }
-  }
-
-  // (4) Render tổng
-  const totalCollected = window.__argusProg__.total;
-  const percentage = totalExpected > 0 ? Math.min(100, (totalCollected / totalExpected) * 100) : 0;
-  progressContainer.style.display = 'block';
-  const txt = document.getElementById('argus-progress-text');
-  const innerBar = document.getElementById('argus-progress-bar-inner');
-  if (txt) txt.textContent = `${totalCollected.toLocaleString()} / ${totalExpected.toLocaleString()} Reviews`;
-  if (innerBar) { innerBar.style.width = `${percentage}%`; innerBar.textContent = `${percentage.toFixed(1)}%`; }
-
-  // Sync unified KV so old toolbar renders correctly
   try {
-    const kv = (await GM_getValue('argus.progress')) || {};
-    kv.collected = Number(totalCollected)||0;
-    kv.total = Number(totalExpected)||0;
-    await GM_setValue('argus.progress', kv);
-    if (typeof window.renderProgress === 'function') window.renderProgress({ collected: kv.collected, total: kv.total });
-  } catch(e){/*ignore*/}
-
-  // (5) Render Per-URL
-  try {
-    const box = document.getElementById('argus-per-url-container');
-    const listEl = document.getElementById('argus-per-url-progress');
-    if (box && listEl) {
-      const rows = [];
-      const perf = state.perf || {};
-      const expectedByUrl = state.expectedByUrl || {};
-      for (const [url, count] of per.entries()) {
-        const p = perf[url] || { rpm: 0, etaSec: null, lastC: count };
-        const expected = expectedByUrl[url] || 0;
-        rows.push({ url, count, rpm: p.rpm||0, etaSec: p.etaSec, expected });
-      }
-      rows.sort((a,b)=> b.count - a.count);
-      const top = rows.slice(0, Math.min(10, rows.length));
-      if (top.length > 0) {
-        box.style.display = 'block';
-        listEl.innerHTML = top.map((r, i)=> {
-          const eta = (r.etaSec==null) ? '—' : `${Math.floor(r.etaSec/60)}m${r.etaSec%60}s`;
-          const name = (r.url.split('/place/')[1]||r.url).split('/')[0];
-          return `<div class="argus-per-row">
-                    <div class="argus-per-rank">${i+1}</div>
-                    <div class="argus-per-url" title="${r.url}">${name}</div>
-                    <div class="argus-per-count">${r.count.toLocaleString()}</div>
-                    <div class="argus-per-rpm">${r.rpm.toFixed(1)} rpm</div>
-                    <div class="argus-per-eta">${eta}</div>
-                  </div>`;
-        }).join('');
-      } else {
-        box.style.display = 'none';
-        listEl.innerHTML = '';
-      }
-    }
-  } catch (e) { /* ignore */ }
-
-  if (window.__ARGUS_DEBUG_PROGRESS__) {
-    const top = [...per.entries()].map(([k,v])=>({k,v})).sort((a,b)=>b.v-a.v).slice(0,5);
-    console.debug('[Argus][Progress]', { totalExpected, totalCollected, percentage:Number(percentage.toFixed(2)), top });
-  }
+    const links = await GM_getValue('argus.progress.links', { discovered: 0, total: 0 });
+    const reviews = await GM_getValue('argus.progress.reviews', { collected: 0, expected: 0 });
+    const total = (links.total || reviews.expected || 0);
+    const collected = (reviews.collected || 0);
+    await GM_setValue('argus.progress', { collected, total });
+    const ui = (window.__argus_ui_progress__ ||= { collected: 0, total: 0 });
+    ui.collected = collected; ui.total = total;
+    if (typeof window.renderProgress === 'function') window.renderProgress(ui);
+    console.log('[Argus][Progress] sync', { collected, total });
+  } catch(e) { console.warn('[Argus][Progress] sync failed', e); }
 }
+
+
 
 
     async function updateUIState() {
@@ -2413,10 +2322,9 @@ state.activeWorkers[task.url] = { tab: opened, type: ARGUS_BG.useIframes ? 'fram
 
     // Reset cache aggregator và HUD về 0/0
     window.__argusProg__ = { per: new Map(), total: 0 };
-    await GM_setValue('argus.progress', { collected: 0, total: 0 });
     await GM_setValue('argus.progress.links', { discovered: 0, total: 0 });
     await GM_setValue('argus.progress.reviews', { collected: 0, expected: 0 });
-
+    await GM_setValue('argus.progress', { collected: 0, total: 0 });
     await updateProgress();
     console.log('[Argus][Progress] Reset to 0 (cleared all storages).');
     updateLog('Đã xóa & reset xong, không cần reload trang.');
@@ -3075,8 +2983,12 @@ async function hardResetProgress(opts = { includeQueue: false }) {
 
   // Reset phiên progress trong bộ nhớ
   window.__argusProg__ = { per: new Map(), total: 0 };
-  // Ghi progress 0/0 (nguồn sự thật duy nhất)
-  try { await GM_setValue('argus.progress', { sessionId: sid, collected: 0, total: 0, seen: [] }); } catch(e){/*ignore*/}
+  // Ghi progress 0/0 (nguồn sự thật duy nhất) - đặt cả 3 keys + gọi updateProgress sau cùng
+  try { 
+    await GM_setValue('argus.progress.links', { discovered: 0, total: 0 }); 
+    await GM_setValue('argus.progress.reviews', { collected: 0, expected: 0 }); 
+    await GM_setValue('argus.progress', { sessionId: sid, collected: 0, total: 0, seen: [] }); 
+  } catch(e){/*ignore*/}
 
   // Làm mới UI ngay
   try {
@@ -3092,6 +3004,8 @@ async function hardResetProgress(opts = { includeQueue: false }) {
     }
   } catch(e){/*ignore*/}
 
+  // Gọi updateProgress sau cùng để đảm bảo UI phản ánh đúng trạng thái
+  try { await updateProgress(); } catch(e){/*ignore*/}
   console.log('[Argus][Trace] hardResetProgress done', { sessionId: sid, includeQueue: !!opts.includeQueue });
 }
 
@@ -3117,8 +3031,12 @@ window.cfg.search = Object.assign({ allowPan:false }, window.cfg.search||{});
 
 try {
   // Reset progress về 0 cho phiên Extract link mới
-       window.__argusKV?.set('argus.progress.links', { discovered: 0, total: 0 }); window.__argusKV?.set('argus.progress.reviews', { collected: 0, expected: 0 });
-  try { window.__argusUI && typeof window.__argusUI.renderProgressFromKV==='function' && window.__argusUI.renderProgressFromKV(); } catch (e) { /* ignore */ }
+  window.__argusKV?.set('argus.progress.links', { discovered: 0, total: 0 }); 
+  window.__argusKV?.set('argus.progress.reviews', { collected: 0, expected: 0 });
+  // Đặt cả 3 keys + gọi updateProgress sau cùng
+  GM_setValue('argus.progress', { collected: 0, total: 0 });
+  // Gọi updateProgress bất đồng bộ để tránh lỗi await
+  updateProgress().catch(e => console.log('[Argus][Trace] updateProgress error', e));
   console.log('[Argus][Trace] progress:reset (extract) 0/0');
 } catch(e){ console.log('[Argus][Trace] progress:reset error', e); }
 
@@ -3142,7 +3060,11 @@ try {
   console.log('[Argus][Trace] config:override', { search: cfg.search });
 
   // Reset progress persisted + UI tại điểm sạch
-  try { GM_setValue('argus.progress.links', { discovered: 0, total: 0 }); GM_setValue('argus.progress.reviews', { collected: 0, expected: 0 }); } catch (e) { /* ignore */ }
+  try { 
+    GM_setValue('argus.progress.links', { discovered: 0, total: 0 }); 
+    GM_setValue('argus.progress.reviews', { collected: 0, expected: 0 }); 
+    GM_setValue('argus.progress', { collected: 0, total: 0 }); 
+  } catch (e) { /* ignore */ }
   const ui = (window.__argusUI ||= { collected: 0, total: 0 });
   ui.collected = 0; ui.total = 0;
   const renderProgress = (window.__argusUI && typeof window.__argusUI.renderProgress === 'function') ? window.__argusUI.renderProgress : function(){};
@@ -3166,6 +3088,8 @@ if (!window.__argus_session_started__) {
   const freshReviews = { collected: 0, expected: 0 };
   ArgusKV.set('argus.progress.links', freshLinks);
   ArgusKV.set('argus.progress.reviews', freshReviews);
+  // Đặt cả 3 keys để đảm bảo single source of truth
+  ArgusKV.set('argus.progress', { collected: 0, total: 0 });
   window.__argus_ui_progress__ = { collected: 0, total: 0 };
   console.log('[Argus][Trace] progress:reset UI+KV (links+reviews) -> 0/0');
   try { window.dispatchEvent(new CustomEvent('argus:progress:update', { detail: { ...window.__argus_ui_progress__, reason: 'session-reset' } })); } catch (e) { /* ignore */ }
