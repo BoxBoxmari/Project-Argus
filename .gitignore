@@ -71,3 +71,23 @@ Thumbs.db
 *.temp
 *.bak
 *.backup
+
+# Node/JS
+pnpm-lock.yaml
+yarn.lock
+
+# Go
+bin/
+*.test
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# Docker & env
+.env.*
+!.env.example
+
+# Data
+data/
+!data/.gitkeep
