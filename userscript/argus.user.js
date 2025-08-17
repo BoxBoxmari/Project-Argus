@@ -2757,7 +2757,8 @@ state.activeWorkers[task.url] = { tab: opened, type: ARGUS_BG.useIframes ? 'fram
           background:'rgba(0,0,0,.7)', color:'#fff', padding:'8px 10px',
           font:'12px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Arial',
           borderRadius:'8px', boxShadow:'0 2px 10px rgba(0,0,0,.35)',
-          maxWidth:'44vw'
+          maxWidth:'44vw',
+          pointerEvents:'none'
         });
         hud.innerHTML = '<div style="font-weight:600;margin-bottom:4px">Argus Progress</div><div id="__argus_progress_list__"></div>';
         document.body.appendChild(hud);

@@ -45,7 +45,12 @@ function forceEnLocale(url) {
 
 // ---------- Helpers
 function nowIso() { return new Date().toISOString(); }
-function randId(len=12) { const s='abcdefghijklmnopqrstuvwxyz0123456789'; return Array.from({length:len},()=>s[Math.floor(Math.random()*s.length)]).join(''); }
+function randId(len = 12) {
+  const s = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  let out = '';
+  for (let i = 0; i < len; i++) out += s[Math.floor(Math.random() * s.length)];
+  return out;
+}
 function ensureDir(p) { fs.mkdirSync(p, { recursive: true }); }
 
 
@@ -122,7 +127,7 @@ async function clickConsentIfPresent(page){
     if (el) { 
       try { 
         await el.click({delay:40}); 
-        await page.waitForTimeout(600); 
+        await sleep(600); 
       } catch(e) {
         jlog("DEBUG", "consent_click_failed", { selector: s, error: String(e) });
       }
@@ -143,7 +148,7 @@ async function expandAllMore(page, panelSel){
       }
     }
   }, panelSel);
-  await page.waitForTimeout(300);
+  await sleep(300);
 }
 
 
@@ -159,11 +164,18 @@ async function main() {
   const puppeteer = require('puppeteer');
 
   const launchArgs = [
-    '--no-sandbox','--disable-setuid-sandbox',
+    '--no-sandbox',
+    '--disable-setuid-sandbox',
     '--disable-dev-shm-usage',
+    '--disable-extensions',
+    '--proxy-server=direct://',
+    '--proxy-bypass-list=*',
+    '--no-first-run',
+    '--no-default-browser-check',
     '--lang=' + (LOCALE.split(',')[0] || 'en-US'),
     '--window-size=1366,900'
   ];
+  
   const browser = await puppeteer.launch({
     headless: HEADLESS,
     args: launchArgs,
@@ -172,39 +184,35 @@ async function main() {
 
   try {
     page = await newPageCompat(browser);
+    await page.setBypassCSP(true);
     await bindRoutingCompat(page, shouldBlockRequest);
-    if (UA) await page.setUserAgent(UA);
-    // Force Accept-Language
-    await page.setExtraHTTPHeaders({ 'Accept-Language': LOCALE });
     
+    // stealth-lite
+    await page.evaluateOnNewDocument(() => {
+      Object.defineProperty(navigator, 'webdriver', { get: () => false });
+      const proto = Notification && Notification.prototype;
+      if (proto) try { Object.defineProperty(proto, 'permission', { get: () => 'default' }); } catch(_e){ /* ignore */ }
+    });
 
-    
-    // Công tắc debug devtools (để soi live)
-    if (OPEN_DEVTOOLS && !HEADLESS) {
-          // eslint-disable-next-line no-debugger
-    await safeEvaluate(page, () => { debugger; });
+    if (UA) {
+      await page.setUserAgent(UA);
+    } else {
+      await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36');
     }
+    await page.setExtraHTTPHeaders({ 'Accept-Language': LOCALE });
 
-    // capture console errors that could hit weird policies
     page.on('console', (msg) => {
       const text = msg.text();
-      if (/error|violation|failed/i.test(text)) jlog("ERROR", "console", { text });
+      // chỉ log ERROR khi thật sự có Error object
+      if (msg.type() === 'error') return jlog("ERROR", "console_error", { text });
+      if (/violation/i.test(text)) return; // bỏ
+      if (/Failed to load resource/.test(text)) return; // noise của Maps
     });
     page.on('requestfailed', (req) => {
+      // hạ thành DEBUG, không coi là lỗi quy trình
       jlog("DEBUG", "requestfailed_ignored", { url: req.url(), err: req.failure()?.errorText });
     });
-    
-    // Backoff nhẹ khi nghi 429
-    page.on('response', async (res) => {
-      try {
-        if (res.status() === 429) {
-          const pause = 500 + Math.floor(Math.random()*700);
-          jlog("WARN","http_429_backoff",{ ms: pause, url: res.url().slice(0,120) });
-          await sleepCompat(page, pause);
-        }
-      } catch { /* ignore response handler errors */ }
-    });
-    page.setDefaultTimeout(Math.max(15000, NAV_TIMEOUT));
+    page.setDefaultTimeout(Math.max(20000, NAV_TIMEOUT));
 
 
 
@@ -257,22 +265,34 @@ async function main() {
       });
     }
 
-    // ---- navigation with retry
-    const url = initialUrl;
-    let attempt = 0;
-    while (true) {
+    // ---- điều hướng + consent + chuyển thẳng Reviews
+    let navOk = false; let lastErr = null;
+    for (let attempt = 1; attempt <= 3 && !navOk; attempt++) {
       try {
-        await page.goto(url, { waitUntil: ['domcontentloaded','networkidle2'], timeout: NAV_TIMEOUT });
+        const url = inputUrl.includes('/reviews') ? inputUrl : inputUrl + (inputUrl.includes('?') ? '&' : '?') + 'hl=en';
+        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT });
+        await sleep(600);
+
+        // cookie consent (nếu có)
+        const consentSel = [
+          'button[aria-label*="Accept"][jsname]',
+          'button[aria-label*="Tôi đồng ý"]',
+          'form[action*="consent"] button'
+        ];
+        for (const sel of consentSel) {
+          const b = await page.$(sel);
+          if (b) { await b.click().catch(()=>{}); await sleep(400); break; }
+        }
+
+        navOk = true;
         jlog("INFO", "nav_ok", { attempt, url: page.url() });
-        break;
-      } catch (err) {
-        attempt++;
-        const backoff = computeBackoffMs(attempt);
-        jlog("WARN", "nav_fail", { attempt, error: String(err), backoff });
-        if (attempt >= 4) throw err;
-        await sleepCompat(page, backoff);
+      } catch (e) {
+        lastErr = String(e);
+        jlog("WARN", "nav_fail", { attempt, error: lastErr, backoff: 1200 + attempt*400 });
+        await sleep(1200 + attempt*400);
       }
     }
+    if (!navOk) throw new Error("Navigation failed: " + lastErr);
 
     // Nạp Userscript khi có (tận dụng nền tảng cốt lõi)
     const tryLoadUserscript = async () => {
@@ -507,13 +527,13 @@ async function main() {
       || '[data-review-id], div.jftiEf, div.gZ9Ghe';
 
     const SEE_ALL_SELECTORS = [
-  'button[aria-label^="See all reviews"]',
-  'button[aria-label*="Xem tất cả đánh giá"]',
-  'button[jsaction*="pane.reviewChart.moreReviews"]',
-  'a[href*="/reviews"][aria-label]',
-  'a[aria-label^="Reviews"][href*="/reviews"]',
-  'a[aria-label*="Đánh giá"][href*="/reviews"]'
-];
+      'button[jsaction*="pane.reviewChart.moreReviews"]',
+      'a[jsaction*="pane.reviewChart.moreReviews"]',
+      // Fallback by aria-label (en/vi)
+      'button[aria-label*="See all reviews"]',
+      'button[aria-label*="Tất cả bài đánh giá"]',
+      'button[aria-label*="Xem tất cả đánh giá"]'
+    ];
 
     const REVIEWS_TAB_SELECTORS = [
       'button[role="tab"][aria-controls*="reviews"]',
@@ -608,7 +628,7 @@ if (!panelSelUsed) {
       return sel;
     }
 
-    // ---- Scroll logic
+    // ---- Scroll logic: dừng khi không tăng thêm item và không tăng chiều cao
 await expandAllMore(page, panelSelUsed);
 async function scrollPanelToEnd() {
   let steps = 0, lastCount = 0, lastHeight = 0, stagnant = 0;

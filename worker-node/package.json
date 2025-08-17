@@ -6,6 +6,8 @@
   "type": "commonjs",
   "scripts": {
     "start": "node puppeteer_engine/scraper.js",
+    "start:headless": "node puppeteer_engine/scraper.js",
+    "start:headful": "cross-env ARGUS_HEADLESS=0 node puppeteer_engine/scraper.js",
     "lint": "eslint puppeteer_engine/scraper.js",
     "lint:fix": "eslint puppeteer_engine/scraper.js --fix"
   },
@@ -21,6 +23,7 @@
     "note": "Puppeteer >= 24.9.0 recommended for best compatibility. Current version works but is deprecated."
   },
   "devDependencies": {
-    "eslint": "^9.33.0"
+    "eslint": "^9.33.0",
+    "cross-env": "^7.0.3"
   }
 }

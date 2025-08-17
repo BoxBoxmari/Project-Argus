@@ -11,15 +11,24 @@ import subprocess
 import sys
 import time
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 
-RUN_ID = os.environ.get("ARGUS_RUN_ID") or datetime.utcnow().strftime("%Y%m%d%H%M%S")
+RUN_ID = os.environ.get("ARGUS_RUN_ID") or datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
+
+PLACEHOLDER_MARKERS = ("REPLACE_ME", "YOUR_PLACE_ID_HERE")
+
+def _is_bad_url(u: str) -> bool:
+    if not u: return True
+    s = u.strip()
+    if any(m in s for m in PLACEHOLDER_MARKERS): return True
+    return not s.startswith("http")
+
 LOG_DIR = Path.cwd() / "logs"
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 LOG_FILE = LOG_DIR / f"processor-{RUN_ID}.log"
 
 def jlog(level: str, msg: str, **kwargs):
-    rec = {"ts": datetime.utcnow().isoformat() + "Z", "level": level, "run_id": RUN_ID,
+    rec = {"ts": datetime.now(timezone.utc).isoformat(), "level": level, "run_id": RUN_ID,
            "module": "processor-python", "msg": msg}
     rec.update(kwargs or {})
     line = json.dumps(rec, ensure_ascii=False)
@@ -108,6 +117,17 @@ def main(argv=None):
         except FileNotFoundError:
             jlog("CRITICAL", "url_file_missing", path=args.url_file)
             sys.exit(2)
+
+    # chuẩn hóa & lọc
+    urls = [u.strip() for u in urls if u and u.strip()]
+    # bỏ trùng
+    seen = set(); urls = [u for u in urls if not (u in seen or seen.add(u))]
+    # chặn placeholder
+    bads = [u for u in urls if _is_bad_url(u)]
+    if bads:
+        jlog("CRITICAL", "bad_input_urls", count=len(bads), examples=bads[:3])
+        print("Remove placeholder URLs (e.g. place_id:REPLACE_ME) and rerun.")
+        sys.exit(2)
 
     if not urls:
         print("usage: main.py --url <URL>  OR  --url-file <file.txt>")
