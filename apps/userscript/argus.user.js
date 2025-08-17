@@ -1,7 +1,7 @@
 ﻿// ==UserScript==
 // @name         Project Argus Master Scraper
 // @namespace    http://tampermonkey.net/
-// @version      46.0.0
+// @version      47.1.0
 // @description  The definitive, fully restored, feature-complete, self-healing, and robust hybrid system for Google Maps data collection.
 // @author       Koon Wang
 // @match        *://*.google.com/maps*
@@ -1486,6 +1486,126 @@ function armLinksMiner(){
     // Expose for console/manual triggering and satisfy linter usage
     try { window.__argusScrollSearchFeedUntilStable = scrollSearchFeedUntilStable; } catch (e) { /* ignore */ }
 
+    async function scrollAllReviews(container, opts = {
+        step: 800, 
+        maxIdleMs: 8000, 
+        backoffMs: 500, 
+        maxScrolls: 9999
+    }) {
+        let lastCount = -1;
+        let idleSince = Date.now();
+        for (let i = 0; i < opts.maxScrolls; i++) {
+            try {
+                container.scrollBy(0, opts.step);
+                await sleep(300);
+                const cards = container.querySelectorAll('[data-review-id], div[class*="review"]');
+                if (cards.length > lastCount) {
+                    lastCount = cards.length;
+                    idleSince = Date.now();
+                    updateLog(`[Reviews] Scrolled to ${cards.length} reviews (+${cards.length - (lastCount || 0)})`);
+                } else if (Date.now() - idleSince > opts.maxIdleMs) {
+                    // Không tiến triển thêm => coi như hết
+                    updateLog(`[Reviews] Scroll stopped at ${cards.length} reviews (no growth for ${opts.maxIdleMs}ms)`);
+                    break;
+                }
+                // Backoff nhẹ để tránh rate-limit
+                await sleep(opts.backoffMs);
+            } catch (e) {
+                console.warn('[Reviews] Scroll error:', e);
+            }
+        }
+        return lastCount;
+    }
+
+    function extractReviews(root) {
+        /**
+         * Enhanced review extraction with robust deduplication strategy (v47.1.0)
+         * - Primary + fallback selector strategy for maximum coverage
+         * - Map-based deduplication with composite key generation
+         * - Enhanced text extraction with length-based quality ranking
+         * - Deterministic pipeline following fail-fast principles
+         */
+        // Primary selector: prefer nodes with data-review-id for accuracy
+        const PRIMARY_CARD_SELECTOR = "[data-review-id]";
+        const FALLBACK_CARD_SELECTORS = [
+            "div.section-review",
+            'div:has(span[aria-label*="star"])',
+            ".jJc9Ad", 
+            ".WMbnJf"
+        ];
+
+        // Use primary selector first, fallback if insufficient results
+        let cards = Array.from(root.querySelectorAll(PRIMARY_CARD_SELECTOR));
+        if (cards.length < 10) {
+            for (const sel of FALLBACK_CARD_SELECTORS) {
+                try {
+                    cards = cards.concat(Array.from(root.querySelectorAll(sel)));
+                } catch (e) {
+                    console.warn('[Reviews] Fallback selector failed:', sel, e);
+                }
+            }
+        }
+
+        // Extract structured data from each card
+        const rows = cards.map((el) => {
+            try {
+                const $ = (s) => el.querySelector(s);
+                const id = el.getAttribute("data-review-id") 
+                    || el.dataset?.reviewId 
+                    || $('[data-review-id]')?.getAttribute("data-review-id");
+                
+                const ratingNode = $('[aria-label*="star"], [aria-label*="sao"], [aria-label*="stars"]');
+                const rating = ratingNode?.ariaLabel 
+                    ? Number(ratingNode.ariaLabel.replace(/[^\d.,]/g, "").replace(",", ".")) || null 
+                    : null;
+                
+                // Enhanced text extraction: find longest meaningful content
+                const textCandidates = Array.from(el.querySelectorAll('[class*="review"], .wiI7pd, .MyEned, span, div'))
+                    .map(n => (n.textContent || "").trim())
+                    .filter(t => t.length > 10) // Filter out short fragments
+                    .sort((a, b) => b.length - a.length); // Sort by length desc
+                const text = textCandidates[0] || "";
+                
+                const timeEl = $("time") || $(".rsqaWe") || $(".bp9Aid");
+                const ts = timeEl?.getAttribute("datetime") || timeEl?.textContent?.trim() || null;
+                
+                const userEl = $('a[href*="/maps/contrib"]') || $(".d4r55") || $('[role="link"][aria-label]');
+                const user = userEl?.textContent?.trim() || userEl?.getAttribute("aria-label") || "";
+                
+                return { review_id: id || null, rating, text, ts, user };
+            } catch (e) {
+                console.warn('[Reviews] Parse error:', e);
+                return null;
+            }
+        }).filter(Boolean);
+
+        // Map-based deduplication with composite key strategy
+        const uniq = new Map();
+        for (const r of rows) {
+            // Create composite key: review_id is primary, fallback to user+time+text_snippet
+            const compositeKey = r.review_id 
+                || `${r.user || "anon"}|${r.ts || "no_time"}|${(r.text || "").slice(0, 80)}`;
+            
+            // Only keep first occurrence (Map preserves insertion order)
+            if (!uniq.has(compositeKey)) {
+                uniq.set(compositeKey, r);
+            }
+        }
+        
+        return Array.from(uniq.values());
+    }
+
+    function toNdjson(records) {
+        return records.map(r => JSON.stringify(r)).join("\n") + "\n";
+    }
+
+    // Expose functions for console access
+    try { 
+        window.__argusScrollAllReviews = scrollAllReviews;
+        window.__argusExtractReviews = extractReviews;
+        window.__argusToNdjson = toNdjson;
+    } catch (e) { /* ignore */ }
+
     function normalizeUrl(url) {
         try {
             const urlObj = new URL(url);
@@ -1700,16 +1820,45 @@ const _progressTick = setInterval(() => {
             const items = document.querySelectorAll(CONFIG.scraper.reviewItemSelector);
             let collected = 0;
             for (const el of items) {
-                const id = el.getAttribute('data-review-id') || '';
-                if (!id || savedIds.has(id)) continue;
-                const author = el.querySelector(CONFIG.scraper.authorNameSelector)?.textContent?.trim() || '';
-                const date = el.querySelector(CONFIG.scraper.reviewDateSelector)?.textContent?.trim() || '';
-                const text = el.querySelector(CONFIG.scraper.reviewTextSelector)?.textContent?.trim() || '';
-                const starEl = el.querySelector(CONFIG.scraper.starRatingSelector);
-                const star = starEl ? (parseFloat(starEl.getAttribute('aria-label')) || NaN) : NaN;
-                partialReviews.push({ id, author, date, text, star });
-                savedIds.add(id);
-                collected++;
+                try {
+                    const id = el.getAttribute('data-review-id') || '';
+                    if (!id || savedIds.has(id)) continue;
+                    const author = el.querySelector(CONFIG.scraper.authorNameSelector)?.textContent?.trim() || '';
+                    const date = el.querySelector(CONFIG.scraper.reviewDateSelector)?.textContent?.trim() || '';
+                    const text = el.querySelector(CONFIG.scraper.reviewTextSelector)?.textContent?.trim() || '';
+                    const starEl = el.querySelector(CONFIG.scraper.starRatingSelector);
+                    const star = starEl ? (parseFloat(starEl.getAttribute('aria-label')) || NaN) : NaN;
+                    partialReviews.push({ id, author, date, text, star });
+                    savedIds.add(id);
+                    collected++;
+                } catch (e) {
+                    console.warn('[Worker] Review parse error:', e);
+                }
+            }
+            return collected;
+        }
+
+        function collectNewReviewsRobust() {
+            // Use the new robust extraction function
+            const container = document.querySelector('.m6QErb, .section-scrollbox, [data-review-id]')?.closest('[role="main"], .section-content') || document;
+            const newReviews = extractReviews(container);
+            let collected = 0;
+            for (const review of newReviews) {
+                try {
+                    const id = review.review_id || `synthetic_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                    if (savedIds.has(id)) continue;
+                    partialReviews.push({
+                        id: id,
+                        author: review.user,
+                        date: review.ts,
+                        text: review.text,
+                        star: review.rating
+                    });
+                    savedIds.add(id);
+                    collected++;
+                } catch (e) {
+                    console.warn('[Worker] Robust review parse error:', e);
+                }
             }
             return collected;
         }
@@ -2218,15 +2367,69 @@ state.activeWorkers[task.url] = { tab: opened, type: ARGUS_BG.useIframes ? 'fram
             }
         }
         updateLog(`Đã tổng hợp dữ liệu từ ${allData.length} địa điểm.`);
-        const jsonString = JSON.stringify(allData, null, 2);
-        const blob = new Blob([jsonString], { type: 'application/json' });
+        
+        // Ask user for format preference
+        const format = confirm('Chọn định dạng export:\n\nOK = NDJSON (streaming, dễ xử lý)\nCancel = JSON (pretty formatted)') ? 'ndjson' : 'json';
+        
+        let content, filename, mimeType;
+        if (format === 'ndjson') {
+            content = toNdjson(allData);
+            filename = 'argus_data_export.ndjson';
+            mimeType = 'application/x-ndjson';
+        } else {
+            content = JSON.stringify(allData, null, 2);
+            filename = 'argus_data_export.json';
+            mimeType = 'application/json';
+        }
+        
+        const blob = new Blob([content], { type: mimeType });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.download = 'argus_data_export.json';
+        a.download = filename;
         a.href = url;
         a.click();
         URL.revokeObjectURL(url);
-        updateLog('Đã xuất file argus_data_export.json!');
+        updateLog(`Đã xuất file ${filename}!`);
+    }
+
+    /**
+     * Export reviews as NDJSON for streaming processing
+     */
+    async function runNdjsonExporter() {
+        updateLog('Đang xuất NDJSON...');
+        const allKeys = await GM_listValues();
+        const reviewKeys = allKeys.filter(k => k.startsWith('https://'));
+        if (reviewKeys.length === 0) {
+            alert('Không có dữ liệu review nào được lưu trữ.');
+            return;
+        }
+        
+        let allReviews = [];
+        for (const key of reviewKeys) {
+            const payload = await GM_getValue(key);
+            if (payload && payload.status === 'SUCCESS' && payload.reviews) {
+                for (const review of payload.reviews) {
+                    allReviews.push({
+                        ...review,
+                        store_name: payload.storeInfo?.name || 'N/A',
+                        store_address: payload.storeInfo?.address || 'N/A',
+                        source_url: payload.storeInfo?.sourceUrl || key,
+                        extracted_at: payload.timestamp
+                    });
+                }
+            }
+        }
+        
+        updateLog(`Đã tổng hợp ${allReviews.length} reviews từ ${reviewKeys.length} địa điểm.`);
+        const ndjsonContent = toNdjson(allReviews);
+        const blob = new Blob([ndjsonContent], { type: 'application/x-ndjson' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.download = 'argus_reviews_export.ndjson';
+        a.href = url;
+        a.click();
+        URL.revokeObjectURL(url);
+        updateLog('Đã xuất file argus_reviews_export.ndjson!');
     }
 
     async function exportLinkList() {
@@ -2301,30 +2504,35 @@ state.activeWorkers[task.url] = { tab: opened, type: ARGUS_BG.useIframes ? 'fram
   if (!confirm('Bạn có chắc chắn muốn xóa TẤT CẢ dữ liệu?')) return;
   updateLog('Đang xóa dữ liệu...');
   try {
+    // Xóa toàn bộ GM keys
     const allKeys = await GM_listValues();
     const del = [];
-    for (const k of allKeys) {
-      const shouldDelete =
-        k.startsWith('http://') ||
-        k.startsWith('https://') ||
-        k.startsWith('progress:') ||
-        k.endsWith('::partial') ||
-        k === 'urlQueue' ||
-        k === 'totalExpectedReviews' ||
-        k === 'argus.progress' ||
-        k === 'argus.progress.links' ||
-        k === 'argus.progress.reviews';
-
-      if (shouldDelete) del.push(GM_deleteValue(k));
-    }
-
+    for (const k of allKeys) del.push(GM_deleteValue(k));
     await Promise.all(del);
 
-    // Reset cache aggregator và HUD về 0/0
+    // Xóa local/sessionStorage các key URL-based, namespace, wildcard *::partial
+    const nuke = (store) => {
+      const toDelete = [];
+      for (let i = 0; i < store.length; i++) {
+        const k = store.key(i);
+        if (k && (
+          k.startsWith('argus.') ||
+          k.startsWith('progress:') ||
+          k.includes('://') ||
+          k.includes('::partial')
+        )) toDelete.push(k);
+      }
+      for (const k of toDelete) store.removeItem(k);
+    };
+    try { nuke(window.localStorage); } catch (e) { /* ignore */ }
+    try { nuke(window.sessionStorage); } catch (e) { /* ignore */ }
+
+    // Reset cache aggregator và HUD về 0/0 với deep copy để đảm bảo reset tuyệt đối
     window.__argusProg__ = { per: new Map(), total: 0 };
-    await GM_setValue('argus.progress.links', { discovered: 0, total: 0 });
-    await GM_setValue('argus.progress.reviews', { collected: 0, expected: 0 });
-    await GM_setValue('argus.progress', { collected: 0, total: 0 });
+    const resetState = { discovered: 0, processed: 0, total: 0 };
+    await GM_setValue('argus.progress.links', JSON.parse(JSON.stringify(resetState)));
+    await GM_setValue('argus.progress.reviews', JSON.parse(JSON.stringify({ collected: 0, expected: 0 })));
+    await GM_setValue('argus.progress', JSON.parse(JSON.stringify({ collected: 0, total: 0 })));
     await updateProgress();
     console.log('[Argus][Progress] Reset to 0 (cleared all storages).');
     updateLog('Đã xóa & reset xong, không cần reload trang.');
@@ -2350,6 +2558,7 @@ state.activeWorkers[task.url] = { tab: opened, type: ARGUS_BG.useIframes ? 'fram
         document.getElementById('argus-extract-links-btn').addEventListener('click', safe(runLinkExtraction));
         document.getElementById('argus-start-scraping-btn').addEventListener('click', safe(runOrchestrator));
         document.getElementById('argus-export-data-btn').addEventListener('click', safe(runDataExporter));
+        document.getElementById('argus-export-ndjson-btn').addEventListener('click', safe(runNdjsonExporter));
         document.getElementById('argus-clear-storage-btn').addEventListener('click', safe(clearStorage));
         document.getElementById('argus-export-links-btn').addEventListener('click', safe(exportLinkList));
         document.getElementById('argus-import-links-btn').addEventListener('click', safe(importLinkList));
@@ -2380,6 +2589,7 @@ state.activeWorkers[task.url] = { tab: opened, type: ARGUS_BG.useIframes ? 'fram
                 <div class="argus-grid">
                     <button id="argus-export-links-btn" class="argus-btn argus-btn-secondary">Export Links</button>
                     <button id="argus-import-links-btn" class="argus-btn argus-btn-secondary">Import Links</button>
+                    <button id="argus-export-ndjson-btn" class="argus-btn argus-btn-success">Export NDJSON</button>
                 </div>
                 <div class="argus-section">Safety</div>
                 <div class="argus-grid">
@@ -3197,7 +3407,13 @@ if (!window.__argus_scan_started__) {
               try {
                 (async function(){
                   const lk = (await GM_getValue('argus.progress.links')) || { discovered: 0 };
-                  lk.discovered = Math.max(0, (lk.discovered||0) + (Number(add)||0));
+                  // Only increment processed links, not discovered to avoid double-counting
+                  if (key.includes('::processed')) {
+                    lk.processed = Math.max(0, (lk.processed||0) + (Number(add)||0));
+                  } else {
+                    // For discovered links, set absolute value based on current snapshot
+                    lk.discovered = Math.max(lk.discovered||0, Number(add)||0);
+                  }
                   await GM_setValue('argus.progress.links', lk);
                   const ui = (window.__argus_ui_progress__ ||= { collected:0, total:0 });
                   try { window.dispatchEvent(new CustomEvent('argus:progress:update', { detail: { ...ui, reason: 'links-only-chunk' } })); } catch (e) { /* ignore */ }
