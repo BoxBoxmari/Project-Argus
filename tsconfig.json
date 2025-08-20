@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "checkJs": false,
+    "allowJs": true,
+    "strict": false,
+    "noEmit": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "types": ["greasemonkey","node"]
+  },
+  "include": ["scrape.mjs", "scripts/**/*"],
+  "exclude": ["node_modules", "out", "userscripts", "node", "services", "processors"]
+}

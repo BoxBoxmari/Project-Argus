@@ -1,199 +1,158 @@
-import { chromium } from "playwright";
-import fs from "fs";
+import fs from 'node:fs';
+import path from 'node:path';
+import process from 'node:process';
+import { setTimeout as sleep } from 'node:timers/promises';
+import { fileURLToPath } from 'node:url';
+import * as readline from 'node:readline/promises';
+import pLimit from 'p-limit';
+import { z } from 'zod';
 
-const PLACE_URL = process.env.PLACE_URL;
-const OUT_DIR = process.env.OUT_DIR || "out";
+// Lazy import playwright for better stability than raw puppeteer
+const { chromium } = await import('playwright');
 
-// Primary & fallback
-const PRIMARY_CARD_SELECTOR = "[data-review-id]";
-const FALLBACK_CARD_SELECTORS = [
-  "div.section-review",
-  'div:has(span[aria-label*="star"])',
-  'div:has([aria-label*="star"])'
-];
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const OUT_DIR = process.env.OUTPUT_DIR || path.join(__dirname, 'out');
+const CONCURRENCY = Number(process.env.GMAPS_SCRAPE_CONCURRENCY || 2);
+const TIMEOUT_MS = Number(process.env.GMAPS_SCRAPE_TIMEOUT_MS || 45000);
+const MAX_SCROLL = Number(process.env.GMAPS_SCRAPE_SCROLL_MAX || 120);
+const BACKOFF_BASE = Number(process.env.GMAPS_SCRAPE_BACKOFF_BASE_MS || 800);
 
-// Review UI controls
-const REVIEW_BTN_SELECTORS = [
-  'button[jsaction="pane.rating.moreReviews"]',
-  'button[aria-label*="reviews"]',
-  'a:has-text("reviews")',
-  'button:has-text("All reviews")',
-  'button:has-text("Xem tất cả bài đánh giá")',
-  'a:has-text("Xem tất cả bài đánh giá")'
-];
+const Review = z.object({
+  review_id: z.string(),
+  place_id: z.string(),
+  author_name: z.string().optional().nullable(),
+  rating: z.number().min(0).max(5),
+  text: z.string(),
+  language: z.string().optional().nullable(),
+  posted_at: z.string(),
+  owner_response: z.string().optional().nullable(),
+  like_count: z.number().int().nonnegative().optional().nullable(),
+  url: z.string().url(),
+  scraped_at: z.string(),
+  source: z.literal('google_maps'),
+  extractor_version: z.string()
+});
 
-const CONTAINER_SELECTORS = [
-  'div[aria-label*="reviews"]',
-  'div[role="feed"]',
-  'div:has(div[aria-label*="rating"])'
-];
+function ensureDir(p) { fs.mkdirSync(p, { recursive: true }); }
+function nowISO() { return new Date().toISOString(); }
 
-// Heuristic text selectors seen in the wild
-const TEXT_SELECTORS = [
-  '[class*="section-review-text"]',
-  '.wiI7pd',     // common GMaps review text
-  '.MyEned',
-  '.Jtu6Td',
-  '.qjESne'
-];
-
-function safeName(u) {
-  return u.replace(/[^a-z0-9]+/gi, "_").replace(/^_+|_+$/g, "").slice(0, 120);
+function makeWriter() {
+  ensureDir(OUT_DIR);
+  const file = path.join(OUT_DIR, 'reviews.ndjson');
+  const stream = fs.createWriteStream(file, { flags: 'a', encoding: 'utf8' });
+  return {
+    write(obj) { stream.write(JSON.stringify(obj) + '\n'); },
+    end() { stream.end(); },
+    file
+  };
 }
 
-// Helpers
-async function clickAny(page, selectors, timeout = 12000) {
-  for (const sel of selectors) {
-    const el = await page.$(sel);
-    if (el) { await el.click({ delay: 50 }).catch(()=>{}); return true; }
-  }
-  for (const sel of selectors) {
-    try { await page.waitForSelector(sel, { timeout }); await page.click(sel, { delay: 50 }); return true; } catch {}
-  }
-  return false;
-}
+// Simple in-memory dedup during run
+const seen = new Set();
+function dedupKey(r) { return `${r.place_id}:${r.review_id}`; }
 
-async function setSortNewest(page) {
-  const triggers = [
-    'button[aria-label*="Sort"]',
-    'button:has-text("Sort")',
-    'button:has-text("Sắp xếp")',
-    'div[role="button"]:has-text("Sort")'
-  ];
-  for (const sel of triggers) { const el = await page.$(sel); if (el) { await el.click().catch(()=>{}); break; } }
-  const newest = [
-    'div[role="menuitem"]:has-text("Newest")',
-    'div[role="menuitem"]:has-text("Mới nhất")'
-  ];
-  for (const sel of newest) { const n = await page.$(sel); if (n) { await n.click().catch(()=>{}); break; } }
-}
-
-async function expandAllMore(page) {
-  const sels = [
-    'button:has-text("More")',
-    'span:has-text("More")',
-    'button:has-text("Xem thêm")',
-    'span:has-text("Xem thêm")'
-  ];
-  for (const s of sels) {
-    const els = await page.$$(s);
-    for (const e of els) { await e.click({ delay: 20 }).catch(()=>{}); }
+async function infiniteScroll(page, maxRounds) {
+  let lastHeight = 0;
+  for (let i=0; i<maxRounds; i++) {
+    await page.mouse.wheel(0, 12000);
+    await sleep(350 + i * 15);
+    const height = await page.evaluate(() => document.body.scrollHeight);
+    if (height === lastHeight) break;
+    lastHeight = height;
   }
 }
 
-async function findFirst(page, selectors, timeout = 15000) {
-  for (const sel of selectors) { const h = await page.$(sel); if (h) return h; }
-  for (const sel of selectors) {
-    try { await page.waitForSelector(sel, { timeout }); return await page.$(sel); } catch {}
+async function extractReviewsFromPlace(page, placeUrl, extractorVersion) {
+  await page.goto(placeUrl, { timeout: TIMEOUT_MS, waitUntil: 'domcontentloaded' });
+  // Open reviews panel; selector may evolve; keep this robust by searching anchors
+  await page.waitForTimeout(1200);
+  const reviewsButton = await page.locator('button[aria-label*="reviews"], a[aria-label*="reviews"]').first();
+  if (await reviewsButton.count()) await reviewsButton.click();
+  await page.waitForTimeout(1200);
+
+  // Scroll the reviews container if present, else fallback to page
+  const reviewContainer = page.locator('[role="feed"], div[aria-label*="reviews"]');
+  for (let i=0;i<MAX_SCROLL;i++){
+    await reviewContainer.evaluateAll(nodes => nodes.forEach(n => n.scrollBy(0, 2000))).catch(()=>{});
+    await sleep(150 + (i%10)*10);
   }
-  return null;
-}
 
-async function scrollAll(container, page, opts = { step: 1000, maxIdleMs: 15000, backoffMs: 250, maxScrolls: 2500 }) {
-  let lastCount = -1, idleSince = Date.now();
-  for (let i = 0; i < opts.maxScrolls; i++) {
-    await container.evaluate((el, step) => el.scrollBy(0, step), opts.step);
-    await page.waitForTimeout(180);
-    const count = await page.$$eval(PRIMARY_CARD_SELECTOR, nodes => nodes.length).catch(() => 0);
-    if (count > lastCount) { lastCount = count; idleSince = Date.now(); }
-    else if (Date.now() - idleSince > opts.maxIdleMs) break;
-    await page.waitForTimeout(opts.backoffMs);
-  }
-  return lastCount;
-}
+  // Parse reviews; selectors simplified; adapt as needed
+  const items = await page.locator('[data-review-id]').all();
+  const results = [];
+  for (const el of items) {
+    const review_id = await el.getAttribute('data-review-id') || crypto.randomUUID();
+    const text = (await el.locator('[data-review-text]').first().textContent().catch(()=>''))?.trim() || '';
+    const ratingAttr = await el.locator('[aria-label*="stars"]').getAttribute('aria-label').catch(()=>null);
+    const rating = ratingAttr ? Number((ratingAttr.match(/([0-5](?:[.,]\d)?)/)?.[1] || '0').replace(',','.')) : 0;
+    const author_name = (await el.locator('a[aria-label*="Profile"], a').first().textContent().catch(()=>null))?.trim() || null;
+    const posted_at = (await el.locator('span').filter({ hasText: /ago|trước|phút|giờ|ngày|tháng|năm/i }).first().textContent().catch(()=>nowISO())) || nowISO();
+    const like_count = Number((await el.locator('[aria-label*="like"], [aria-label*="thích"]').first().textContent().catch(()=>0)) || 0);
 
-function shash(s) { let h = 5381; for (let i = 0; i < s.length; i++) h = ((h << 5) + h) ^ s.charCodeAt(i); return (h >>> 0).toString(36); }
-
-async function extract(page) {
-  // Truyền 1 object vào evaluate (Playwright rule)
-  const raw = await page.evaluate(({ PRIMARY, FALLBACKS, TEXTS }) => {
-    const grab = (el, sel) => el.querySelector(sel);
-    const txt = (n) => (n?.textContent || "").trim();
-    const getRating = (el) => {
-      const a = el.querySelector('[aria-label*="star"], [aria-label*="sao"]');
-      if (!a?.ariaLabel) return null;
-      const m = a.ariaLabel.match(/([\d.,]+)/);
-      return m ? parseFloat(m[1].replace(",", ".")) : null;
+    const rec = {
+      review_id,
+      place_id: new URL(placeUrl).searchParams.get('cid') || new URL(placeUrl).pathname,
+      author_name,
+      rating: isFinite(rating) ? rating : 0,
+      text,
+      language: null,
+      posted_at,
+      owner_response: null,
+      like_count: isFinite(like_count) ? like_count : 0,
+      url: placeUrl,
+      scraped_at: nowISO(),
+      source: 'google_maps',
+      extractor_version: extractorVersion
     };
-    const cards = [];
-    document.querySelectorAll(PRIMARY).forEach(n => cards.push(n));
-    if (cards.length < 10) { for (const sel of FALLBACKS) document.querySelectorAll(sel).forEach(n => cards.push(n)); }
-    const uniqEls = Array.from(new Set(cards));
+    results.push(rec);
+  }
+  return results;
+}
 
-    const pickText = (el) => {
-      // Ưu tiên các selector text “thật”
-      const buckets = [];
-      for (const s of TEXTS) el.querySelectorAll(s).forEach(n => buckets.push((n.textContent || "").trim()));
-      if (!buckets.length) el.querySelectorAll("span,div").forEach(n => buckets.push((n.textContent || "").trim()));
-      const cleaned = buckets.map(s => s.replace(/\s+/g, " ").trim()).filter(s => s && s.length >= 5 && !/^More$|^Xem thêm$/i.test(s));
-      cleaned.sort((a,b)=>b.length-a.length);
-      return cleaned[0] || "";
-    };
+async function main() {
+  ensureDir(OUT_DIR);
+  const writer = makeWriter();
+  const urlsPath = process.argv[2] || path.join(__dirname, 'data', 'places.txt');
+  const extractorVersion = 'gmaps.0.1.0';
 
-    const rows = [];
-    for (const el of uniqEls) {
-      // Lấy id trực tiếp hoặc lặn xuống con
-      let id = el.getAttribute("data-review-id");
-      if (!id) {
-        const child = el.querySelector("[data-review-id]");
-        if (child) id = child.getAttribute("data-review-id");
+  const input = fs.readFileSync(urlsPath, 'utf8').split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+  const limit = pLimit(CONCURRENCY);
+
+  const browser = await chromium.launch({ headless: process.env.GMAPS_SCRAPE_HEADLESS !== 'false' });
+  const ctx = await browser.newContext({ userAgent: "Mozilla/5.0 Argus/0.1" });
+
+  try {
+    const jobs = input.map(url => limit(async () => {
+      for (let attempt=1; attempt<=Number(process.env.GMAPS_SCRAPE_MAX_RETRIES||3); attempt++) {
+        const page = await ctx.newPage();
+        try {
+          const reviews = await extractReviewsFromPlace(page, url, extractorVersion);
+          for (const r of reviews) {
+            const key = dedupKey(r);
+            if (seen.has(key)) continue;
+            Review.parse(r);
+            seen.add(key);
+            writer.write(r);
+          }
+          await page.close();
+          return;
+        } catch (err) {
+          await page.close();
+          await sleep(BACKOFF_BASE * Math.pow(2, attempt-1));
+          if (attempt === Number(process.env.GMAPS_SCRAPE_MAX_RETRIES||3)) throw err;
+        }
       }
-      const text = pickText(el);
-      const rating = getRating(el);
-      const timeNode = el.querySelector("time");
-      const ts = timeNode?.getAttribute("datetime") || timeNode?.getAttribute("aria-label") || null;
-      const userNode = el.querySelector('a[href*="/maps/contrib"]') || el.querySelector('a[aria-label][href*="/maps"]');
-      const user = txt(userNode);
-      if (!id && !text && !ts && (rating === null || rating === undefined)) continue;
-      rows.push({ review_id: id || null, rating, text, ts, user });
-    }
-    return rows;
-  }, { PRIMARY: PRIMARY_CARD_SELECTOR, FALLBACKS: FALLBACK_CARD_SELECTORS, TEXTS: TEXT_SELECTORS });
-
-  // Dedup client-side
-  const map = new Map();
-  let statId = 0, statRating = 0, statTs = 0, statText = 0;
-  for (const r of raw) {
-    if (r.review_id) statId++;
-    if (r.rating !== null && r.rating !== undefined) statRating++;
-    if (r.ts) statTs++;
-    if (r.text && r.text.length >= 5) statText++;
-    const key = r.review_id || `${r.user || ""}|${r.ts || ""}|${shash(r.text || "")}|${r.rating ?? ""}`;
-    if (!map.has(key)) map.set(key, r);
+    }));
+    await Promise.allSettled(jobs);
+  } finally {
+    await ctx.close();
+    await browser.close();
+    writer.end();
+    console.log('Done. Output:', path.join(OUT_DIR,'reviews.ndjson'));
   }
-  const deduped = Array.from(map.values());
-  return { deduped, stats: { total_raw: raw.length, with_id: statId, with_rating: statRating, with_ts: statTs, with_text: statText } };
 }
 
-(async () => {
-  const browser = await chromium.launch({ headless: true });
-  const ctx = await browser.newContext({ locale: "en-US" });
-  const page = await ctx.newPage();
-
-  const name = safeName(PLACE_URL);
-  await page.goto(PLACE_URL, { waitUntil: "domcontentloaded", timeout: 60000 });
-  await page.waitForLoadState("networkidle", { timeout: 20000 }).catch(() => {});
-  await Promise.all([
-    (async()=>{ try { await page.click('button:has-text("Reject all")', { timeout: 3000 }); } catch {} })(),
-    (async()=>{ try { await page.click('button:has-text("Từ chối tất cả")', { timeout: 3000 }); } catch {} })()
-  ]);
-  await Promise.any([
-    clickAny(page, REVIEW_BTN_SELECTORS, 12000),
-    page.waitForSelector(CONTAINER_SELECTORS[0], { timeout: 12000 }).catch(()=>null)
-  ]).catch(()=>{});
-  await setSortNewest(page).catch(()=>{});
-
-  const container = await findFirst(page, CONTAINER_SELECTORS, 15000);
-  if (!container) { console.error("Cannot locate reviews container. Exiting."); process.exit(2); }
-
-  const total = await scrollAll(container, page);
-  await expandAllMore(page).catch(()=>{});
-  const { deduped, stats } = await extract(page);
-
-  if (!fs.existsSync(OUT_DIR)) fs.mkdirSync(OUT_DIR, { recursive: true });
-  const outPath = `${OUT_DIR}/${name}.ndjson`;
-  fs.writeFileSync(outPath, deduped.map(r => JSON.stringify(r)).join("\n") + "\n", "utf8");
-
-  console.log(JSON.stringify({ outPath, totalDetected: total, exported_after_dedup: deduped.length, stats }));
-  await browser.close();
-})();
+main().catch(e => {
+  console.error('[FATAL]', e);
+  process.exit(1);
+});

@@ -1,0 +1,33 @@
+{
+  "root": true,
+  "env": { "es2022": true, "browser": true, "node": true },
+  "parserOptions": { "sourceType": "module", "ecmaVersion": 2022 },
+  "extends": ["eslint:recommended","plugin:import/recommended","prettier"],
+  "ignorePatterns": ["node_modules", "out", "node/**/*", "services/**/*", "processors/**/*"],
+  "rules": {
+    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
+    "import/no-unresolved": "off"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.ts", "**/*.tsx"],
+      "parser": "@typescript-eslint/parser",
+      "plugins": ["@typescript-eslint"],
+      "extends": ["eslint:recommended", "@typescript-eslint/recommended", "prettier"],
+      "rules": {
+        "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
+        "no-unused-vars": "off"
+      }
+    },
+    {
+      "files": ["userscripts/**/*"],
+      "env": { "browser": true },
+      "globals": { "unsafeWindow": "readonly", "GM_getValue":"readonly","GM_setValue":"readonly","GM_deleteValue":"readonly","GM_listValues":"readonly","GM_download":"readonly","GM_addStyle":"readonly" }
+    },
+    {
+      "files": ["**/jest.config.js"],
+      "env": { "node": true },
+      "globals": { "module": "readonly" }
+    }
+  ]
+}

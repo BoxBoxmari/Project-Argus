@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ArgusReview",
+  "type": "object",
+  "required": ["review_id","place_id","rating","text","posted_at","url","scraped_at","source","extractor_version"],
+  "properties": {
+    "review_id": {"type":"string"},
+    "place_id": {"type":"string"},
+    "author_name": {"type":["string","null"]},
+    "rating": {"type":"number","minimum":0,"maximum":5},
+    "text": {"type":"string"},
+    "language": {"type":["string","null"]},
+    "posted_at": {"type":"string","format":"date-time"},
+    "owner_response": {"type":["string","null"]},
+    "like_count": {"type":["integer","null"],"minimum":0},
+    "url": {"type":"string","format":"uri"},
+    "scraped_at": {"type":"string","format":"date-time"},
+    "source": {"type":"string","enum":["google_maps"]},
+    "extractor_version": {"type":"string"}
+  },
+  "additionalProperties": true
+}
