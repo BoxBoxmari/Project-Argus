@@ -89,5 +89,12 @@ Thumbs.db
 !.env.example
 
 # Data
-data/
+data/tmp/
+data/processed/
+!data/raw/
 !data/.gitkeep
+
+# Argus restructure
+/out/
+/apps/userscript/*.map
+*.DS_Store

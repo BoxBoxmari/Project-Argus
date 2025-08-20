@@ -11,6 +11,6 @@
     "skipLibCheck": true,
     "types": ["greasemonkey","node"]
   },
-  "include": ["scrape.mjs", "scripts/**/*"],
-  "exclude": ["node_modules", "out", "userscripts", "node", "services", "processors"]
+  "include": ["apps/**/*.ts", "apps/**/*.js", "apps/**/*.mjs", "scripts/**/*"],
+  "exclude": ["node_modules", "out", "data", "services"]
 }
