@@ -22,7 +22,7 @@ def load_ndjson(path):
             yield json.loads(s)
 
 def normalize(rec):
-    # drop hoàn toàn rỗng
+    # drop fully empty records
     text = (rec.get("text") or "").strip()
     rating = rec.get("rating")
     rid = rec.get("review_id")
@@ -38,14 +38,28 @@ def normalize(rec):
     r["user"]      = user
     return r
 
-def key_of(r):
-    return r.get("review_id") or f"{r.get('user','')}|{r.get('ts','')}|{shash(r.get('text',''))}|{r.get('rating','')}"
+def key_of_default(r):
+    rid = r.get("review_id")
+    if rid: return rid
+    # If 'id' is missing entirely (no user/time/text), return None to skip
+    user = r.get('user','')
+    ts = r.get('ts','')
+    txt = r.get('text','')
+    rating = r.get('rating','')
+    # If there is truly nothing to construct a key from, skip
+    if not (user or ts or txt or rating):
+        return None
+    return f"{user}|{ts}|{shash(txt)}|{rating}"
 
-def dedup(records):
+def process_ndjson(records, key_of=None):
+    """Deduplicate with optional custom key extractor and skip records with no key."""
+    make_key = key_of or key_of_default
     seen = set()
     for r in records:
         if r is None: continue
-        k = key_of(r)
+        k = make_key(r)
+        if not k:  # skip when key cannot be derived
+            continue
         if k in seen: continue
         seen.add(k)
         yield r
@@ -71,7 +85,8 @@ def main():
         path = os.path.join(IN_DIR, fn)
         for x in load_ndjson(path):
             merged.append(normalize(x))
-    unique = list(dedup(merged))
+    # Use process_ndjson with default key function; can be overridden if needed
+    unique = list(process_ndjson(merged, key_of=None))
     good = list(qc(unique))
     out = os.path.join(IN_DIR, "merged_clean.ndjson")
     with open(out, "w", encoding="utf-8") as f:

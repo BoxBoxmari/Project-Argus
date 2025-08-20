@@ -4,7 +4,7 @@ Command-line interface for Project Argus Python processor.
 
 Usage:
     python -m src.cli process input1.ndjson input2.ndjson output.ndjson
-    python -m src.cli validate schema.json
+    python -m src.cli validate reviews.ndjson
 """
 
 import argparse

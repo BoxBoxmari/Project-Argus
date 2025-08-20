@@ -1,4 +1,6 @@
-import json, sys
+import json
+import os
+import sys
 from .schema import ReviewV1
 
 def load_ndjson(fp):
@@ -36,7 +38,7 @@ def run(in_paths, out_path):
     try:
         allrecs = []
         for p in in_paths:
-            place_id = p.split("/")[-1].split(".")[0]
+            place_id = os.path.splitext(os.path.basename(p))[0]
             with open(p, "r", encoding="utf-8") as f:
                 for x in load_ndjson(f):
                     allrecs.append(normalize(x, place_id))

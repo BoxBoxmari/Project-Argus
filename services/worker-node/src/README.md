@@ -104,7 +104,7 @@ const worker = startWorker(async (data) => {
 
 ### POST /enqueue
 
-Enqueue a review collection job.
+Enqueue a review collection job. Returns **HTTP 202 Accepted** on success.
 
 **Request:**
 

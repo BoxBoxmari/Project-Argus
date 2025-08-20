@@ -52,7 +52,8 @@ func EnqueueToWorker(placeID string) (*WorkerJobResponse, error) {
 		return nil, fmt.Errorf("decode worker response: %w", err)
 	}
 
-	if resp.StatusCode != http.StatusOK {
+	// The worker node responds with 202 Accepted when a job is queued
+	if resp.StatusCode != http.StatusAccepted {
 		return &workerResp, fmt.Errorf("worker returned status %d: %s", resp.StatusCode, workerResp.Error)
 	}
 

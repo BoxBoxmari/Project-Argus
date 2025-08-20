@@ -1,9 +1,8 @@
-import { Queue, Worker, QueueScheduler, JobsOptions } from "bullmq";
+import { Queue, Worker, JobsOptions } from "bullmq";
 import IORedis from "ioredis";
 
 const connection = new IORedis(process.env.QUEUE_URL || "redis://127.0.0.1:6379");
 export const reviewsQueue = new Queue("reviews", { connection });
-new QueueScheduler("reviews", { connection });
 
 export function enqueueReviewJob(payload: { placeId: string; cursor?: string }) {
   const jobId = `reviews:${payload.placeId}:${payload.cursor ?? "start"}`;

@@ -1,7 +1,7 @@
 # Python Data Processor
 
-A robust ETL pipeline for processing Google Maps review data with schema validation.
-Deduplication, and quality control checks.
+A robust ETL pipeline for processing Google Maps review data with schema validation,
+deduplication, and quality control checks.
 
 ## Features
 

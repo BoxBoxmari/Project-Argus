@@ -9,7 +9,7 @@ Project Argus pipeline.
 - **Worker Integration**: Seamless integration with worker node queue system
 - **Graceful Shutdown**: Proper signal handling and connection draining
 - **Health Checks**: Built-in health monitoring endpoint
-- **Deterministic Jobs**: Idempotent job enqueueing with stable job IDs
+- **Deterministic Jobs**: Idempotent job enqueuing with stable job IDs
 - **Observable Operations**: Structured logging for monitoring
 
 ## Architecture

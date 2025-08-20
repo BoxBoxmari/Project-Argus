@@ -56,8 +56,9 @@ async function handleEnqueueJob(req: IncomingMessage, res: ServerResponse) {
     }
 
     const job = await enqueueJob(payload.placeId, payload.cursor);
-    
-    sendResponse(res, 200, {
+
+    // Return 202 Accepted to indicate the job was enqueued for processing
+    sendResponse(res, 202, {
       success: true,
       data: {
         jobId: job.id,
@@ -112,7 +113,10 @@ function handleOptions(req: IncomingMessage, res: ServerResponse) {
 
 export function startApiServer(port: number = 3000) {
   const server = createServer(async (req, res) => {
-    const url = new URL(req.url || '/', `http://${req.headers.host}`);
+    // `req.headers.host` may be undefined for HTTP/1.0 requests or tests.
+    // Defaulting to `localhost` prevents `new URL` from throwing on missing host.
+    const host = req.headers.host || 'localhost';
+    const url = new URL(req.url || '/', `http://${host}`);
     const method = req.method?.toUpperCase();
 
     console.log(JSON.stringify({
