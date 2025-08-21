@@ -1,0 +1,156 @@
+{"type":"meta","ts_start":"2025-08-21T04:39:30.211Z","node":"v24.5.0","platform":"win32","url":"https://www.google.com/maps/place/Highlands+Coffee+417+Dien+Bien+Phu/data=!4m7!3m6!1s0x3175292a6362e83f:0x4b2d4efbb1d1a764!8m2!3d10.8018228!4d106.7127545!16s%2Fg%2F11s7xmj488!19sChIJP-hiYyopdTERZKfRsftOLUs?authuser=0&rclk=1"}
+{"type":"launch_ok","opts":{"channel":"chrome","headless":true}}
+{"type":"requestfailed","url":"https://www.google.com/maps/_/ss/k=maps.m.mBixsguzmxw.L.W.O/m=sc2,per,mo,lp,ep,ti,stx,ds,dwi,enr,pwd,dw,ppl,log,std,b/am=5AAAIgEI/d=1/rs=ACT90oE0qMoS8dn_GS7CrIH1fjHbZh68bg?cb=M","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu4mxK.woff2","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/pb=!1m4!1m3!1i17!2i104388!3i61579!2m3!1e0!2sm!3i745504884!2m2!1e2!2sspotlit!3m8!2sen!3s!5e1105!12m4!1e68!2m2!1sset!2sRoadmap!4e0!5m1!1e0!23i1368782!23i1368785!23i4861626!23i10211310!23i4897086!23i47054629!23i10212092!23i94278265!23i72458815!23i10211069!23i94243289!23i94255677!23i72860224!23i10211515!23i94260020!27m15!299174093m14!14m13!1m8!1m2!1y3563799942166407231!2y5417072769723639652!2s%2Fg%2F11s7xmj488!4m2!1x108018228!2x1067127545!15sgcid%3Acoffee_shop!2b0!3b0!6b0!8b0","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/pb=!1m4!1m3!1i17!2i104389!3i61579!2m3!1e0!2sm!3i745504884!2m2!1e2!2sspotlit!3m8!2sen!3s!5e1105!12m4!1e68!2m2!1sset!2sRoadmap!4e0!5m1!1e0!23i1368782!23i1368785!23i4861626!23i10211310!23i4897086!23i47054629!23i10212092!23i94278265!23i72458815!23i10211069!23i94243289!23i94255677!23i72860224!23i10211515!23i94260020!27m15!299174093m14!14m13!1m8!1m2!1y3563799942166407231!2y5417072769723639652!2s%2Fg%2F11s7xmj488!4m2!1x108018228!2x1067127545!15sgcid%3Acoffee_shop!2b0!3b0!6b0!8b0","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/pb=!1m4!1m3!1i17!2i104387!3i61579!2m3!1e0!2sm!3i745504884!2m2!1e2!2sspotlit!3m8!2sen!3s!5e1105!12m4!1e68!2m2!1sset!2sRoadmap!4e0!5m1!1e0!23i1368782!23i1368785!23i4861626!23i10211310!23i4897086!23i47054629!23i10212092!23i94278265!23i72458815!23i10211069!23i94243289!23i94255677!23i72860224!23i10211515!23i94260020!27m15!299174093m14!14m13!1m8!1m2!1y3563799942166407231!2y5417072769723639652!2s%2Fg%2F11s7xmj488!4m2!1x108018228!2x1067127545!15sgcid%3Acoffee_shop!2b0!3b0!6b0!8b0","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/pb=!1m4!1m3!1i17!2i104390!3i61579!2m3!1e0!2sm!3i745504884!2m2!1e2!2sspotlit!3m8!2sen!3s!5e1105!12m4!1e68!2m2!1sset!2sRoadmap!4e0!5m1!1e0!23i1368782!23i1368785!23i4861626!23i10211310!23i4897086!23i47054629!23i10212092!23i94278265!23i72458815!23i10211069!23i94243289!23i94255677!23i72860224!23i10211515!23i94260020!27m15!299174093m14!14m13!1m8!1m2!1y3563799942166407231!2y5417072769723639652!2s%2Fg%2F11s7xmj488!4m2!1x108018228!2x1067127545!15sgcid%3Acoffee_shop!2b0!3b0!6b0!8b0","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/pb=!1m4!1m3!1i17!2i104386!3i61579!2m3!1e0!2sm!3i745504884!2m2!1e2!2sspotlit!3m8!2sen!3s!5e1105!12m4!1e68!2m2!1sset!2sRoadmap!4e0!5m1!1e0!23i1368782!23i1368785!23i4861626!23i10211310!23i4897086!23i47054629!23i10212092!23i94278265!23i72458815!23i10211069!23i94243289!23i94255677!23i72860224!23i10211515!23i94260020!27m15!299174093m14!14m13!1m8!1m2!1y3563799942166407231!2y5417072769723639652!2s%2Fg%2F11s7xmj488!4m2!1x108018228!2x1067127545!15sgcid%3Acoffee_shop!2b0!3b0!6b0!8b0","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/pb=!1m4!1m3!1i17!2i104391!3i61579!2m3!1e0!2sm!3i745504884!2m2!1e2!2sspotlit!3m8!2sen!3s!5e1105!12m4!1e68!2m2!1sset!2sRoadmap!4e0!5m1!1e0!23i1368782!23i1368785!23i4861626!23i10211310!23i4897086!23i47054629!23i10212092!23i94278265!23i72458815!23i10211069!23i94243289!23i94255677!23i72860224!23i10211515!23i94260020!27m15!299174093m14!14m13!1m8!1m2!1y3563799942166407231!2y5417072769723639652!2s%2Fg%2F11s7xmj488!4m2!1x108018228!2x1067127545!15sgcid%3Acoffee_shop!2b0!3b0!6b0!8b0","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://maps.gstatic.com/tactile/basepage/loader_beige_2x.gif","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://fonts.gstatic.com/l/font?kit=HhyAU5Ak9u-oMExPeInvcuEmPosC9zSpYaEEU68cdvrHJvcSqdPLEJIz8dTgzBT9ALQUyeAJjZW9-iIiYoUy8JdFwRNFsns0F97GQPKqMtUz9qwMI-ep4vkaJDxa9-teC1DT46E5POW083Yx8fcyg5EJOmcAPdMRpcev0HfDUknfmJ0u0CZYU1KsjJrI_ZzHR6YWN36zzYj75DRON9VdXfMBa3gA6gf0qciP4GDM9TkibQo5VdGFLSJnsVWRSIv4EguPiektz38Sxc5c-7Ix3qmShhDkWzp97YvfpcWUToqv_mrPqNSF9GEEQ8L7nIm-wC6Q2YfYjHxz0o_t-KWGIG8EatSi9wiptYNqdlTGHr6LMT9dLsegrA5n6uBsfcwL3AZXZhtWN2lxHgd4HMUQwk0aKOkvjBAZ4ET1sIQqwCRRmrYQ-kdDKA9Ye5tK9RSAwpt61ecYsC5Io0jgtFuPXrmGoCKHH7pGypn1k1K4bGIyH0x6TRR7k8eo6eT0IyHoGfYfjJ6JDViHBTHMEodOBsAndZDQJkAJhMceJus1Nk8zXz_3NzYwSLNqptK2_IE38rdfodqp9htpe6gJfBHzn7PdIK_WxWK-RaEMlq3OKmWM9iHh4HwzGQWBF--bfgk5cPXeGWe6hHg0D1oe9yZ5EYSuN--Ugao9kX-9Kqnj3MO_hsbnrN09x85hIuCrR223pDbbSLnlm_99204MnQSiTnhCIrNDta4YFuNdncEd9n-kWNSBbJdDcbtkdqYZvbgyAgxKRWgyCKxcS-6cjZpPo1A17wQTDuSwy-FWA_u8zUUDOYqzSNVKUR0iXhCdQlXfJFjo7rxzeyfYLKnc_g5seaIL-MnpjPpYAg9Z4vEwT4YCKlRNXBe0rHWTu1N33jaxNTyAgdbjDhKsHizou4-TauAimIa-uPm8-4GYiC4uPGNYsiVz1qZHNeXxAZWQjlE_XV9WyOEMSE22OBe_4Y7n4eASjS09invZZF8CKQMkCOyiMQB0J2EcyAEfWfbEYcp5hNsLJ8pyvypP9AVM7-Py9xviZfKv490QZzFY59V67Gi7vklcgkqpV6JMI97dIgd1NJZtN321Lr0Jo2R0RXOWSbit3i2ITpDtcbyuXvx_dQYyNsIkY-GKDEFTW6AqQBf2E2jM1BoPImwU-q72Syz0cMUUA_dlUG727zWl-fGq4sAZ6dgLF8JOee3cUB8xsVaZ9T4QB4UCPORBNvWp9dVkFzbnIH-4AA&skey=f8ec4d50247dc1c1&v=v342","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/geougc-cs/AB3l90CSxkjJRpuL2EnjVeseZr85UYMloj2HiZ8Y0jngz6gh-pbLt1lb4fB2aVLlSfG6VXag_eQPeHBIoOVhMTgY__t1l7A8nylUyE_UTSbwAaoIlPhNIAlzaJNkwuvnojti3NH9OCeq=w174-h114-p","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/a-/ALV-UjW5Wn_n_ABPKPIisjiamBfi0e-HPwmU8Kn7KHIhe2_2Ie2Ipf-69g=s120-c-rp-mo-ba7-br100","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/a/default-user=w32-h32-p-rp-br100","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/geougc-cs/AB3l90Asn3U-KwoxBG_Q7u6RYjTRozcgx_jqXsQukr8I8760dhx3skVDE0KNxk9KI41gr2HtimNn1VMiJGbijYoL4qRYmWZFO3q81Umi-Iw0vioTKSrHDQf5y6AKcfGIxYLmVa3wqDQE=w300-h225-p","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/geougc-cs/AB3l90D2oPWOyX520bZ3gi94XGnRm4v5HPyIrX8Gqh0xssYKCX4cc81qKAZsFi4I2KXlIxQsFJmsP9p-mxduBmCG7B41dr_qehfajoZ4K8Eyl7bybPbTqVgtz0GjJc82hhrvfCxtmuoV=w300-h225-p","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/geougc-cs/AB3l90BLpWJcnCQs7wwJGDfz7sUfhDz6CbexXyFn-uwoeU9IVALq52MZM6p6c2C-uRNQr2UIfyMyTp1w-EDMf82UzLvp2HRVRZCb4q7oErJkQHUoDODE8orfGPVn0tmwwzYEGe6pipl9Fg=w300-h225-p","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/geougc-cs/AB3l90DgwACo6Bo7mDK0ohD7OjrmxIofVDyZE6OwGLVLvTeceo2UGUUHctqq9_OqeS50ncy8hGYevDsbecfhW5dbcG9umRKICx49msO6pvAe1q0N7SzgqQ7dUi__jodxQtSpYV8hGm87=w300-h225-p","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/geougc-cs/AB3l90CEPWoKZjZVpDyUWzsDFIS2tE0xNY9D9dbbWKbddUgRScBeMNyOKMOMJNF4ujxoO0mbWnrP9qwEfLfdekYd5Nty2otXZRMX8iT7EOROTwvV47fN1XMZVqljQgqkr0btxbpcroI=w300-h450-p","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/geougc-cs/AB3l90BO8Rz4YOuAlChO_3BQeBMqnv8gfTf1-hhyg8xZLrfD_KafmT258TMp3CUhIopq-onN2H1Z83COQ3doqdOdEjLJVbOHVqqzEb0eYgiWZau8E238BOUFFfaUeb2eB60wXNY-0xeg=w300-h450-p","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu7GxKOzY.woff2","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu7WxKOzY.woff2","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqG7IxC8ov2fIkieTP6NByuDqhFsGZ8MPdd-4dc7koi-K4vT7Zeol_A0tV2itPlq5PlArrTbVQ-LpPAS0k_rZ8FcwCtuR24j2piOy9PVfC_TRp4mW7cBuqHfMqOMQZ1qC_e8Mt4CB5sMPsD=w112-h112-p-k-no","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/gps-cs-s/AC9h4no5UZEenmg9m451vyYLA5Yvy_7fXY4mHeH9slXhozMSbU-OYzNtos7-0I2sccM3up8_iBqrYUd4ppLlL33Ps5u05Wx-Z-a0AK04yloJdZBGQtWQDQrt5fpIULbcwmjervZAnJ53=w112-h112-p-k-no","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/gps-cs-s/AC9h4nosl28vq4O0sXGv_4LdGr0mMDGkkq13qSmpoEU6tzJOUl19CGPJn7IzNkVb3flKha_AOaFgY1ZQa9ctOtOHrwK9W6WuaJKmo2HgF4wsKpe7DYYWkxLUjMEwUXYCaid-uEiHpG_LUg=w112-h112-p-k-no","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqikVxJxR7m-QjPct7ve5jQJahtmDOFpT_a-qobo6494vieiY-oNIYfRsTDavzpZLAvHlpvCVHrxItyeoDneMWJjtl4LnIdiqYec3j65SYUXMRJ2QJKzr9dPXfzZa9dtoUrsIk=w397-h298-k-no","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/gps-cs-s/AC9h4noQdRVidiLNE6lVpqMjHYSwCgJfVqc3GZZO3OM1xPNwJr4htzm6hjw3A3PA2nggDUqpo_UWQcz2Fxngf0TN41RBon56FHRJydgAsRBqen4m-GqO2iumbgxg-6cJEAoZ-LOP8oH1JAPBg8Ly=w397-h298-k-no","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/gps-cs-s/AC9h4nrrff4t4047vOFeq1Eh7ccfosoI7Of9Rze6MQakWIIa1Uw2tMUa9TLsIA_NnAKZrvO8fQ_w9zn3OmPy5f0AX5-bNCktMT5dXpI4EldSTi5k_zRzTQbkz_dcuhmGcH7dz1FPVdyz=w224-h398-k-no","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqG7IxC8ov2fIkieTP6NByuDqhFsGZ8MPdd-4dc7koi-K4vT7Zeol_A0tV2itPlq5PlArrTbVQ-LpPAS0k_rZ8FcwCtuR24j2piOy9PVfC_TRp4mW7cBuqHfMqOMQZ1qC_e8Mt4CB5sMPsD=w397-h298-k-no","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/gps-cs-s/AC9h4no03iuE7zxLWkj81oUuOgmt9HFXdtoqs2Nwml_NjNd-DRdyvq1o2-WyhXslYWJXgWx8U0QjLBvRiBdOi2JKK7QhMwwgp4stz_QhsBs8GQHBwfTtozm8qM7yoKVvr8CbgzSqr7DM=w298-h298-k-no","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/gps-cs-s/AC9h4no_dTqpY0pkOv_HIkd5Lg_1luyzuIdwMeYEE4p3YGrffHNzCfx46f_kw-dhaqil0m3RN95GmmcN9Y2WPmeTE-IE9wUakjAyNeH9pK45eUCu5qKTjUlvPgzDUbPkaXx1_pLuZetc=w224-h398-k-no","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/gps-cs-s/AC9h4nquo_CB516NzA_cP1uI_eOXRuUZW3d1cisU2oDjXwzyVf1zdZ06NA5pOqvjvQ31g6Y3M62uCPjtsIsCebE_Nwp2gIdHCEZ9XY3dReNcLE0s2VLZQ1iDbvYdW2s1kZRkG2QPSHCnOw=w224-h398-k-no","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/gps-cs-s/AC9h4nrmT2HObpuBJGvKqdRJhZM_ACOHI_NeDuECRGxTALHvPa9DyaVN-ktkj_9MQcW-0QKqu_91DNVntzbMNsv8v5mi9MCfNlld5NgM4YkMuW3Iv7KJuGeSy-vY-sEyo-m9v7twJJQyuQ=w224-h298-k-no","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://streetviewpixels-pa.googleapis.com/v1/thumbnail?panoid=qcBVdbkTeV7G3g5m1aLR7A&cb_client=maps_sv.tactile.gps&w=224&h=298&yaw=354.61444&pitch=0&thumbfov=100","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/a-/ALV-UjVtB-4eke5bW9cnXJoQhH4KJtRCkEaaHrvbQq2Iw39eYbNC0n_6=w36-h36-p-rp-mo-ba6-br100","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/a-/ALV-UjUOqIymFAhvLhLsX4e-kE0nlYCIf49kvwezklcxWTdOpirfZ6vz=w36-h36-p-rp-mo-ba4-br100","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/a-/ALV-UjWArqNnXUuwb3RAysk6xdXSgHMbqNVZ95IQ0mxkhaHw5nb0jSYN=w36-h36-p-rp-mo-br100","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/gps-cs-s/AC9h4noOxVRA660f6Sy8WFIHfPAGyxIY448RH1F1aW4HtBPyjDDRUJNcyyzlg2oVjB0x89ZkiWjVNEUL2zXE68fkdnTxbo2Om-PDTgFln6xl8StksgzdiAM8bJHA2xPG480XjzPNVRc8=w156-h114-p-k-no","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/data=dFjCMW0YucuAGCtqX90eKB--Y8FdixMmMRRlcRd0JCuaHEDvHDuxi70h3n8S3EkgKvPZlsqyolSp8Ga8lur46mW4uTfDhrJM7kR76Hwu4-nr3Bi93EHYKYTFur8qJlSHKqO0BkJRh31sV-aUnNoIpL1Y6dodELqUif-g6k5xqP9_fWsr","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/gps-cs-s/AC9h4nrEiWT8ziMH3KkH5xqHFqWazfVokPvl6rqNAVqAY8Cp695C1B0hvzfHViG9cp2ghN9GR2JCWyx_zJscDLddHq4Uu1yx0ClEKTwMqBRD8A4nbuZIqsLeXsDaxpQkP_MYmRsycAbA5FGZLP8=w156-h114-p-k-no","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/gps-cs-s/AC9h4nrQmX7bSn953yG2pZ2OvbsfIJncj59QythaDhutKLKtPrS3t3VbLPtrXucUDP9nDU7Mjtd9C3uCQITRu5q_C4i6PCXWlYCRqcYTbSR_gupSx2wv8ivp8D0ybe7wioCvhOLz09ZSSw=w156-h114-p-k-no","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqikVxJxR7m-QjPct7ve5jQJahtmDOFpT_a-qobo6494vieiY-oNIYfRsTDavzpZLAvHlpvCVHrxItyeoDneMWJjtl4LnIdiqYec3j65SYUXMRJ2QJKzr9dPXfzZa9dtoUrsIk=w408-h306-k-no","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/images/branding/mapslogo/1x/googlelogo_62x24_with_2_stroke_color_66x26dp.png","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/images/branding/mapslogo/1x/googlelogo_light_62x24_with_2_stroke_color_66x26dp.png","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqikVxJxR7m-QjPct7ve5jQJahtmDOFpT_a-qobo6494vieiY-oNIYfRsTDavzpZLAvHlpvCVHrxItyeoDneMWJjtl4LnIdiqYec3j65SYUXMRJ2QJKzr9dPXfzZa9dtoUrsIk=w408-h306-k-no","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/gen_204?v=3&s=tactile&action=vtworker&srt=1869&tbsrt=2009&tran=15&conn=onchange&ei=BqOmaIvOGrzl2roPsIDz2Ag&cad=vws:3225.5999999996275,ct:1,jsv:20250818.0,cz:17,w:1366,h:900,sc:0,drv:m,sph:0,rdv:m&e=10210186,10210187,10211331,10211485,10211515,10211716,10211747,10211947,10212086,10212092,1368782,1368785,4861626,10211310,4897086,47054629,94278265,72458815,10211069,94243289,94255677,72860224,94260020&atyp=csi&opi=79508299&rt=noop.0","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/xjs/_/ss/k=xjs.qs.5nHWcb68OWI.L.W.O/am=ACEAABAQAgAAAGAAAAAAhACAFAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEAAAAAAEAAAAAYAAAAAAAAAAAAACAAAAAAIAIAQAUAKAAAAACCLwAAkAIAAAAAACL4AMZVAAAAAAAEAAAgAAgAAIAEAAAAAAAAgAAEAAACAAQACNgUEAIQgBABAAAIBQCYEAAggAABQEAEABkAACARACDIAAQAQDDIAAAAEAAAAAAgAACAUwMQGAABAAgIwAAAAAA0AAIAAKAYAIAAAoAAAAAAAAAAAAAAAAAAAEAAAACAAAAADIALQRgAARWApQMHAACQAAAAAAICBABAQAAAAAAgAABEAgCBBwAAAAoAIAADAG-AwAMAAABEAIgAAIgAAAgAKABAAAAAAAoBQAAKAAIAABDAKAAAAwAACIAjigYAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAFAAAAAAAAAAAAAAAAAAAAAAAAAAAIA/d=1/ed=1/rs=ACT90oE_wMSm9Snmq5bWz7acnMM6dFxb_g/m=jsa,dbm,hsm,ssm,trex,d,csi?cb=73047164","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcSZ0X5yTf-EISoYUyG4u95tzlLja68ZWj4HdWISPJcnGAkIqy-trZSmOeTQPmhJRJ7-KDJ4ycfXaovRvNJ-qx-_cKz90s3Txg","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://encrypted-tbn2.gstatic.com/favicon-tbn?q=tbn%3AANd9GcS-wS3328FodTEHXg6BAYk9p6pxSZyUYuJ2yqXZ0xMVvcYKvQ_KzWoZyHnYKhcAcYplTdaX_jMLmbaTTab_WhK3jEDy3fJjvto","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://encrypted-tbn3.gstatic.com/favicon-tbn?q=tbn%3AANd9GcQPZom9H3cVvz40kMXaASXn-Tm9MtxUM8oB8YKRYSKOINiJsnAraOFoIjuXcllPPxek_DqgdhyHU5vGpwiW42hVCDNfu_oKKYysZHKHTlBvObp3n40Z","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Refused to execute inline event handler because it violates the following Content Security Policy directive: \"script-src 'nonce-MOxbACPYm2W1KGPziKsbQQ' 'strict-dynamic' 'report-sample' 'unsafe-eval' 'unsafe-inline' https: http: local.adguard.org 'nonce-9580df05df70418c89ed0c8e2a2'\". Note that 'unsafe-inline' is ignored if either a hash or nonce value is present in the source list.\n"}
+{"type":"requestfailed","url":"https://www.google.com/gen_204?v=3&s=tactile&action=worker_mvl0&tran=15&conn=onchange&ei=BqOmaIvOGrzl2roPsIDz2Ag&cad=ct:1,jsv:20250818.0,cz:17,w:1366,h:900,sc:0,drv:m,sph:0,rdv:m&e=10210186,10210187,10211331,10211485,10211515,10211716,10211747,10211947,10212086,10212092,1368782,1368785,4861626,10211310,4897086,47054629,94278265,72458815,10211069,94243289,94255677,72860224,94260020&atyp=csi&opi=79508299&rt=wl0.1090,wasml0.1211,wl1.1360,wasml1.1868","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"info","msg":"landed","ms":4373}
+{"type":"requestfailed","url":"https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqikVxJxR7m-QjPct7ve5jQJahtmDOFpT_a-qobo6494vieiY-oNIYfRsTDavzpZLAvHlpvCVHrxItyeoDneMWJjtl4LnIdiqYec3j65SYUXMRJ2QJKzr9dPXfzZa9dtoUrsIk=w408-h306-k-no","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/icon/name=assets/icons/spotlight/spotlight_pin_v4_outline-2-medium.png,assets/icons/spotlight/spotlight_pin_v4-2-medium.png,assets/icons/spotlight/spotlight_pin_v4_dot-2-medium.png&highlight=c5221f,ea4335,b31412?scale=1","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/gen_204?atyp=i&ct=psnt&cad=&nt=navigate&ei=B6OmaIqgK-Hk2roP3OWBoAU&zx=1755751176472&opi=79508299","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://fonts.gstatic.com/s/roboto/v18/KFOlCnqEu92Fr1MmWUlfBBc4.woff2","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://fonts.gstatic.com/s/roboto/v18/KFOlCnqEu92Fr1MmWUlfCxc4EsA.woff2","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://fonts.gstatic.com/s/roboto/v18/KFOlCnqEu92Fr1MmWUlfChc4EsA.woff2","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/icon/name=assets/icons/poi/tactile/forage_shadow_v2-2-medium.png&scale=4","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/icon/name=assets/icons/poi/tactile/forage_outline_v1-2-medium.png&scale=4","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/icon/name=assets/icons/poi/tactile/forage_window_v1-2-medium.png&scale=4","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/icon/name=assets/icons/poi/quantum/modern_pinlet/cafe_pinlet_v3-2-medium.png&scale=4","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/icon/name=assets/icons/transit/quantum_v2/transit-round-container-shadow_v3-0-tiny.png&scale=4","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/icon/name=assets/icons/transit/quantum_v2/transit-round-container-outline_v3-0-tiny.png&scale=4","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/icon/name=assets/icons/transit/quantum_v2/transit-round-container_v3-0-tiny.png&scale=4","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/icon/name=assets/icons/transit/quantum_v2/bus-0-tiny.png&scale=4","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/icon/name=assets/icons/road/arrow-opaque-2-medium.png&scale=4","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/icon/name=assets/icons/poi/quantum/modern_pinlet/restaurant_pinlet_v4-2-medium.png&scale=4","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/icon/name=assets/icons/poi/quantum/modern_pinlet/lodging_pinlet-2-medium.png&scale=4","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/icon/name=assets/icons/poi/quantum/modern_pinlet/dot_pinlet-2-medium.png&scale=4","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/icon/name=assets/icons/poi/quantum/modern_pinlet/school_pinlet-2-medium.png&scale=4","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/icon/name=assets/icons/poi/quantum/modern_pinlet/worship_dharma_pinlet-2-medium.png&scale=4","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/icon/name=assets/icons/poi/quantum/modern_pinlet/shoppingbag_pinlet-2-medium.png&scale=4","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/icon/name=assets/icons/spotlight/spotlight_pin_v4_outline-2-medium.png&scale=4","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/icon/name=assets/icons/spotlight/spotlight_pin_v4-2-medium.png&scale=4","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/icon/name=assets/icons/spotlight/spotlight_pin_v4_dot-2-medium.png&scale=4","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"requestfailed","url":"https://www.google.com/maps/vt/icon/name=assets/icons/poi/quantum/modern_pinlet/camera_pinlet-2-medium.png&scale=4","method":"GET","failure":"net::ERR_FAILED"}
+{"type":"console","level":"error","text":"Failed to load resource: net::ERR_FAILED"}
+{"type":"click_err","selector":"button[role=\"tab\"][aria-label*=\"Reviews\" i]","label":"tab_0","err":"TimeoutError: locator.click: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button[role=\"tab\"][aria-label*=\"Reviews\" i]').first()\u001b[22m\n\u001b[2m    - locator resolved to <button role=\"tab\" tabindex=\"-1\" class=\"hh2c6 \" data-tab-index=\"2\" aria-selected=\"false\" jslog=\"145620; track:click;\" aria-label=\"Reviews for Highlands Coffee 417 Dien Bien Phu\" jsaction=\"pane.wfvdle5tabs.tabClick; mousedown:pane.wfvdle5tabs.dragTabs; focus:pane.wfvdle5tabs.focus\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <canvas id=\"\" width=\"1366\" height=\"900\" class=\"aFsglc\"></canvas> from <div id=\"scene\" class=\"id-scene\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <canvas id=\"\" width=\"1366\" height=\"900\" class=\"aFsglc\"></canvas> from <div id=\"scene\" class=\"id-scene\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    9 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <canvas id=\"\" width=\"1366\" height=\"900\" class=\"aFsglc\"></canvas> from <div id=\"scene\" class=\"id-scene\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n"}
+{"type":"fatal","message":"Error: page.evaluate: TypeError: Cannot destructure property 'rounds' of 'args' as it is undefined.\n    at eval (eval at evaluate (:291:30), <anonymous>:2:17)\n    at UtilityScript.evaluate (<anonymous>:293:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"}

@@ -1,7 +1,8 @@
-from pathlib import Path
 import sys
+from pathlib import Path
 
-sys.path.append(str(Path(__file__).resolve().parent.parent))
+# Add the parent directory to Python path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from modules.link_extractor import extract_place_urls
 
@@ -37,3 +38,9 @@ def test_ignores_unrelated_urls():
         "https://www.google.com/maps/about for other stuff."
     )
     assert extract_place_urls(text) == []
+
+if __name__ == "__main__":
+    test_extracts_place_urls()
+    test_deduplicates_and_case_insensitive()
+    test_ignores_unrelated_urls()
+    print("All tests passed!")

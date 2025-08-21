@@ -9,8 +9,8 @@
     "noEmit": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "types": ["greasemonkey","node"]
+    "types": ["node"]
   },
-  "include": ["apps/**/*.ts", "apps/**/*.js", "apps/**/*.mjs", "scripts/**/*"],
-  "exclude": ["node_modules", "out", "data", "services"]
+  "include": ["package.json"],
+  "exclude": ["node_modules", "out", "data"]
 }

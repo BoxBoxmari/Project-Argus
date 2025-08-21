@@ -1,22 +1,21 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "ArgusReview",
   "type": "object",
-  "required": ["review_id","place_id","rating","text","posted_at","url","scraped_at","source","extractor_version"],
+  "required": ["run_id","place_id","review_id","rating","text","lang","published_at"],
   "properties": {
-    "review_id": {"type":"string"},
+    "run_id": {"type":"string"},
     "place_id": {"type":"string"},
-    "author_name": {"type":["string","null"]},
-    "rating": {"type":"number","minimum":0,"maximum":5},
+    "review_id": {"type":"string"},
+    "user_id": {"type":["string","null"]},
+    "rating": {"type":"integer","minimum":1,"maximum":5},
     "text": {"type":"string"},
-    "language": {"type":["string","null"]},
-    "posted_at": {"type":"string","format":"date-time"},
-    "owner_response": {"type":["string","null"]},
-    "like_count": {"type":["integer","null"],"minimum":0},
-    "url": {"type":"string","format":"uri"},
-    "scraped_at": {"type":"string","format":"date-time"},
-    "source": {"type":"string","enum":["google_maps"]},
-    "extractor_version": {"type":"string"}
+    "lang": {"type":"string"},
+    "likes": {"type":["integer","null"]},
+    "published_at": {"type":"string","format":"date-time"},
+    "fetched_at": {"type":"string","format":"date-time"},
+    "source": {"type":"string","enum":["userscript","node"]},
+    "meta": {"type":"object","additionalProperties": true}
   },
-  "additionalProperties": true
+  "additionalProperties": false
 }

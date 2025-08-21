@@ -17,14 +17,14 @@ export function enqueueReviewJob(payload: { placeId: string; cursor?: string }) 
 }
 
 export function startWorker(handler: (data: any) => Promise<void>) {
-  const worker = new Worker("reviews", async job => {
+  const worker = new Worker("reviews", async (job: any) => {
     await handler(job.data);
   }, { connection, concurrency: Number(process.env.WORKER_CONCURRENCY ?? 3) });
 
-  worker.on("failed", (job, err) => {
+  worker.on("failed", (job: any, err: any) => {
     console.error(JSON.stringify({ level: "error", msg: "job_failed", jobId: job?.id, err: String(err) }));
   });
-  worker.on("completed", job => {
+  worker.on("completed", (job: any) => {
     console.log(JSON.stringify({ level: "info", msg: "job_completed", jobId: job.id }));
   });
   return worker;

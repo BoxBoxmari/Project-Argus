@@ -3,7 +3,7 @@
   "env": { "es2022": true, "browser": true, "node": true },
   "parserOptions": { "sourceType": "module", "ecmaVersion": 2022 },
   "extends": ["eslint:recommended","plugin:import/recommended","prettier"],
-  "ignorePatterns": ["node_modules", "out", "node/**/*", "services/**/*", "processors/**/*"],
+  "ignorePatterns": ["node_modules/**", "out/**", "data/**", "**/*.user.js", "**/logs/**", "**/dist/**"],
   "rules": {
     "no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
     "import/no-unresolved": "off"
@@ -20,14 +20,14 @@
       }
     },
     {
-      "files": ["userscripts/**/*"],
+      "files": ["apps/userscript/**/*", "userscripts/**/*"],
       "env": { "browser": true },
       "globals": { "unsafeWindow": "readonly", "GM_getValue":"readonly","GM_setValue":"readonly","GM_deleteValue":"readonly","GM_listValues":"readonly","GM_download":"readonly","GM_addStyle":"readonly" }
     },
     {
       "files": ["**/jest.config.js"],
       "env": { "node": true },
-      "globals": { "module": "readonly" }
+      "globals": { "module": "readonly", "exports": "readonly" }
     }
   ]
 }
