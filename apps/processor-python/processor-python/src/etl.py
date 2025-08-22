@@ -1,7 +1,11 @@
 import json
 import os
 import sys
-from .schema import ReviewV1
+try:
+    from .schema import ReviewV1
+except ImportError:
+    # Fallback for direct execution
+    from schema import ReviewV1
 
 def load_ndjson(fp):
     for line in fp:

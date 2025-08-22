@@ -16,5 +16,8 @@
       "pythonVersion": "3.11",
       "extraPaths": ["src"]
     }
-  ]
+  ],
+  "venvPath": ".",
+  "venv": ".",
+  "pythonPath": "python"
 }

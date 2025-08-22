@@ -4,7 +4,8 @@ from pathlib import Path
 # Add the parent directory to Python path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from modules.link_extractor import extract_place_urls
+from processor_python.modules import link_extractor
+from processor_python.modules.link_extractor import extract_place_urls
 
 
 def test_extracts_place_urls():

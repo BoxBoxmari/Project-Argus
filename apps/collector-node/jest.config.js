@@ -1,11 +1,14 @@
-export const preset = 'ts-jest';
-export const testEnvironment = 'node';
-export const transform = {
-  '^.+\\.tsx?$': 'ts-jest',
+/* eslint-disable no-undef */
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  transform: {
+    '^.+\\.tsx?$': 'ts-jest',
+  },
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
+  testMatch: ['**/tests/**/*.test.ts', '**/tests/**/*.spec.ts'],
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx}',
+    '!src/**/*.d.ts',
+  ],
 };
-export const moduleFileExtensions = ['ts', 'tsx', 'js', 'jsx', 'json'];
-export const testMatch = ['**/tests/**/*.test.ts', '**/tests/**/*.spec.ts'];
-export const collectCoverageFrom = [
-  'src/**/*.{ts,tsx}',
-  '!src/**/*.d.ts',
-];

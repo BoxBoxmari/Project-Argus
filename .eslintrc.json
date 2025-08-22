@@ -3,7 +3,7 @@
   "env": { "es2022": true, "browser": true, "node": true },
   "parserOptions": { "sourceType": "module", "ecmaVersion": 2022 },
   "extends": ["eslint:recommended","plugin:import/recommended","prettier"],
-  "ignorePatterns": ["node_modules/**", "out/**", "data/**", "**/*.user.js", "**/logs/**", "**/dist/**"],
+  "ignorePatterns": ["node_modules/**", "out/**", "data/**", "**/*.user.js", "**/logs/**", "**/dist/**", "**/jest.config.js", "out/argus.user.js", "out/", "out/*"],
   "rules": {
     "no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
     "import/no-unresolved": "off"
@@ -25,9 +25,14 @@
       "globals": { "unsafeWindow": "readonly", "GM_getValue":"readonly","GM_setValue":"readonly","GM_deleteValue":"readonly","GM_listValues":"readonly","GM_download":"readonly","GM_addStyle":"readonly" }
     },
     {
-      "files": ["**/jest.config.js"],
+      "files": ["**/jest.config.js", "**/*jest.config.js"],
       "env": { "node": true },
-      "globals": { "module": "readonly", "exports": "readonly" }
+      "globals": { "module": "readonly", "exports": "readonly", "require": "readonly" }
+    },
+    {
+      "files": ["out/argus.user.js"],
+      "env": { "browser": true, "greasemonkey": true },
+      "globals": { "GM_getValue": "readonly", "GM_setValue": "readonly", "GM_deleteValue": "readonly", "GM_listValues": "readonly", "GM_download": "readonly", "GM_addStyle": "readonly" }
     }
   ]
 }

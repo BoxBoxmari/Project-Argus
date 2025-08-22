@@ -11,8 +11,13 @@ import argparse
 import json
 import sys
 from pathlib import Path
-from .etl import run as etl_run, load_ndjson
-from .schema import ReviewV1
+try:
+    from .etl import run as etl_run, load_ndjson
+    from .schema import ReviewV1
+except ImportError:
+    # Fallback for direct execution
+    from etl import run as etl_run, load_ndjson
+    from schema import ReviewV1
 
 def cmd_process(args):
     """Process NDJSON files through the ETL pipeline."""

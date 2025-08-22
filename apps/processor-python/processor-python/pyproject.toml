@@ -19,7 +19,13 @@ typeCheckingMode = "basic"
 reportMissingImports = false
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
-python_files = ["test_*.py", "*_test.py"]
-python_functions = ["test_*"]
-addopts = "-v"
+ testpaths = ["tests"]
+ python_files = ["test_*.py", "*_test.py"]
+ python_functions = ["test_*"]
+ addopts = "-v"
+ pythonpath = ["processor_python"]
+
+[tool.basedpyright]
+ typeCheckingMode = "basic"
+ reportMissingImports = true
+ extraPaths = ["apps/processor-python","apps/processor-python/processor_python"]

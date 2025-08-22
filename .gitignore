@@ -98,3 +98,13 @@ data/processed/
 /out/
 /apps/userscript/*.map
 *.DS_Store
+
+# Test artifacts
+reviews.json
+events.jsonl
+final.png
+summary.json
+
+# PowerShell run directories
+argus_run_*/
+argus_demo_*/
