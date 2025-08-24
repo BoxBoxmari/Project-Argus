@@ -1,5 +1,0 @@
-# Proxy pool for Argus crawler
-# Format: http://proxy:port or http://user:pass@proxy:port
-# Example entries (replace with actual proxies):
-# http://proxy1.example.com:8080
-# http://proxy2.example.com:8080

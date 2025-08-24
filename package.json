@@ -1,65 +1,19 @@
 {
-  "name": "argus",
-  "version": "1.0.0",
-  "description": "Scaffold created.",
-  "main": "index.js",
-  "type": "module",
+  "name": "project-argus",
+  "private": true,
+  "packageManager": "pnpm@9",
+  "workspaces": ["apps/*", "libs/*"],
   "scripts": {
-    "prepare": "husky install",
-    "lint": "eslint .",
-    "typecheck": "tsc -p tsconfig.json || echo 'skip ts'",
-    "test": "vitest run || echo 'skip tests'",
-    "crawl": "node ./scrape.mjs",
-    "process": "python ./apps/processor-python/processor-python/src/cli.py process ./out/raw/sample.ndjson ./out/processed/reviews.ndjson",
-    "cx-map": "python ./apps/processor-python/processor-python/src/cx_map.py ./out/processed/reviews.ndjson --out ./out/cx",
-    "build": "echo 'no build step'",
-    "audit": "node ./scripts/audit.mjs",
-    "format": "prettier -w .",
-    "build:userscript": "npx --yes esbuild apps/userscript/argus.entry.ts --bundle --format=iife --platform=browser --outfile=out/argus.user.js --banner:js=\"/* ==UserScript==\\n@name Argus Google Maps Reviews\\n@namespace https://github.com/BoxBoxmord/Project-Argus\\n@version 0.1.0\\n@match https://www.google.com/maps/*\\n@grant GM_getValue\\n@grant GM_setValue\\n@grant GM_deleteValue\\n@grant GM_listValues\\n@grant GM_download\\n@grant GM_addStyle\\n==/UserScript== */\"",
-    "check": "npm run lint && npm run typecheck"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/BoxBoxmari/Project-Argus.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/BoxBoxmari/Project-Argus/issues"
-  },
-  "homepage": "https://github.com/BoxBoxmari/Project-Argus#readme",
-  "dependencies": {
-    "ajv": "^8.17.1",
-    "ajv-formats": "^3.0.1",
-    "bottleneck": "^2.19.5",
-    "dayjs": "^1.11.13",
-    "fs-extra": "^11.2.0",
-    "glob": "^11.0.0",
-    "p-limit": "^5.0.0",
-    "playwright": "^1.55.0"
+    "build": "pnpm -r run build",
+    "lint": "pnpm -r run lint",
+    "test": "pnpm -r run test",
+    "clean": "pnpm -r run clean",
+    "dev": "pnpm -r run dev"
   },
   "devDependencies": {
-    "@types/greasemonkey": "^4.0.7",
     "@types/node": "^22.0.0",
-    "@typescript-eslint/eslint-plugin": "^8.0.0",
-    "@typescript-eslint/parser": "^8.0.0",
-    "esbuild": "^0.23.0",
-    "eslint": "^9.7.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-import": "^2.29.0",
-    "husky": "^9.0.0",
-    "lint-staged": "^15.2.0",
-    "prettier": "^3.3.0",
-    "typescript": "^5.5.4",
-    "vitest": "^2.0.0"
-  },
-  "lint-staged": {
-    "*.{js,mjs,ts,tsx,css,md,json,yml,yaml}": [
-      "prettier -w"
-    ],
-    "*.{js,mjs,ts,tsx}": [
-      "eslint --fix"
-    ]
+    "typescript": "^5.6.2",
+    "eslint": "^9.10.0",
+    "prettier": "^3.3.3"
   }
 }

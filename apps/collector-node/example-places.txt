@@ -1,2 +1,0 @@
-https://www.google.com/maps/place/Starbucks/@10.7629,106.6820,17z/data=!3m1!4b1!4m6!3m5!1s0x31752f1b7c3ed289:0xa06651894598e488!8m2!3d10.7629!4d106.6820!16s%2Fg%2F11c5m7k8k8
-https://www.google.com/maps/place/McDonald's/@10.7758,106.6956,17z/data=!3m1!4b1!4m6!3m5!1s0x31752f4a7c1234ab:0xb1234567890abcde!8m2!3d10.7758!4d106.6956!16s%2Fg%2F11f5n8m9n0

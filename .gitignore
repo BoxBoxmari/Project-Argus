@@ -1,110 +1,72 @@
-# Dependencies
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.npm
-.yarn-integrity
-
-# Environment variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Output and log directories
-outputs/
-logs/
+# --- Global ---
+.DS_Store
+Thumbs.db
 *.log
+*.tmp
+.tmp/
+.cache/
+.temp/
+.env
+.env.*
+!.env.example
 
-# Python build artifacts
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
+# --- Node/Playwright ---
+node_modules/
+pnpm-lock.yaml
+npm-debug.log
+yarn.lock
 dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
+build/
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+blob-report/
+.trace/
+*.har
+*.mp4
+*.webm
+*.zip
 
-# Python virtual environments
-venv/
-env/
-ENV/
-env.bak/
-venv.bak/
-
-# Coverage and testing
-.coverage
+# --- Python ---
+.venv/
+__pycache__/
 .pytest_cache/
-.tox/
-.nox/
-coverage.xml
-*.cover
-.hypothesis/
+.ipynb_checkpoints/
+.ruff_cache/
+.mypy_cache/
+*.ipynb_convert/
 
-# IDE and editor files
+# --- PowerShell ---
+*.ps1xml
+*.psc1
+*.clixml
+Transcripts/
+
+# --- Data ---
+datasets/
+data/
+outputs/
+artifacts/
+*.json
+*.csv
+*.parquet
+*.ndjson
+
+# --- IDE ---
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
+
+# --- OS ---
 .DS_Store
 Thumbs.db
+desktop.ini
 
-# Temporary files
-*.tmp
-*.temp
-*.bak
-*.backup
-
-# Node/JS
-pnpm-lock.yaml
-yarn.lock
-
-# Go
-bin/
-*.test
-
-# OS noise
-.DS_Store
-Thumbs.db
-
-# Docker & env
-.env.*
-!.env.example
-
-# Data
-data/tmp/
-data/processed/
-!data/raw/
-!data/.gitkeep
-
-# Argus restructure
-/out/
-/apps/userscript/*.map
-*.DS_Store
-
-# Test artifacts
-reviews.json
-events.jsonl
-final.png
-summary.json
-
-# PowerShell run directories
-argus_run_*/
-argus_demo_*/
+# --- Build artifacts ---
+*.tsbuildinfo
+*.map
+*.min.js
+*.min.css

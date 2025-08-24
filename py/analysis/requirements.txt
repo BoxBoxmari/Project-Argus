@@ -1,0 +1,8 @@
+notebook
+matplotlib
+seaborn
+pandas
+pyarrow
+polars
+jupyter
+ipykernel
