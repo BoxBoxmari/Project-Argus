@@ -19,6 +19,9 @@ dist/
 build/
 coverage/
 .nyc_output/
+.turbo/
+.vite/
+.eslintcache
 playwright-report/
 test-results/
 blob-report/
@@ -27,6 +30,7 @@ blob-report/
 *.mp4
 *.webm
 *.zip
+node-compile-cache/
 
 # --- Python ---
 .venv/
@@ -44,14 +48,11 @@ __pycache__/
 Transcripts/
 
 # --- Data ---
-datasets/*
+datasets/**
 !datasets/.gitkeep
 data/
 outputs/
 artifacts/
-*.json
-*.csv
-*.parquet
 *.ndjson
 
 # --- IDE ---
@@ -71,3 +72,33 @@ desktop.ini
 *.map
 *.min.js
 *.min.css
+# Node
+node_modules/
+dist/
+coverage/
+.eslintcache
+.turbo/
+.vite/
+
+# Datasets / artifacts
+datasets/
+artifacts/
+outputs/
+*.ndjson
+*.har
+*.log
+
+# Python
+.venv/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# Go
+bin/
+vendor/
+
+# Rust
+target/
