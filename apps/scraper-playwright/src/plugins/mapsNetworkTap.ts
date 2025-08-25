@@ -1,7 +1,7 @@
 // Intercept GMaps XHR to extract review payloads; emits unified Review[]
 import { EventEmitter } from 'node:events';
 import type { Page } from 'playwright';
-import { Review, normalizeReview } from '@argus/js-core';
+import { Review, normalizeReview, Plugin } from '@argus/js-core';
 
 export interface NetworkTapOptions {
   blockHeavyResources?: boolean;
@@ -66,3 +66,11 @@ export function createNetworkTap(page: Page, emitter: EventEmitter) {
     }
   });
 }
+
+export const networkTapPlugin = (bus: EventEmitter): Plugin => ({
+  name: 'networkTap',
+  init({ page }: { page: Page }) {
+    tap(page, bus);
+  },
+  async run() {},
+});

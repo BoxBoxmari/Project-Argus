@@ -4,4 +4,5 @@ export * from "./session.js";
 export * from "./persist.js";
 export * from "./dataset.js";
 export * from "./errors.js";
+export * from "./plugin.js";
 
