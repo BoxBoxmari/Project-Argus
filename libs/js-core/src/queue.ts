@@ -14,13 +14,19 @@ class Bloom {
   private m: Uint8Array; 
   private n: number;
   
-  constructor(n = 1 << 20) { 
-    this.n = n; 
-    this.m = new Uint8Array(n >> 3); 
+  constructor(n = 1 << 20) {
+    this.n = n;
+    this.m = new Uint8Array(n >> 3);
   }
-  
-  private h(s: string, seed: number) { 
-    return crypto.createHash("sha1").update(seed + s).digest()[0] % this.n; 
+
+  private h(s: string, seed: number) {
+    return (
+      crypto
+        .createHash("sha1")
+        .update(seed + s)
+        .digest()
+        .readUInt32BE(0) % this.n
+    );
   }
   
   has(s: string) { 

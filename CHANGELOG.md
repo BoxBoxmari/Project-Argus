@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Repository Structure**: Added specs/ directory with JSON schemas for queue items and scraping results
 - **Data Directory**: Created datasets/ directory with .gitkeep for local data storage (gitignored)
 - **Seed URLs**: Added sample seed URLs file for testing the scraper system
+- **Bloom Filter**: Improved hashing for better distribution and lower collision rate (`libs/js-core/src/queue.ts`)
+- **Dataset Validation**: Required field checks now guard against `null`/`undefined` (`libs/js-core/src/dataset.ts`)
+- **Autoscaled Pool**: Timers cleared on shutdown with memory stats (`libs/js-core/src/autoscale.ts`)
+- **Python Ingest**: Schema validation via generator for NDJSON lines (`py/ingest/src/processor.py`)
 
 ### 🚀 Added
 

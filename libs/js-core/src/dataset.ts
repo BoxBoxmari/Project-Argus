@@ -77,18 +77,24 @@ export type Checkpoint = {
 export function validateReview(review: any): { valid: boolean; errors: string[] } {
   const errors: string[] = [];
   const required = ['place_id', 'place_url', 'review_id', 'author', 'rating', 'text', 'relative_time', 'time_unix'];
-  
+
   for (const field of required) {
-    if (!review[field]) {
+    if (review[field] === undefined || review[field] === null) {
       errors.push(`Missing required field: ${field}`);
     }
   }
-  
-  if (review.rating && (typeof review.rating !== 'number' || review.rating < 1 || review.rating > 5)) {
+
+  if (
+    review.rating !== undefined && review.rating !== null &&
+    (typeof review.rating !== 'number' || review.rating < 1 || review.rating > 5)
+  ) {
     errors.push('Rating must be a number between 1 and 5');
   }
-  
-  if (review.time_unix && (typeof review.time_unix !== 'number' || review.time_unix <= 0)) {
+
+  if (
+    review.time_unix !== undefined && review.time_unix !== null &&
+    (typeof review.time_unix !== 'number' || review.time_unix <= 0)
+  ) {
     errors.push('time_unix must be a positive number');
   }
   
