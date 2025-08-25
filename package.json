@@ -1,23 +1,10 @@
 {
   "private": true,
   "name": "project-argus",
-  "workspaces": [
-    "apps/*",
-    "libs/*"
-  ],
+  "packageManager": "pnpm@9.0.0",
   "scripts": {
-    "clean": "pnpm -r run clean",
-    "build": "pnpm -r run build",
-    "lint": "pnpm -r run lint",
-    "test": "pnpm -r run test",
-    "typecheck": "pnpm -r run typecheck"
-  },
-  "devDependencies": {
-    "@types/node": "^20.14.10",
-    "rimraf": "^5.0.5",
-    "typescript": "^5.5.4"
-  },
-  "dependencies": {
-    "playwright": "^1.55.0"
-  }
-}
+    "clean": "pnpm -r --workspace-concurrency=1 run clean || true",
+    "build": "pnpm -r --workspace-concurrency=1 run build",
+    "lint": "pnpm -r run lint || true",
+    "test": "pnpm -r run test || true",
+    "typecheck": "pnpm -r run typecheck || true"

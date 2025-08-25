@@ -1,4 +1,7 @@
-import argparse, json, os, re
+import argparse
+import os
+import re
+
 import pandas as pd
 
 STAGES = [
@@ -19,10 +22,11 @@ TOUCHPOINTS = [
 ]
 
 def tag_text(txt, rules):
-  tags=set()
-  low=txt.lower()
-  for name,pat in rules:
-    if re.search(pat, low): tags.add(name)
+  tags = set()
+  low = txt.lower()
+  for name, pat in rules:
+    if re.search(pat, low):
+      tags.add(name)
   return list(tags)
 
 def main():
