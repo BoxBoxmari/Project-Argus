@@ -16,6 +16,7 @@ export class RetryError extends Error {
   ) {
     super(message);
     this.name = 'RetryError';
+    Object.setPrototypeOf(this, RetryError.prototype);
   }
 }
 
