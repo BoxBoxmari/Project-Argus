@@ -8,5 +8,3 @@
     "lint": "pnpm -r run lint || true",
     "test": "pnpm -r run test || true",
     "typecheck": "pnpm -r run typecheck || true"
-  }
-}
