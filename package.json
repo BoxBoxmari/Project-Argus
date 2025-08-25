@@ -1,13 +1,29 @@
 {
-  "private": true,
-  "name": "project-argus",
-  "packageManager": "pnpm@9.0.0",
+  "name": "@argus/scraper-playwright",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "postinstall": "pnpm -C apps/scraper-playwright exec playwright install chromium || true",
-    "clean": "pnpm -r --workspace-concurrency=1 run clean || true",
-    "build": "pnpm -r --workspace-concurrency=1 run build",
-    "lint": "pnpm -r run lint || true",
-    "test": "pnpm -r run test || true",
-    "typecheck": "pnpm -r run typecheck || true"
+    "prestart": "playwright install chromium || true",
+    "clean": "rimraf dist",
+    "build": "tsc -b",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "typecheck": "tsc -b --pretty false",
+    "lint": "eslint . --config ../../.eslintrc.json"
+  },
+  "dependencies": {
+    "playwright": "^1.45.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.7.0",
+    "typescript": "^5.5.0",
+    "@types/node": "^20.12.12",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "rimraf": "^5.0.0"
   }
 }
