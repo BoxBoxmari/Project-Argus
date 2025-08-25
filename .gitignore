@@ -19,6 +19,9 @@ dist/
 build/
 coverage/
 .nyc_output/
+.turbo/
+.vite/
+.eslintcache
 playwright-report/
 test-results/
 blob-report/
@@ -44,7 +47,7 @@ __pycache__/
 Transcripts/
 
 # --- Data ---
-datasets/*
+datasets/**
 !datasets/.gitkeep
 data/
 outputs/

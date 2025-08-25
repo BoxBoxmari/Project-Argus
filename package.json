@@ -6,9 +6,11 @@
     "libs/*"
   ],
   "scripts": {
-    "build": "pnpm -r --workspace-concurrency=1 build",
-    "clean": "rimraf libs/js-core/dist apps/scraper-playwright/dist",
-    "tsc": "tsc -b"
+    "clean": "pnpm -r run clean",
+    "build": "pnpm -r run build",
+    "lint": "pnpm -r run lint",
+    "test": "pnpm -r run test",
+    "typecheck": "pnpm -r run typecheck"
   },
   "devDependencies": {
     "@types/node": "^20.14.10",

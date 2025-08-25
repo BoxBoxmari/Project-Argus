@@ -1,0 +1,21 @@
+# Files/directories safe to remove
+node_modules/
+dist/
+coverage/
+.turbo/
+.vite/
+.eslintcache
+.playwright-report/
+.test-results/
+blob-report/
+.trace/
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.log
+datasets/
+artifacts/
+outputs/
+*.ndjson
+*.har
