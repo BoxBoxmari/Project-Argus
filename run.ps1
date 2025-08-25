@@ -6,8 +6,12 @@ $env:ARGUS_DEBUG='1'
 $env:ARGUS_RESET_QUEUE='1'      # reset queue.ndjson mỗi lần chạy
 $env:ARGUS_REQUEUE_SEEDS='1'    # ép seed về trạng thái 'queued'
 
-$seedPath = "data/raw/seed_urls.txt"
-$env:ARGUS_SEED_URLS = [IO.File]::ReadAllText($seedPath)
+$seedPath = Join-Path $PSScriptRoot 'data\raw\seed_urls.txt'
+if (Test-Path $seedPath) {
+  $env:ARGUS_SEED_URLS = [IO.File]::ReadAllText($seedPath)
+} elseif (-not $env:ARGUS_URLS) {
+  throw "Missing seeds: provide data\raw\seed_urls.txt or set ARGUS_URLS."
+}
 
 # đảm bảo app đã build
 pnpm --filter @argus/scraper-playwright run build

@@ -25,25 +25,28 @@ if (-not (Get-Command pnpm -ErrorAction SilentlyContinue)) {
   corepack prepare pnpm@$PnpmVersion --activate
 }
 
-Write-Section "Stopping node"
-Stop-IfRunning node
+# == Stopping node ==
+Get-Process node -ErrorAction SilentlyContinue | Stop-Process -Force
 
-Write-Section "Cleaning dist folders"
-$targets = @(
-  ".\libs\js-core\dist",
-  ".\apps\scraper-playwright\dist"
+# == Cleaning dist folders ==
+$paths = @(
+  "libs/js-core/dist",
+  "apps/scraper-playwright/dist"
 )
-foreach($t in $targets){
-  if (Test-Path $t) { Remove-Item -Recurse -Force $t }
-}
-Get-ChildItem -Path . -Directory -Filter dist -Recurse -ErrorAction SilentlyContinue |
-  Remove-Item -Recurse -Force
+foreach ($p in $paths) { if (Test-Path $p) { Remove-Item $p -Recurse -Force -ErrorAction SilentlyContinue } }
 
-Write-Section "Building workspace"
+# Xoá mọi tsbuildinfo để tránh cache incremental
+Get-ChildItem -Path "libs","apps" -Recurse -Filter "tsconfig.tsbuildinfo" -ErrorAction SilentlyContinue | Remove-Item -Force -ErrorAction SilentlyContinue
+
+Write-Host "`n== Building workspace =="
+
+# Dọn state build TypeScript ở level solution rồi build lại
+pnpm -w exec tsc -b --clean
 pnpm -w run build
 
-Write-Section "Running scraper"
-pwsh -f .\run.ps1
+Write-Host "`n== Running scraper =="
+pnpm -C apps/scraper-playwright run build
+pnpm -C apps/scraper-playwright start
 
 Write-Section "Artifacts"
 if (Test-Path .\libs\js-core\dist) {

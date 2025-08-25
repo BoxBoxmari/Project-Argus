@@ -1,11 +1,21 @@
 {
-  "name": "project-argus",
   "private": true,
-  "packageManager": "pnpm@10.15.0",
+  "name": "project-argus",
+  "workspaces": [
+    "apps/*",
+    "libs/*"
+  ],
   "scripts": {
     "build": "pnpm -r --workspace-concurrency=1 build",
-    "lint": "echo skip",
-    "prestart": "pnpm -w run build",
-    "test": "echo tests disabled in CI; enable locally with vitest or jest"
+    "clean": "rimraf libs/js-core/dist apps/scraper-playwright/dist",
+    "tsc": "tsc -b"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "playwright": "^1.55.0"
   }
 }
