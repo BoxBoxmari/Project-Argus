@@ -1,158 +1,98 @@
-import { chromium, Browser, Page } from 'playwright';
+import { chromium } from 'playwright';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
+import { promises as fs } from 'node:fs';
+import { collectGmapsReviews } from './gmaps.js';
 
-export class ArgusScraper {
-    private browser: Browser | null = null;
-    private page: Page | null = null;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname  = dirname(__filename);
+const appRoot    = dirname(__dirname); // dist -> app root
+const dsDir      = join(appRoot, 'datasets');
+const artDir     = join(dsDir, 'artifacts');
 
-    async init(): Promise<void> {
-        this.browser = await chromium.launch({ headless: true });
-        this.page = await this.browser.newPage();
-        
-        // Set user agent and viewport
-        await this.page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36');
-        await this.page.setViewportSize({ width: 1280, height: 720 });
-    }
-
-    async scrapeReviews(placeUrl: string): Promise<any[]> {
-        if (!this.page) throw new Error('Scraper not initialized');
-
-        try {
-            await this.page.goto(placeUrl, { waitUntil: 'domcontentloaded' });
-            await this.page.waitForTimeout(2000);
-
-            // Navigate to reviews
-            await this.navigateToReviews();
-            
-            // Extract reviews
-            const reviews = await this.extractReviews();
-            
-            return reviews;
-        } catch (error) {
-            console.error('Error scraping reviews:', error);
-            return [];
-        }
-    }
-
-    private async navigateToReviews(): Promise<void> {
-        if (!this.page) return;
-
-        // Try to click reviews tab
-        const reviewsTab = await this.page.locator('button[role="tab"][aria-label*="Reviews"]').first();
-        if (await reviewsTab.isVisible()) {
-            await reviewsTab.click();
-            await this.page.waitForTimeout(1000);
-        } else {
-            // Fallback: navigate directly to reviews URL
-            const currentUrl = this.page.url();
-            const reviewsUrl = currentUrl.replace(/\/data\![^?]+/, '/reviews');
-            await this.page.goto(reviewsUrl + 'hl=en&entry=ttu');
-            await this.page.waitForTimeout(2000);
-        }
-    }
-
-    private async extractReviews(): Promise<any[]> {
-        if (!this.page) return [];
-
-        const reviews: any[] = [];
-        let previousCount = 0;
-        let scrollAttempts = 0;
-        const maxScrolls = 50;
-
-        while (scrollAttempts < maxScrolls) {
-            // Find review elements
-            const reviewElements = await this.page.locator('[data-review-id]').all();
-            
-            for (const element of reviewElements) {
-                const reviewData = await this.parseReviewElement(element);
-                if (reviewData && !reviews.find(r => r.review_id === reviewData.review_id)) {
-                    reviews.push(reviewData);
-                }
-            }
-
-            // Scroll to load more
-            const scrollBox = await this.page.locator('div.m6QErb.DxyBCb.kA9KIf.dS8AEf').first();
-            if (await scrollBox.isVisible()) {
-                await scrollBox.evaluate(el => el.scrollBy(0, el.clientHeight * 0.8));
-                await this.page.waitForTimeout(1000);
-            }
-
-            // Check if we're still loading new reviews
-            if (reviews.length === previousCount) {
-                scrollAttempts++;
-            } else {
-                previousCount = reviews.length;
-                scrollAttempts = 0;
-            }
-        }
-
-        return reviews;
-    }
-
-    private async parseReviewElement(element: any): Promise<any> {
-        try {
-            const reviewId = await element.getAttribute('data-review-id');
-            const author = await element.locator('a').first().textContent() || '';
-            const rating = await this.extractRating(element);
-            const text = await element.locator('[data-review-text]').textContent() || '';
-            const time = await element.locator('span').first().textContent() || '';
-
-            return {
-                review_id: reviewId,
-                author: author.trim(),
-                rating,
-                text: text.trim(),
-                time: time.trim(),
-                extracted_at: new Date().toISOString()
-            };
-        } catch (error) {
-            console.error('Error parsing review element:', error);
-            return null;
-        }
-    }
-
-    private async extractRating(element: any): Promise<number | null> {
-        try {
-            const starElement = await element.locator('[aria-label*="stars"]').first();
-            if (await starElement.isVisible()) {
-                const ariaLabel = await starElement.getAttribute('aria-label');
-                const match = ariaLabel?.match(/(\d+(?:\.\d+)?)/);
-                return match ? parseFloat(match[1]) : null;
-            }
-        } catch (error) {
-            // Rating extraction failed
-        }
-        return null;
-    }
-
-    async close(): Promise<void> {
-        if (this.page) await this.page.close();
-        if (this.browser) await this.browser.close();
-    }
+async function ensureDirs() {
+  await fs.mkdir(dsDir, { recursive: true });
+  await fs.mkdir(artDir, { recursive: true });
 }
 
-// CLI usage
-if (import.meta.url === `file://${process.argv[1]}`) {
-    const scraper = new ArgusScraper();
-    
-    async function main() {
-        try {
-            await scraper.init();
-            const placeUrl = process.argv[2] || 'https://www.google.com/maps/place/Highlands+Coffee+417+Dien+Bien+Phu/';
-            const reviews = await scraper.scrapeReviews(placeUrl);
-            
-            console.log(JSON.stringify({
-                url: placeUrl,
-                reviews_count: reviews.length,
-                reviews,
-                extracted_at: new Date().toISOString()
-            }, null, 2));
-        } catch (error) {
-            console.error('Scraping failed:', error);
-            process.exit(1);
-        } finally {
-            await scraper.close();
-        }
-    }
-
-    main();
+function getSeeds(): string[] {
+  const env = (process.env.ARGUS_SEED_URLS || '').trim();
+  if (env) return env.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+  return [];
 }
+
+function stableReviewKey(r: any): string {
+  return r.id || `${r.author}|${r.date}|${r.text}`;
+}
+
+async function loadExistingKeysForUrl(url: string): Promise<Set<string>> {
+  const file = join(dsDir, 'reviews.ndjson');
+  const keys = new Set<string>();
+  try {
+    const buf = await fs.readFile(file, 'utf8');
+    for (const line of buf.split(/\r?\n/)) {
+      if (!line.trim()) continue;
+      try {
+        const row = JSON.parse(line);
+        if (row.url !== url) continue;
+        const reviews = Array.isArray(row.reviews) ? row.reviews : [];
+        for (const r of reviews) keys.add(stableReviewKey(r));
+      } catch {}
+    }
+  } catch {}
+  return keys;
+}
+
+async function saveNdjson(record: any) {
+  await fs.appendFile(join(dsDir, 'reviews.ndjson'), JSON.stringify(record) + '\n', 'utf8');
+}
+
+async function saveArtifacts(page, url: string, tag='0') {
+  const safe = url.replace(/[^a-z0-9]+/gi, '_').slice(0, 180);
+  await fs.writeFile(join(artDir, `${safe}_${tag}.html`), await page.content(), 'utf8').catch(()=>{});
+  await page.screenshot({ path: join(artDir, `${safe}_${tag}.png`), fullPage: true }).catch(()=>{});
+}
+
+async function delay(ms: number) { return new Promise(r => setTimeout(r, ms)); }
+
+async function run() {
+  await ensureDirs();
+  const seeds = getSeeds();
+  console.log(JSON.stringify({ t:'boot', seeds: seeds.length, preview: seeds[0]?.slice(0,160) ?? '' }));
+
+  if (!seeds.length) {
+    console.log('[Argus] No queued items. Check ARGUS_SEED_URLS or datasets/queue.ndjson');
+    return;
+  }
+
+  const headful = !!process.env.ARGUS_HEADFUL;
+  const interDelayMs = Number(process.env.ARGUS_RATE_DELAY_MS || 0) || 0;
+  const browser = await chromium.launch({
+    headless: !headful,
+    args: ['--disable-blink-features=AutomationControlled','--no-sandbox','--disable-dev-shm-usage']
+  });
+  const ctx = await browser.newContext({ viewport: { width: 1366, height: 900 } });
+  const page = await ctx.newPage();
+
+  for (const url of seeds) {
+    console.log(JSON.stringify({ t:'task-start', url }));
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60_000 }).catch(()=>{});
+
+    const existingKeys = await loadExistingKeysForUrl(url);
+    const result = await collectGmapsReviews(page, { maxItems: Number(process.env.ARGUS_MAX_REVIEWS || '0') || undefined });
+
+    // Filter out duplicates against existing
+    const filtered = (result.reviews || []).filter(r => !existingKeys.has(stableReviewKey(r)));
+
+    await saveArtifacts(page, url);
+    await saveNdjson({ url, ts: Date.now(), reviews: filtered, store: result.store, status: result.status });
+    console.log(JSON.stringify({ t:'task-ok', url, n: filtered.length, status: result.status }));
+
+    if (interDelayMs > 0) await delay(interDelayMs);
+  }
+
+  console.log(JSON.stringify({ t:'queue-drained' }));
+  await browser.close();
+}
+
+run().catch(e=>{ console.error(e); process.exit(1); });

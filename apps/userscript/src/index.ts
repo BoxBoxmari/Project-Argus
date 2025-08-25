@@ -11,9 +11,13 @@
 // @grant        GM_listValues
 // @grant        GM_download
 // @grant        GM_addStyle
+// @grant        GM_getResourceText
+// @grant        GM_getResourceURL
 // ==/UserScript==
 
 import { ArgusExtractor } from './extractor';
+export * from './progress';
+export * from './storage';
 
 (function() {
     'use strict';

@@ -7,7 +7,8 @@ This document outlines the migration from the old repository structure to the ne
 ## What Changed
 
 ### Before (Old Structure)
-```
+
+```text
 argus/
 ├── apps/api-go/           # Go orchestrator service
 ├── apps/processor-python/ # Python data processor
@@ -19,7 +20,8 @@ argus/
 ```
 
 ### After (New Structure)
-```
+
+```text
 argus/
 ├── apps/
 │   ├── userscript/           # Tampermonkey bundle + build
@@ -54,6 +56,7 @@ pwsh -f scripts/ps/repo-hardening.ps1
 ### 2. New Development Workflow
 
 #### Node.js Development
+
 ```bash
 # Install dependencies
 pnpm -w install
@@ -69,6 +72,7 @@ pnpm -w run dev
 ```
 
 #### Python Development
+
 ```bash
 # Setup ingest environment
 cd py/ingest
@@ -84,12 +88,14 @@ uv pip sync requirements.txt
 ### 3. File Migrations
 
 #### Moved Files
+
 - `test_runner.mjs` → `apps/scraper-playwright/src/main.ts`
 - `scrape.mjs` → Integrated into Playwright scraper
 - Python processing → `py/ingest/src/processor.py`
 - Go service → Preserved in `apps/api-go/` (legacy)
 
 #### New Files
+
 - `apps/userscript/` - Browser-based extraction
 - `libs/js-core/` - Shared utilities
 - `py/analysis/` - Data analysis tools
@@ -99,13 +105,16 @@ uv pip sync requirements.txt
 ## Breaking Changes
 
 ### 1. Script Commands
+
 **Old:**
+
 ```bash
 npm run crawl
 npm run process
 ```
 
 **New:**
+
 ```bash
 # Build userscript
 cd apps/userscript && pnpm run build
@@ -118,37 +127,44 @@ cd py/ingest && uv run python src/processor.py input.json
 ```
 
 ### 2. File Paths
+
 **Old:**
-```
+
+```text
 out/argus.user.js
 data/urls.txt
 ```
 
 **New:**
-```
+
+```text
 apps/userscript/dist/argus.user.js
 datasets/urls.txt
 ```
 
 ### 3. Dependencies
+
 **Old:** npm + pip
 **New:** pnpm + uv
 
 ## Benefits of New Structure
 
 ### 1. Clear Separation of Concerns
+
 - **Extraction**: Userscript and Playwright scraper
 - **Processing**: Python ingest module
 - **Analysis**: Jupyter notebooks
 - **Utilities**: Shared JavaScript library
 
 ### 2. Better Development Experience
+
 - Workspace-based dependency management
 - Consistent tooling across packages
 - Automated CI/CD pipeline
 - Comprehensive linting and formatting
 
 ### 3. Improved Maintainability
+
 - Modular architecture
 - Clear dependency boundaries
 - Standardized build processes
@@ -159,6 +175,7 @@ datasets/urls.txt
 ### Common Issues
 
 #### 1. Build Failures
+
 ```bash
 # Clean and rebuild
 pnpm -w run clean
@@ -167,6 +184,7 @@ pnpm -w run build
 ```
 
 #### 2. Python Environment Issues
+
 ```bash
 # Recreate virtual environment
 cd py/ingest
@@ -176,6 +194,7 @@ uv pip sync requirements.txt
 ```
 
 #### 3. TypeScript Errors
+
 ```bash
 # Check TypeScript configuration
 pnpm -w run typecheck
@@ -194,12 +213,14 @@ pnpm -w run lint --fix
 ## Next Steps
 
 ### Immediate Actions
+
 1. ✅ Complete repository restructuring
 2. ✅ Set up CI/CD pipeline
 3. ✅ Create comprehensive documentation
 4. ✅ Test build and lint processes
 
 ### Future Enhancements
+
 1. Add comprehensive test coverage
 2. Implement automated deployment
 3. Create development environment setup script
@@ -221,6 +242,7 @@ git checkout -b restore/old-structure
 ## Support
 
 For questions or issues with the migration:
+
 1. Review this migration guide
 2. Check the troubleshooting section
 3. Run diagnostic scripts

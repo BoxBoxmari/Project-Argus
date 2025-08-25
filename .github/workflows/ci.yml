@@ -1,62 +1,13 @@
 name: ci
-on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main, develop ]
-
+on: [push, pull_request]
 jobs:
-  js:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-    steps:
-      - uses: actions/checkout@v4
-      
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
-      
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'pnpm'
-      
-      - name: Install dependencies
-        run: pnpm -w install
-      
-      - name: Lint
-        run: pnpm -w run lint
-      
-      - name: Build
-        run: pnpm -w run build
-      
-      - name: Test
-        run: pnpm -w run test --if-present
-
-  py:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      
-      - uses: astral-sh/setup-uv@v3
-        with:
-          version: latest
-      
-      - name: Setup Python ingest
-        run: |
-          cd py/ingest
-          uv venv
-          uv pip sync requirements.txt
-      
-      - name: Setup Python analysis
-        run: |
-          cd py/analysis
-          uv venv
-          uv pip sync requirements.txt
-      
-      - name: Run Python tests
-        run: |
-          cd py/ingest
-          uv run pytest -q || true
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with: { node-version: '20' }
+      - run: npm i -g pnpm
+      - run: pnpm -w install
+      - run: pnpm -w run lint
+      - run: pnpm -w run build

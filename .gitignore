@@ -44,7 +44,8 @@ __pycache__/
 Transcripts/
 
 # --- Data ---
-datasets/
+datasets/*
+!datasets/.gitkeep
 data/
 outputs/
 artifacts/
