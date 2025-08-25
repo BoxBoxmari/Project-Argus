@@ -8,11 +8,12 @@ Usage:
 """
 
 import argparse
-import json
 import sys
-from pathlib import Path
-from .etl import run as etl_run, load_ndjson
+
+from .etl import load_ndjson
+from .etl import run as etl_run
 from .schema import ReviewV1
+
 
 def cmd_process(args):
     """Process NDJSON files through the ETL pipeline."""

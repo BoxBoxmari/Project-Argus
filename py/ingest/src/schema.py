@@ -1,6 +1,5 @@
-import json
-from typing import Dict, List, Tuple, Any, Optional
 from datetime import datetime
+from typing import Any, Dict, List, Optional, Tuple
 
 # Review schema fields based on libs/js-core/src/dataset.ts
 REVIEW_FIELDS = {
@@ -97,7 +96,7 @@ def normalize_review(raw: Dict[str, Any], meta: Optional[Dict[str, Any]] = None)
                     raw['time_unix'] = int(datetime.now().timestamp())
             else:
                 raw['time_unix'] = int(raw['date'])
-        except:
+        except Exception:
             raw['time_unix'] = int(datetime.now().timestamp())
     
     # Ensure required fields have defaults
