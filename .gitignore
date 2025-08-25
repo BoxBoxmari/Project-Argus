@@ -30,6 +30,7 @@ blob-report/
 *.mp4
 *.webm
 *.zip
+node-compile-cache/
 
 # --- Python ---
 .venv/
@@ -52,9 +53,6 @@ datasets/**
 data/
 outputs/
 artifacts/
-*.json
-*.csv
-*.parquet
 *.ndjson
 
 # --- IDE ---

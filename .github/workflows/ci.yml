@@ -14,6 +14,8 @@ jobs:
           node-version: 20
           cache: 'pnpm'
       - run: pnpm install
+      - name: Install Playwright browsers (chromium)
+        run: pnpm -C apps/scraper-playwright exec playwright install --with-deps chromium || true
       - run: pnpm -r run typecheck || true
       - run: pnpm -r run lint || true
       - run: pnpm -r run build
@@ -49,5 +51,5 @@ jobs:
         run: |
           set -e
           crates=$(git ls-files '**/Cargo.toml' | xargs -r -n1 dirname)
-          if [ -z "$crates" ]; then echo "no rust crates"; exit 0; fi
+          if [ -z "$crates" ]; then echo 'no rust crates'; exit 0; fi
           for c in $crates; do (cd "$c" && cargo clippy -- -D warnings && cargo check); done
