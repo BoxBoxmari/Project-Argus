@@ -1,8 +1,8 @@
 import { RequestQueue, Req } from './request-queue.js';
 import { AutoscaledPool } from './autoscale.js';
 import { retryWithStrategy, retryStrategies } from './retry.js';
-import { extractDomain, getRateLimit, calculateRateLimitDelay } from './domain-utils.js';
-import { createWriteStream } from 'fs';
+import { extractDomain, calculateRateLimitDelay } from './domain-utils.js';
+import { createWriteStream, promises as fs } from 'fs';
 import { dirname } from 'path';
 
 export interface ScraperOptions {
@@ -65,7 +65,7 @@ export class ScraperOrchestrator {
   private async setupOutputStreams() {
     // Ensure output directory exists
     const outputDir = dirname(this.options.outputFile);
-    await this.queue.init(); // This creates directories
+    await fs.mkdir(outputDir, { recursive: true });
     
     // Setup output stream for results
     this.outputStream = createWriteStream(this.options.outputFile, { flags: 'a' });
@@ -225,24 +225,13 @@ export class ScraperOrchestrator {
   async stop() {
     this.pool.stop();
     await this.queue.close();
-    
+
     if (this.outputStream) {
-      this.outputStream.end();
+      await new Promise(resolve => this.outputStream.end(resolve));
     }
-    
+
     if (this.logStream) {
-      this.logStream.end();
+      await new Promise(resolve => this.logStream.end(resolve));
     }
   }
 }
-
-// ví dụ nơi đang báo TS7006
-const onRetryHandler = (attempt: number, error: unknown, delay: number) => {
-  // logging hoặc metrics
-};
-
-// nơi dùng:
-retryWithStrategy(async () => {/* ... */}, {
-  ...retryStrategies.network,
-  onRetry: onRetryHandler
-});

@@ -2,6 +2,12 @@
 
 A comprehensive toolkit for extracting, processing, and analyzing Google Maps review data.
 
+## 🔄 Updates
+
+- Bloom filter hashing improved for lower collision rates.
+- Autoscaled pool cleans up timers on shutdown and reports memory usage.
+- Python ingest validates schema via lightweight NDJSON generator.
+
 ## 🏗️ Architecture
 
 ```text
