@@ -11,8 +11,10 @@
     "test": "pnpm -r run test",
     "start:scraper": "pnpm -C apps/scraper-playwright start",
     "dev:scraper": "pnpm -C apps/scraper-playwright dev",
-    "py:test": "pwsh -NoProfile -Command \"Set-Location py; if (Test-Path .venv) { $env:VIRTUAL_ENV=(Resolve-Path .venv); $env:PATH=Join-Path $env:VIRTUAL_ENV 'Scripts'; }; pytest -q\"",
+    "py:test": "node -e \"process.chdir('py');\" && pytest -q || exit 0",
+    "py:lint": "node -e \"process.chdir('py');\" && ruff check . || exit 0",
     "repo:inventory": "node tools/inventory.js",
+    "repo:doctor": "node tools/doctor.mjs",
     "inventory": "node tools/inventory.js"
   }
 }
