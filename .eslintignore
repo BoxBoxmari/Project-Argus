@@ -1,6 +1,0 @@
-node_modules/
-out/
-data/
-**/*.user.js
-**/argus_ps_test_*
-.git/
