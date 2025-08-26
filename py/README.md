@@ -1,3 +1,5 @@
+Chạy test: `pnpm run py:test`
+>>>>>>> 2c6bb0c (\chore(structure): move Python config to py/, harden jest/ts excludes, add repo doctor, tighten ignores\)
 # Argus Python
 
 Chạy test: `pnpm run py:test`
@@ -14,3 +16,6 @@ python -m venv .venv
 .\.venv\Scripts\activate
 pip install -r ingest/requirements.txt
 ```
+=======
+Chạy test: `pnpm run py:test`
+>>>>>>> 2c6bb0c (\chore(structure): move Python config to py/, harden jest/ts excludes, add repo doctor, tighten ignores\)

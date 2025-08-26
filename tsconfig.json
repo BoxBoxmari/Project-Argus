@@ -1,7 +1,10 @@
-{ 
-  "files": [], 
+{
+  "extends": "./tsconfig.base.json",
+  "files": [],
+  "include": ["apps","libs","tools","scripts"],
+  "exclude": ["**/dist/**","**/datasets/**","**/artifacts/**","**/storage/**","node_modules"],
   "references": [
-    { "path": "libs/js-core" }, 
+    { "path": "libs/js-core" },
     { "path": "apps/scraper-playwright" }
-  ] 
+  ]
 }
