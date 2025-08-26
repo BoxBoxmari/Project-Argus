@@ -1,3 +1,10 @@
+$ErrorActionPreference = 'Stop'
+Write-Host "== Stopping node =="; try { taskkill /F /IM node.exe | Out-Null } catch {}
+Write-Host "== Cleaning dist folders =="; pnpm -r run clean
+Write-Host "== Building workspace =="; pnpm -r --workspace-concurrency=1 build
+Write-Host "== Typecheck & lint =="; pnpm -r run typecheck; pnpm -r run lint
+Write-Host "== Start scraper =="; pnpm -C apps/scraper-playwright start
+>>>>>>> 5fca665 (\chore(repo): declutter root, unify Python under py/, relocate scripts/docs, remove staging artifacts\)
 # clean-build-run.ps1
 [CmdletBinding()]
 param(
@@ -58,3 +65,11 @@ if (Test-Path .\apps\scraper-playwright\dist) {
 } else { Write-Host "missing: apps/scraper-playwright/dist" -ForegroundColor Yellow }
 
 Write-Host "`nDone."
+=======
+$ErrorActionPreference = 'Stop'
+Write-Host "== Stopping node =="; try { taskkill /F /IM node.exe | Out-Null } catch {}
+Write-Host "== Cleaning dist folders =="; pnpm -r run clean
+Write-Host "== Building workspace =="; pnpm -r --workspace-concurrency=1 build
+Write-Host "== Typecheck & lint =="; pnpm -r run typecheck; pnpm -r run lint
+Write-Host "== Start scraper =="; pnpm -C apps/scraper-playwright start
+>>>>>>> 5fca665 (\chore(repo): declutter root, unify Python under py/, relocate scripts/docs, remove staging artifacts\)

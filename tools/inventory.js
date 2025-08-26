@@ -1,4 +1,9 @@
-#!/usr/bin/env node
+import { execSync } from "node:child_process";
+const run = (cmd) => execSync(cmd, { stdio: "inherit" });
+console.log("== Workspaces =="); run("pnpm -r list --depth -1");
+console.log("\n== Git clean preview =="); run("git clean -ndX");
+>>>>>>> 5fca665 (\chore(repo): declutter root, unify Python under py/, relocate scripts/docs, remove staging artifacts\)
+#!/usr/bin / env node
 import { readFileSync, readdirSync, statSync } from 'fs';
 import { join } from 'path';
 
@@ -59,3 +64,9 @@ for (const dir of workspaceDirs) {
         // Directory doesn't exist
     }
 }
+=======
+import { execSync } from "node:child_process";
+const run = (cmd) => execSync(cmd, { stdio: "inherit" });
+console.log("== Workspaces =="); run("pnpm -r list --depth -1");
+console.log("\n== Git clean preview =="); run("git clean -ndX");
+>>>>>>> 5fca665 (\chore(repo): declutter root, unify Python under py/, relocate scripts/docs, remove staging artifacts\)
