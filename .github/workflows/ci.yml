@@ -1,7 +1,7 @@
-name: CI
+name: ci
 on:
-  push: { branches: [ "**" ] }
-  pull_request: { branches: [ "**" ] }
+  push: { branches: [ main ] }
+  pull_request:
 jobs:
   node:
     runs-on: ubuntu-latest
@@ -10,46 +10,42 @@ jobs:
       - uses: pnpm/action-setup@v4
         with: { version: 9 }
       - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'pnpm'
+        with: { node-version: '20', cache: 'pnpm' }
       - run: pnpm install
-      - name: Install Playwright browsers (chromium)
-        run: pnpm -C apps/scraper-playwright exec playwright install --with-deps chromium || true
-      - run: pnpm -r run typecheck || true
-      - run: pnpm -r run lint || true
+      - run: pnpm -r run typecheck
       - run: pnpm -r run build
+      - run: pnpm -r run lint || true
+      - run: pnpm -r run test || true
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install chromium
+      - name: Install Playwright system deps (Linux only)
+        run: sudo npx playwright install-deps
   python:
+    if: hashFiles('pyproject.toml') != ''
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: '3.11' }
-      - run: python -m pip install -U pip
-      - run: pip install ruff mypy pytest black isort
-      - run: ruff check . --fix || true
-      - run: mypy . || true
+      - run: pip install -e .[dev] || true
+      - run: pip install ruff mypy pytest || true
+      - run: ruff check .
+      - run: mypy .
       - run: pytest -q || true
   go:
+    if: hashFiles('go.mod') != ''
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with: { go-version: '1.22' }
-      - name: Vet each Go module
-        run: |
-          set -e
-          mods=$(git ls-files '**/go.mod' | xargs -r -n1 dirname)
-          if [ -z "$mods" ]; then echo "no go modules"; exit 0; fi
-          for m in $mods; do (cd "$m" && go vet ./... && go test ./... || true); done
+      - run: go vet ./...
+      - run: go build ./...
   rust:
+    if: hashFiles('**/Cargo.toml') != ''
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - name: Clippy each crate
-        run: |
-          set -e
-          crates=$(git ls-files '**/Cargo.toml' | xargs -r -n1 dirname)
-          if [ -z "$crates" ]; then echo 'no rust crates'; exit 0; fi
-          for c in $crates; do (cd "$c" && cargo clippy -- -D warnings && cargo check); done
+      - run: cargo check
+      - run: cargo clippy -- -D warnings

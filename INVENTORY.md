@@ -1,7 +1,10 @@
 # INVENTORY
 - Workspaces: apps/*, libs/*, packages/*, tools/*, scripts/*
-- Node packages: (Codex: liệt kê sau khi phát hiện)
-- Python package: processor_python (src layout)
-- Go modules: (Codex: liệt kê nếu tìm thấy)
-- Rust crates: (Codex: liệt kê nếu tìm thấy)
-- Scripts root: clean/build/lint/test/typecheck (đệ quy)
+- Apps:
+  - apps/api-go (Go)
+  - apps/scraper-playwright (TypeScript)
+  - apps/userscript (TypeScript)
+- Libraries: libs/
+- Scripts: scripts/
+- Python package: python/src
+- CI workflow: .github/workflows/ci.yml

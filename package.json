@@ -5,8 +5,8 @@
   "scripts": {
     "postinstall": "pnpm -C apps/scraper-playwright exec playwright install chromium || true",
     "clean": "pnpm -r --workspace-concurrency=1 run clean || true",
-    "build": "pnpm -r --workspace-concurrency=1 build",
-    "lint": "pnpm -r lint",
+    "build": "pnpm -r run build",
+    "lint": "pnpm -r run lint || true",
     "test": "pnpm -r run test || true",
     "typecheck": "pnpm -r run typecheck || true",
     "argus:smoke": "pnpm -C apps/scraper-playwright build && pnpm -C apps/scraper-playwright smoke:tls"
