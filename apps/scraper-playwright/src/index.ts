@@ -83,4 +83,3 @@ async function tryNavigate(profile: Profile, url: string, attempts: number): Pro
   }
   throw new Error("Protocol error after multi-profile retries");
 })().catch(e=>{ console.error("[argus] start failed:", (e as any)?.message || e); process.exitCode = 1; });
-
