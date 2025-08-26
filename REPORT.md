@@ -1,12 +1,4 @@
 # Repo-wide Fix Report
-- Fixed: pnpm workspaces detection, TS base config, missing package for apps/scraper-playwright.
-- Python: added src-layout, pyproject, fixed ruff auto-fix, unified tests to avoid duplicate module names, ensured pytest module path.
-- Go/Rust: iterate per-module, correct clippy arg via `-- -D warnings`.
-- CI: added Node, Python, Go, Rust jobs.
-- TODO: implement actual scraping logic in apps/scraper-playwright/src/index.ts and expand tests.
-- Added Playwright browser auto-install and graceful skip when no Rust crates.
-- Playwright TLS bypass fallback:
-  - detects certificate errors and retries with insecure flags automatically
-  - set `ARGUS_TLS_BYPASS=1` to always ignore TLS checks when network SSL inspection blocks navigation
-  - use `ARGUS_PROXY_URL="http://user:pass@host:port"` if outbound proxy is required
-  - CI runners already install Chromium; remaining TLS errors may require additional proxy or network config
+- Standardized configuration files (.gitignore, .gitattributes, .editorconfig).
+- Added environment variable parsing for scraper.
+- Tidied repository inventory and cleanup lists.
