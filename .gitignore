@@ -1,52 +1,46 @@
-# Node
+# Node / TS
 node_modules/
 dist/
-build/
-.pnpm-store/
-pnpm-debug.log*
 coverage/
+.nyc_output/
+.eslintcache
+
+# Playwright
+.playwright-cache/
 playwright-report/
 test-results/
 
+# Crawlee / Apify
+storage/
+datasets/
+key-value-store/
+request-queue/
+
+# Argus datasets/artifacts
+apps/scraper-playwright/datasets/
+apps/scraper-playwright/artifacts/
+
 # Python
 .venv/
-venv/
 __pycache__/
 .pytest_cache/
-.ruff_cache/
 .mypy_cache/
-.coverage*
-htmlcov/
+.ruff_cache/
 
-# Go/Rust
+# Go
 bin/
+build/
+*.test
+
+# Rust
 target/
 
-# OS/IDE
+# Additional build artifacts
+.nyc_output/
+.eslintcache
+
+# OS / IDE
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
-
-# Project data
-datasets/
-logs/
-outputs/
-tmp/
-.env
-.env.*
-
-# Artifacts by stacks
-.eslintcache
-.turbo/
-.vite/
-artifacts/
-*.ndjson
-*.har
-*.log
-*.egg-info/
-vendor/
-
-node-compile-cache/
-*.tsbuildinfo
-
