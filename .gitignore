@@ -35,3 +35,18 @@ outputs/
 tmp/
 .env
 .env.*
+
+# Artifacts by stacks
+.eslintcache
+.turbo/
+.vite/
+artifacts/
+*.ndjson
+*.har
+*.log
+*.egg-info/
+vendor/
+
+node-compile-cache/
+*.tsbuildinfo
+

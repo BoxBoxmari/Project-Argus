@@ -1,5 +1,6 @@
 node_modules/
 dist/
+build/
 coverage/
 .eslintcache
 .turbo/
@@ -15,6 +16,12 @@ __pycache__/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+*.egg-info/
 target/
 bin/
 vendor/
+*.tmp
+*.bak
+.DS_Store
+Thumbs.db
+
