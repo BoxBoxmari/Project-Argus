@@ -17,5 +17,9 @@ export const Env = {
   LOCALE: process.env.ARGUS_LOCALE || "en-US",
   USER_AGENT: process.env.ARGUS_USER_AGENT,
   TEST_URL: process.env.ARGUS_TEST_URL || "https://www.google.com/maps",
+  MAX_REVIEWS: int(process.env.ARGUS_MAX_REVIEWS, 100),
+  MAX_ROUNDS: int(process.env.ARGUS_MAX_ROUNDS, 1),
+  IDLE_LIMIT: int(process.env.ARGUS_IDLE_LIMIT, 0),
+  SCROLL_PAUSE: int(process.env.ARGUS_SCROLL_PAUSE, 1000),
   PLATFORM: os.platform(),
 } as const;
