@@ -14,8 +14,7 @@ argus/
 ├── apps/processor-python/ # Python data processor
 ├── services/              # Service definitions
 ├── scripts/               # Various scripts
-├── test_runner.mjs        # Main test runner
-├── scrape.mjs            # Scraping logic
+├── scrape.mjs            # Legacy scraping logic
 └── Various scattered files
 ```
 
@@ -89,7 +88,7 @@ uv pip sync requirements.txt
 
 #### Moved Files
 
-- `test_runner.mjs` → `apps/scraper-playwright/src/main.ts`
+- `test_runner.mjs` removed (replaced by `apps/scraper-playwright/src/index.ts`)
 - `scrape.mjs` → Integrated into Playwright scraper
 - Python processing → `py/ingest/src/processor.py`
 - Go service → Preserved in `apps/api-go/` (legacy)
