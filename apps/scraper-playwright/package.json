@@ -5,14 +5,16 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "prestart": "playwright install chromium || true",
+    "prestart": "pnpm exec playwright install chromium || true && pnpm run deps:install || true",
     "clean": "rimraf dist",
     "build": "tsc -b",
     "dev": "tsx src/index.ts",
     "start": "node dist/index.js",
     "typecheck": "tsc -b --pretty false",
     "lint": "eslint --ext .ts src",
-    "smoke:tls": "node dist/tests/tls-smoke.js"
+    "smoke:tls": "node dist/tests/tls-smoke.js",
+    "deps:install": "node scripts/install-deps.mjs",
+    "postinstall": "pnpm exec playwright install chromium || true"
   },
   "dependencies": {
     "playwright": "^1.45.0"

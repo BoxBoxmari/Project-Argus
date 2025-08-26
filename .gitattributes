@@ -1,7 +1,9 @@
 * text=auto eol=lf
+*.sh text eol=lf
 *.ps1 text eol=crlf
 *.bat text eol=crlf
 *.cmd text eol=crlf
-*.sh text eol=lf
-*.csv text eol=lf
-*.tsv text eol=lf
+# normalize images/binaries
+*.png binary
+*.jpg binary
+*.pdf binary
