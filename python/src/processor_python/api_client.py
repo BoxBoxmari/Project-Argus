@@ -6,10 +6,11 @@ and NDJSON output format.
 """
 
 import json
-import time
 import os
-from typing import Iterator, Optional, Dict, Any
+import time
 from datetime import datetime
+from typing import Any, Dict, Iterator, Optional
+
 from .schema import ReviewV1
 
 try:

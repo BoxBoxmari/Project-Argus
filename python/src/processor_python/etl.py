@@ -1,7 +1,9 @@
 import json
 import os
 import sys
+
 from .schema import ReviewV1
+
 
 def load_ndjson(fp):
     for line in fp:
@@ -23,7 +25,8 @@ def dedup(records):
     seen = set()
     for r in records:
         key = (r["place_id"], r["review_id"])
-        if key in seen: continue
+        if key in seen:
+            continue
         seen.add(key)
         yield r
 
