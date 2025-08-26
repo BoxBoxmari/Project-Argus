@@ -19,3 +19,7 @@
 ## Stacks skipped (no module/crate)
 - Rust: no rust crates
 
+## Playwright start hardening
+- Added conditional multi-profile navigation (secure → insecure → insecure_no_sandbox) with ARGUS_NAV_RETRIES, ARGUS_NO_SANDBOX, ARGUS_CHROMIUM_ARGS, ARGUS_NAV_DEBUG.
+- Health-checks to distinguish TLS vs network issues without changing business logic.
+- Idempotent patch: skipped if existing code already contains ARGUS_NAV_RETRIES or requestfailed/console handlers.
