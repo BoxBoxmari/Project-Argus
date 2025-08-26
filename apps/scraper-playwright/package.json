@@ -1,0 +1,30 @@
+{
+  "name": "@argus/scraper-playwright",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prestart": "playwright install chromium || true",
+    "clean": "rimraf dist",
+    "build": "tsc -b",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "typecheck": "tsc -b --pretty false",
+    "lint": "eslint --ext .ts src",
+    "smoke:tls": "node dist/tests/tls-smoke.js"
+  },
+  "dependencies": {
+    "playwright": "^1.45.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.7.0",
+    "typescript": "^5.5.0",
+    "@types/node": "^20.12.12",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "rimraf": "^5.0.0"
+  }
+}

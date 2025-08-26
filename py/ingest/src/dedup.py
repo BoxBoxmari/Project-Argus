@@ -1,7 +1,8 @@
-import json
-from typing import List, Dict, Any, Tuple
-from collections import defaultdict
 import hashlib
+import json
+from collections import defaultdict
+from typing import Any, Dict, List, Tuple
+
 
 def create_review_key(review: Dict[str, Any]) -> str:
     """Create a unique key for deduplication"""
@@ -128,7 +129,7 @@ if __name__ == '__main__':
     
     try:
         stats = load_and_process_ndjson(input_file, output_file, sort_reverse)
-        print(f"Processing complete:")
+        print("Processing complete:")
         print(f"  Original: {stats['original_count']} reviews")
         print(f"  Deduplicated: {stats['deduplicated_count']} reviews")
         print(f"  Removed: {stats['duplicates_removed']} duplicates")

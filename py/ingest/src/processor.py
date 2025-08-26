@@ -1,4 +1,8 @@
-import sys, json, argparse, pathlib
+import argparse
+import json
+import pathlib
+import sys
+
 from . import schema
 
 
@@ -22,7 +26,9 @@ def run(infile: str, outdir: str):
         for obj in iter_ndjson(infile):
             w.write(json.dumps(obj, ensure_ascii=False) + '\n')
 
-if __name__=='__main__':
+if __name__ == '__main__':
     ap = argparse.ArgumentParser()
-    ap.add_argument('input'); ap.add_argument('--output-dir',required=True)
-    a = ap.parse_args(); run(a.input, a.output_dir)
+    ap.add_argument('input')
+    ap.add_argument('--output-dir', required=True)
+    a = ap.parse_args()
+    run(a.input, a.output_dir)
