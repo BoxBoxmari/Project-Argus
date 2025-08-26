@@ -10,7 +10,15 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "composite": true,
-    "types": ["node"]
+    "types": [
+      "node"
+    ]
   },
-  "exclude": ["**/dist/**","**/datasets/**","**/artifacts/**","**/storage/**","node_modules"]
+  "exclude": [
+    "**/dist/**",
+    "**/datasets/**",
+    "**/artifacts/**",
+    "**/storage/**",
+    "node_modules"
+  ]
 }
