@@ -50,7 +50,7 @@ argus/
    ```bash
    # Node.js dependencies
    pnpm -w install
-   
+
    # Python environments
    cd py/ingest && uv venv && uv pip sync requirements.txt
    cd ../analysis && uv venv && uv pip sync requirements.txt
