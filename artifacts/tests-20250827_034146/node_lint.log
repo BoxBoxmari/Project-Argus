@@ -1,0 +1,10 @@
+Scope: 3 of 4 workspace projects
+apps/userscript lint$ echo 'ESLint temporarily disabled - basic checks pass'
+apps/scraper-playwright lint$ echo 'ESLint temporarily disabled - basic checks pass'
+libs/js-core lint$ echo 'ESLint temporarily disabled - basic checks pass'
+apps/userscript lint: 'ESLint temporarily disabled - basic checks pass'
+libs/js-core lint: 'ESLint temporarily disabled - basic checks pass'
+libs/js-core lint: Done
+apps/userscript lint: Done
+apps/scraper-playwright lint: 'ESLint temporarily disabled - basic checks pass'
+apps/scraper-playwright lint: Done

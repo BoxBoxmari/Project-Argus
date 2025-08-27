@@ -10,12 +10,12 @@ export type Review = {
   time_unix: number;
   lang?: string;
   owner_response?: { text: string; time_unix: number };
-  crawl_meta: { 
-    run_id: string; 
-    session: string; 
-    ts: number; 
-    source: 'userscript' | 'playwright'; 
-    url?: string 
+  crawl_meta: {
+    run_id: string;
+    session: string;
+    ts: number;
+    source: 'userscript' | 'playwright';
+    url?: string
   }
 };
 
@@ -74,7 +74,7 @@ export type Checkpoint = {
   };
 };
 
-export function validateReview(review: any): { valid: boolean; errors: string[] } {
+export function validateLegacyReview(review: any): { valid: boolean; errors: string[] } {
   const errors: string[] = [];
   const required = ['place_id', 'place_url', 'review_id', 'author', 'rating', 'text', 'relative_time', 'time_unix'];
 
@@ -97,7 +97,7 @@ export function validateReview(review: any): { valid: boolean; errors: string[] 
   ) {
     errors.push('time_unix must be a positive number');
   }
-  
+
   return {
     valid: errors.length === 0,
     errors
@@ -117,12 +117,12 @@ export function normalizeReview(r: Partial<Review>): Review {
     time_unix: r.time_unix ?? 0,
     lang: r.lang,
     owner_response: r.owner_response,
-    crawl_meta: r.crawl_meta ?? { 
-      run_id: "", 
-      session: "", 
-      ts: 0, 
-      source: "playwright", 
-      url: "" 
+    crawl_meta: r.crawl_meta ?? {
+      run_id: "",
+      session: "",
+      ts: 0,
+      source: "playwright",
+      url: ""
     }
   };
 }

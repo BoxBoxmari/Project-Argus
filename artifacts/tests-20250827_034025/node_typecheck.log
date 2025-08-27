@@ -1,0 +1,8 @@
+Scope: 3 of 4 workspace projects
+apps/scraper-playwright typecheck$ tsc -b --pretty false
+libs/js-core typecheck$ tsc --noEmit
+apps/userscript typecheck$ echo 'Typecheck skipped (GM APIs not available)'
+apps/userscript typecheck: 'Typecheck skipped (GM APIs not available)'
+apps/userscript typecheck: Done
+apps/scraper-playwright typecheck: Done
+libs/js-core typecheck: Done

@@ -1,7 +1,21 @@
-{ 
-  "files": [], 
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "types": []
+  },
   "references": [
-    { "path": "libs/js-core" }, 
-    { "path": "apps/scraper-playwright" }
-  ] 
+    {
+      "path": "./libs/js-core"
+    },
+    {
+      "path": "./apps/scraper-playwright"
+    },
+    {
+      "path": "./apps/userscript"
+    }
+  ],
+  "files": []
 }

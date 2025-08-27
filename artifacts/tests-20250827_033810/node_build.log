@@ -1,0 +1,9 @@
+Scope: 3 of 4 workspace projects
+apps/scraper-playwright build$ tsc -b
+apps/userscript build$ esbuild src/index.ts --bundle --minify --outfile=dist/argus.user.js --format=iife --legal-comments=none
+libs/js-core build$ tsc -b --force
+apps/userscript build:   dist\argus.user.js  3.0kb
+apps/userscript build: Done in 19ms
+apps/userscript build: Done
+apps/scraper-playwright build: Done
+libs/js-core build: Done

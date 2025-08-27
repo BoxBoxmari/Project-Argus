@@ -2,31 +2,21 @@
   "name": "@argus/scraper-playwright",
   "version": "0.1.0",
   "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/main.js",
+  "types": "dist/main.d.ts",
   "scripts": {
-    "prestart": "pnpm exec playwright install chromium || true && pnpm run deps:install || true",
-    "clean": "rimraf dist",
+    "start": "node dist/cli.js",
+    "dev": "tsx src/cli.ts",
     "build": "tsc -b",
-    "dev": "tsx src/index.ts",
-    "start": "node dist/index.js",
-    "typecheck": "tsc -b --pretty false",
-    "lint": "eslint --ext .ts src",
-    "smoke:tls": "node dist/tests/tls-smoke.js",
-    "deps:install": "node scripts/install-deps.mjs",
-    "postinstall": "pnpm exec playwright install chromium || true"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test:maps": "tsx src/test-google-maps.ts"
   },
   "dependencies": {
-    "playwright": "^1.45.0"
+    "@argus/js-core": "file:../../libs/js-core",
+    "playwright": "^1.40.0"
   },
   "devDependencies": {
-    "tsx": "^4.7.0",
-    "typescript": "^5.5.0",
-    "@types/node": "^20.12.12",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.0.0",
-    "@typescript-eslint/parser": "^7.0.0",
-    "@typescript-eslint/eslint-plugin": "^7.0.0",
-    "rimraf": "^5.0.0"
+    "tsx": "^4.20.5"
   }
 }

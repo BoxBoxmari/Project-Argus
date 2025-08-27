@@ -17,7 +17,7 @@ for (const dir of workspaceDirs) {
             try {
                 const subPkg = JSON.parse(readFileSync(pkgPath, 'utf8'));
                 const privacy = subPkg.private ? ' (PRIVATE)' : '';
-                console.log(`${subPkg.name}@${subPkg.version} ${process.cwd()}\\${dir}\\${item}${privacy}`);
+                console.log(`${subPkg.name}@${subPkg.version} ${process.cwd()}\\\\${dir}\\\\${item}${privacy}`);
             } catch (err) {
                 // No package.json or not readable
             }

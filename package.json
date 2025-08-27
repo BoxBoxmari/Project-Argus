@@ -1,22 +1,27 @@
 {
+  "name": "project-argus",
   "type": "module",
   "private": true,
-  "name": "project-argus",
   "packageManager": "pnpm@9.0.0",
   "scripts": {
     "postinstall": "pnpm -C apps/scraper-playwright exec playwright install chromium || true",
     "clean": "pnpm -r --workspace-concurrency=1 run clean || true",
-    "build": "pnpm -r run build",
-    "lint": "pnpm -r run lint || true",
-    "test": "pnpm -r run test || true",
-    "typecheck": "pnpm -r run typecheck || true",
+    "typecheck": "pnpm -r run typecheck",
+    "lint": "pnpm -r run lint",
+    "build": "pnpm -r --workspace-concurrency=1 build",
+    "test": "pnpm -r run test",
     "argus:smoke": "pnpm -C apps/scraper-playwright build && pnpm -C apps/scraper-playwright smoke:tls",
     "start:scraper": "pnpm -C apps/scraper-playwright start",
     "dev:scraper": "pnpm -C apps/scraper-playwright dev",
-    "py:test": "pwsh -NoProfile -Command \"Set-Location py; if (Test-Path .venv) { $env:VIRTUAL_ENV=(Resolve-Path .venv); $env:PATH=Join-Path $env:VIRTUAL_ENV 'Scripts'; }; pytest -q\"",
-    "repo:inventory": "node tools/inventory.js"
+    "py:test": "pwsh -NoProfile -Command \"Set-Location py; pytest -q\"",
+    "py:lint": "pwsh -NoProfile -Command \"Set-Location py; ruff check .\"",
+    "repo:inventory": "node tools/inventory.js",
+    "repo:doctor": "node tools/doctor.mjs",
+    "inventory": "node tools/inventory.js"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.3.0",
     "typescript": "^5.5.0"
   },
   "dependencies": {

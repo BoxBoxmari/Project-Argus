@@ -2,17 +2,30 @@
   "name": "@argus/js-core",
   "version": "0.1.0",
   "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./queue/memoryQueue": {
+      "types": "./dist/queue/memoryQueue.d.ts",
+      "default": "./dist/queue/memoryQueue.js"
+    },
+    "./session/sessionPool": {
+      "types": "./dist/session/sessionPool.d.ts",
+      "default": "./dist/session/sessionPool.js"
+    },
+    "./obs/events": {
+      "types": "./dist/obs/events.d.ts",
+      "default": "./dist/obs/events.js"
     }
   },
-  "files": ["dist"],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc -b --force",
-    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true});require('fs').rmSync('tsconfig.tsbuildinfo',{force:true});\""
+    "build": "tsc -b",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run"
   }
 }
