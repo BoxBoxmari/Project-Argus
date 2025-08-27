@@ -1,0 +1,99 @@
+[
+    {
+        "place_id": "ChIJN1t_tDeuEmsRUsoyG83frY4",
+        "place_url": "https://www.google.com/maps/place/Premium+Restaurant+Downtown/",
+        "review_id": "ChZDSUhNMG9nS0VJQ0FnSUNBd0lTSHdBRQ",
+        "author": "Sarah Johnson",
+        "rating": 5,
+        "text": "Outstanding dining experience! The ambiance is perfect for special occasions. The pan-seared salmon was cooked to perfection, and the wine selection is impressive. Service was attentive without being intrusive. Will definitely return for anniversary dinners.",
+        "relative_time": "1 month ago",
+        "time_unix": 1700068200,
+        "lang": "en",
+        "photos": [
+            "photo1.jpg",
+            "photo2.jpg",
+            "photo3.jpg"
+        ],
+        "likes": 15,
+        "owner_response": {
+            "text": "Thank you so much for your wonderful review, Sarah! We're thrilled that you enjoyed your anniversary dinner with us. Your feedback about our service and cuisine means the world to us. We look forward to welcoming you back for many more special occasions!",
+            "time_unix": 1700139300
+        },
+        "crawl_meta": {
+            "run_id": "test-run-002",
+            "session": "session-002",
+            "ts": 1700068200000,
+            "source": "playwright"
+        }
+    },
+    {
+        "place_id": "ChIJN1t_tDeuEmsRUsoyG83frY4",
+        "place_url": "https://www.google.com/maps/place/Premium+Restaurant+Downtown/",
+        "review_id": "ChZDSUhNMG9nS0VJQ0FnSUNBd0lTSHdBRR",
+        "author": "Michael Chen",
+        "rating": 4,
+        "text": "Visited here for a business dinner last week. The restaurant has a sophisticated atmosphere that's perfect for professional meetings. Started with the seafood appetizer platter - the oysters were fresh and the shrimp cocktail was well-prepared. For the main course, I had the ribeye steak medium-rare, which was cooked exactly as requested. The portion size was generous and the accompanying vegetables were perfectly seasoned. My colleague ordered the lobster thermidor, which looked spectacular and she raved about the flavor. The wine list is extensive, though prices are on the higher side. Service was professional and timely. The only minor complaint would be that the noise level can get quite high during peak hours, making conversation challenging. Overall, a solid choice for special occasions or business dinners, though be prepared for premium pricing.",
+        "relative_time": "1 month ago",
+        "time_unix": 1698252300,
+        "lang": "en",
+        "photos": [
+            "steak_dinner.jpg"
+        ],
+        "likes": 8,
+        "owner_response": null,
+        "crawl_meta": {
+            "run_id": "test-run-002",
+            "session": "session-002",
+            "ts": 1698252300000,
+            "source": "playwright"
+        }
+    },
+    {
+        "place_id": "ChIJN1t_tDeuEmsRUsoyG83frY4",
+        "place_url": "https://www.google.com/maps/place/Premium+Restaurant+Downtown/",
+        "review_id": "ChZDSUhNMG9nS0VJQ0FnSUNBd0lTSHdBRg",
+        "author": "Jennifer Williams",
+        "rating": 2,
+        "text": "Disappointing experience for the price point. Made reservations weeks in advance for our anniversary. Upon arrival, we were seated at a cramped table near the kitchen despite requesting a quiet spot. The appetizer took 45 minutes to arrive, and when it did, the calamari was overcooked and rubbery. The main courses were lukewarm when served. The server seemed overwhelmed and forgot our drink orders twice. For what we paid ($180 for two people), we expected much better service and food quality.",
+        "relative_time": "2 months ago",
+        "time_unix": 1696959300,
+        "lang": "en",
+        "photos": [],
+        "likes": 3,
+        "owner_response": {
+            "text": "Dear Jennifer, we sincerely apologize for the poor experience during your anniversary dinner. This is not the level of service we strive to provide. We would love the opportunity to make this right. Please contact us directly so we can discuss how to improve your experience with us. Your feedback is valuable in helping us maintain our standards.",
+            "time_unix": 1697021800
+        },
+        "crawl_meta": {
+            "run_id": "test-run-002",
+            "session": "session-002",
+            "ts": 1696959300000,
+            "source": "playwright"
+        }
+    },
+    {
+        "place_id": "ChIJN1t_tDeuEmsRUsoyG83frY4",
+        "place_url": "https://www.google.com/maps/place/Premium+Restaurant+Downtown/",
+        "review_id": "ChZDSUhNMG9nS0VJQ0FnSUNBd0lTSHdBRw",
+        "author": "Robert Martinez",
+        "rating": 5,
+        "text": "Exceptional culinary experience! Chef's tasting menu was a journey through flavors and textures. The amuse-bouche set the tone perfectly. Each course built upon the last, showcasing seasonal ingredients. The duck confit was outstanding - crispy skin, tender meat, paired beautifully with the cherry gastrique. Wine pairings were spot-on. Service was impeccable, with servers knowledgeable about each dish's preparation. Atmosphere strikes perfect balance between elegant and comfortable. Pricing reflects the quality and experience. Highly recommend for food enthusiasts.",
+        "relative_time": "3 weeks ago",
+        "time_unix": 1701446400,
+        "lang": "en",
+        "photos": [
+            "amuse_bouche.jpg",
+            "duck_confit.jpg",
+            "dessert.jpg",
+            "wine_pairing.jpg"
+        ],
+        "likes": 22,
+        "owner_response": null,
+        "crawl_meta": {
+            "run_id": "test-run-002",
+            "session": "session-002",
+            "ts": 1701446400000,
+            "source": "playwright"
+        }
+    }
+]

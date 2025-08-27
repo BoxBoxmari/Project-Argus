@@ -22,7 +22,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: '3.11' }
-      - run: pip install -r python-dev-requirements.txt
+      - run: |
+          python -m pip install --upgrade pip
+          pip install -r python-dev-requirements.txt
+          # Try to install test extras if pyproject.toml exists in py/
+          if (Test-Path "py/pyproject.toml") {
+            pip install "py/[test]" -q 2>$null || echo "Optional test extras not available"
+          }
       - run: ruff check . --fix || echo "Ruff check completed with warnings"
-      - run: mypy . --ignore-missing-imports || echo "MyPy check completed with warnings"
+      - run: mypy . --ignore-missing-imports || echo "MyPy check completed - see warnings above"
       - run: pytest -q || echo "Pytest completed with warnings"

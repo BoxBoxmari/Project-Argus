@@ -1,0 +1,260 @@
+"""
+Argus Python Testing Configuration
+Comprehensive test setup for Python components with quality gates
+"""
+
+import json
+import os
+import sys
+import tempfile
+from datetime import datetime
+from typing import Any, Dict, List
+from pathlib import Path
+
+import pytest
+try:
+    import pandas as pd  # type: ignore[import-not-found]
+except ImportError as _err:
+    pytest.skip("pandas not available for test environment", allow_module_level=True)
+
+# Add project root to path
+PROJECT_ROOT = Path(__file__).parent.parent
+sys.path.insert(0, str(PROJECT_ROOT / "py" / "ingest" / "src"))
+sys.path.insert(0, str(PROJECT_ROOT / "py" / "ingest" / "processor_python"))
+
+# Test environment setup
+TEST_ENV = {
+    "PYTHONPATH": ":".join([
+        str(PROJECT_ROOT / "py" / "ingest" / "src"),
+        str(PROJECT_ROOT / "py" / "ingest" / "processor_python")
+    ]),
+    "ARGUS_TEST_MODE": "1",
+    "ARGUS_LOG_LEVEL": "DEBUG"
+}
+
+for key, value in TEST_ENV.items():
+    os.environ[key] = value
+
+
+@pytest.fixture(scope="session")
+def test_data_dir():
+    """Fixture for test data directory"""
+    return PROJECT_ROOT / "tests" / "fixtures" / "data"
+
+
+@pytest.fixture(scope="session")
+def golden_data_dir():
+    """Fixture for golden reference data directory"""
+    return PROJECT_ROOT / "tests" / "golden"
+
+
+@pytest.fixture(scope="session")
+def artifacts_dir():
+    """Fixture for test artifacts directory"""
+    run_id = f"pytest-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+    artifacts_path = PROJECT_ROOT / ".artifacts" / run_id
+    artifacts_path.mkdir(parents=True, exist_ok=True)
+    return artifacts_path
+
+
+@pytest.fixture
+def temp_ndjson_file(tmp_path):
+    """Create temporary NDJSON file for testing"""
+    def _create_ndjson(data: List[Dict[str, Any]]) -> str:
+        ndjson_path = tmp_path / "test_data.ndjson"
+        with open(ndjson_path, 'w', encoding='utf-8') as f:
+            for record in data:
+                f.write(json.dumps(record, ensure_ascii=False) + '\n')
+        return str(ndjson_path)
+    return _create_ndjson
+
+
+@pytest.fixture
+def sample_review_data():
+    """Sample review data for testing"""
+    return {
+        "place_id": "ChIJN1t_tDeuEmsRUsoyG83frY4",
+        "place_url": "https://www.google.com/maps/place/?q=place_id:ChIJN1t_tDeuEmsRUsoyG83frY4",
+        "review_id": "ChdDSUhNMG9nS0VJQ0FnSURhcU1ESzF3RRAB",
+        "author": "John Smith",
+        "rating": 4,
+        "text": "Great coffee and friendly service!",
+        "relative_time": "2 months ago",
+        "time_unix": 1640995200,
+        "lang": "en",
+        "crawl_meta": {
+            "run_id": "test-run-001",
+            "session": "session-001",
+            "ts": 1640995200000,
+            "source": "playwright"
+        }
+    }
+
+
+@pytest.fixture
+def invalid_review_data():
+    """Invalid review data for negative testing"""
+    return [
+        # Missing required fields
+        {"place_id": "test", "rating": 4},
+        # Invalid rating
+        {"place_id": "test", "review_id": "test", "author": "test", "rating": 6,
+         "text": "test", "relative_time": "test", "time_unix": 1640995200},
+        # Invalid time_unix
+        {"place_id": "test", "review_id": "test", "author": "test", "rating": 4,
+         "text": "test", "relative_time": "test", "time_unix": -1},
+        # Invalid crawl_meta
+        {"place_id": "test", "review_id": "test", "author": "test", "rating": 4,
+         "text": "test", "relative_time": "test", "time_unix": 1640995200,
+         "crawl_meta": "invalid"}
+    ]
+
+
+@pytest.fixture
+def large_dataset():
+    """Generate large dataset for performance testing"""
+    def _generate(size: int) -> List[Dict[str, Any]]:
+        reviews = []
+        for i in range(size):
+            reviews.append({
+                "place_id": f"place_{i % 100}",  # 100 unique places
+                "place_url": f"https://www.google.com/maps/place/?q=place_id:place_{i % 100}",
+                "review_id": f"review_{i}",
+                "author": f"Author {i}",
+                "rating": (i % 5) + 1,
+                "text": f"Review text {i} " * 50,  # Long text
+                "relative_time": f"{i} days ago",
+                "time_unix": 1640995200 + i * 3600,
+                "lang": ["en", "vi", "fr", "de", "es"][i % 5],
+                "crawl_meta": {
+                    "run_id": f"run_{i // 1000}",
+                    "session": f"session_{i % 10}",
+                    "ts": 1640995200000 + i * 1000,
+                    "source": "playwright"
+                }
+            })
+        return reviews
+    return _generate
+
+
+class QualityGate:
+    """Quality gate for data validation tests"""
+
+    @staticmethod
+    def check_schema_compliance(df: pd.DataFrame) -> Dict[str, Any]:
+        """Check if DataFrame complies with review schema"""
+        required_columns = {
+            "place_id", "place_url", "review_id", "author", "rating",
+            "text", "relative_time", "time_unix"
+        }
+
+        missing_columns = required_columns - set(df.columns)
+        extra_columns = set(df.columns) - required_columns - {"lang", "crawl_meta"}
+
+        rating_issues = df[~df['rating'].between(1, 5, inclusive='both')].index.tolist() if 'rating' in df.columns else []
+        time_issues = df[df['time_unix'] <= 0].index.tolist() if 'time_unix' in df.columns else []
+
+        return {
+            "compliant": len(missing_columns) == 0 and len(rating_issues) == 0 and len(time_issues) == 0,
+            "missing_columns": list(missing_columns),
+            "extra_columns": list(extra_columns),
+            "rating_issues": rating_issues,
+            "time_issues": time_issues,
+            "total_records": len(df),
+            "null_counts": df.isnull().sum().to_dict()
+        }
+
+    @staticmethod
+    def check_uniqueness(df: pd.DataFrame) -> Dict[str, Any]:
+        """Check for duplicate reviews"""
+        if 'place_id' not in df.columns or 'review_id' not in df.columns:
+            return {"error": "Missing place_id or review_id columns"}
+
+        duplicates = df.duplicated(subset=['place_id', 'review_id'])
+        duplicate_groups = df[duplicates].groupby(['place_id', 'review_id']).size()
+
+        return {
+            "unique": not duplicates.any(),
+            "duplicate_count": duplicates.sum(),
+            "duplicate_groups": duplicate_groups.to_dict(),
+            "total_records": len(df)
+        }
+
+    @staticmethod
+    def check_data_quality(df: pd.DataFrame) -> Dict[str, Any]:
+        """Comprehensive data quality check"""
+        quality_report = {
+            "schema_compliance": QualityGate.check_schema_compliance(df),
+            "uniqueness": QualityGate.check_uniqueness(df),
+            "timestamp": datetime.now().isoformat()
+        }
+
+        # Additional quality checks
+        if 'text' in df.columns:
+            empty_text = df['text'].isna() | (df['text'].str.strip() == '')
+            quality_report["empty_text_count"] = empty_text.sum()
+
+        if 'author' in df.columns:
+            missing_authors = df['author'].isna() | (df['author'].str.strip() == '')
+            quality_report["missing_authors_count"] = missing_authors.sum()
+
+        return quality_report
+
+
+@pytest.fixture
+def quality_gate():
+    """Quality gate fixture for data validation"""
+    return QualityGate
+
+
+def pytest_configure(config):
+    """Pytest configuration hook"""
+    # Add custom markers
+    config.addinivalue_line(
+        "markers", "unit: Unit tests for individual functions"
+    )
+    config.addinivalue_line(
+        "markers", "integration: Integration tests for component interaction"
+    )
+    config.addinivalue_line(
+        "markers", "performance: Performance and load tests"
+    )
+    config.addinivalue_line(
+        "markers", "quality: Data quality and schema validation tests"
+    )
+    config.addinivalue_line(
+        "markers", "slow: Tests that take longer than 30 seconds"
+    )
+
+
+def pytest_collection_modifyitems(config, items):
+    """Modify test collection to add markers automatically"""
+    for item in items:
+        # Mark performance tests
+        if "performance" in item.nodeid:
+            item.add_marker(pytest.mark.performance)
+        elif "quality" in item.nodeid:
+            item.add_marker(pytest.mark.quality)
+        elif "integration" in item.nodeid:
+            item.add_marker(pytest.mark.integration)
+        else:
+            item.add_marker(pytest.mark.unit)
+
+
+def pytest_runtest_makereport(item, call):
+    """Generate test reports with artifact collection"""
+    if call.when == "call":
+        # Collect artifacts for failed tests
+        if call.excinfo is not None:
+            artifacts_dir = Path(".artifacts") / os.environ.get("PYTEST_RUN_ID", "pytest")
+            artifacts_dir.mkdir(parents=True, exist_ok=True)
+
+            # Save test failure details
+            failure_report = {
+                "test_name": item.nodeid,
+                "failure_reason": str(call.excinfo.value),
+                "timestamp": datetime.now().isoformat()
+            }
+
+            with open(artifacts_dir / f"failure-{item.name}.json", 'w') as f:
+                json.dump(failure_report, f, indent=2)

@@ -1,0 +1,56 @@
+[
+    {
+        "place_id": "ChIJN1t_tDeuEmsRUsoyG83frY4",
+        "place_url": "https://www.google.com/maps/place/Highlands+Coffee+417+Dien+Bien+Phu/",
+        "review_id": "ChdDSUhNMG9nS0VJQ0FnSURhcU1ESzF3RRAB",
+        "author": "John Smith",
+        "rating": 5,
+        "text": "Great coffee and friendly service! The Vietnamese coffee here is authentic and delicious. Highly recommended for coffee lovers.",
+        "relative_time": "2 months ago",
+        "time_unix": 1697535000,
+        "lang": "en",
+        "owner_response": null,
+        "crawl_meta": {
+            "run_id": "test-run-001",
+            "session": "session-001",
+            "ts": 1697535000000,
+            "source": "playwright"
+        }
+    },
+    {
+        "place_id": "ChIJN1t_tDeuEmsRUsoyG83frY4",
+        "place_url": "https://www.google.com/maps/place/Highlands+Coffee+417+Dien+Bien+Phu/",
+        "review_id": "ChdDSUhNMG9nS0VJQ0FnSURhcU1ESzJ3RRAB",
+        "author": "Maria Garcia",
+        "rating": 4,
+        "text": "Good atmosphere for working. WiFi is stable and the coffee quality is consistent.",
+        "relative_time": "3 months ago",
+        "time_unix": 1695200100,
+        "lang": "en",
+        "owner_response": null,
+        "crawl_meta": {
+            "run_id": "test-run-001",
+            "session": "session-001",
+            "ts": 1695200100000,
+            "source": "playwright"
+        }
+    },
+    {
+        "place_id": "ChIJN1t_tDeuEmsRUsoyG83frY4",
+        "place_url": "https://www.google.com/maps/place/Highlands+Coffee+417+Dien+Bien+Phu/",
+        "review_id": "ChdDSUhNMG9nS0VJQ0FnSURhcU1ESzN3RRAB",
+        "author": "David Kim",
+        "rating": 3,
+        "text": "Average coffee, nothing special.",
+        "relative_time": "4 months ago",
+        "time_unix": 1691672700,
+        "lang": "en",
+        "owner_response": null,
+        "crawl_meta": {
+            "run_id": "test-run-001",
+            "session": "session-001",
+            "ts": 1691672700000,
+            "source": "playwright"
+        }
+    }
+]

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New UI Structure - Google Maps</title>
+</head>
+
+<body>
+    <div id="pane" role="main">
+        <!-- Place header with modified structure -->
+        <div data-value="Coffee Shop with New UI">
+            <h1><span>Coffee Shop with New UI</span></h1>
+            <div>
+                <span>4.1</span>
+                <span role="img" aria-label="4.1 stars">★★★★☆</span>
+                <span>(45 reviews)</span>
+            </div>
+        </div>
+
+        <!-- Reviews section with changed class names and structure -->
+        <div role="region" aria-label="Reviews">
+            <!-- Review 1 - New CSS classes -->
+            <div data-review-id="ChZDSUhNMG9nS0VJQ0FnSUNBd0lUU3dBRQ" class="new-review-container">
+                <div class="review-content-wrapper">
+                    <div data-owner-id="105234567890123456789" class="author-section-v2">
+                        <div class="author-info-new">
+                            <div class="author-name-container">
+                                <a href="/maps/contrib/105234567890123456789" class="author-link-updated">John Doe</a>
+                            </div>
+                            <div class="author-meta-info">
+                                <span class="local-guide-badge-new">Local Guide</span>
+                                <span class="separator-dot">·</span>
+                                <span class="review-count-new">45 reviews</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="rating-time-section">
+                        <span role="img" aria-label="4 stars" class="star-rating-new">★★★★☆</span>
+                        <time datetime="2023-11-01T12:00:00Z" class="review-time-new">1 month ago</time>
+                    </div>
+                    <div class="review-text-section">
+                        <!-- Changed class name from MyEned to new-review-text -->
+                        <span class="new-review-text">Good coffee but the new interface took some getting used to. The
+                            ordering system has changed but staff are helpful in explaining the new process.</span>
+                    </div>
+                    <div class="helpful-section-new">
+                        <button aria-label="2 people found this review helpful" class="helpful-button-v2">
+                            <span class="helpful-icon">👍</span>
+                            <span class="helpful-count">2</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review 2 - Missing some expected elements -->
+            <div data-review-id="ChZDSUhNMG9nS0VJQ0FnSUNBd0lUU3dBRg">
+                <div>
+                    <!-- Author section with missing data-owner-id -->
+                    <div class="author-section">
+                        <div>
+                            <div>
+                                <a href="/maps/contrib/105234567890123456790">Jane Smith</a>
+                            </div>
+                            <!-- Missing local guide info -->
+                            <div>
+                                <span>15 reviews</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <!-- Missing stars element -->
+                        <time datetime="2023-10-15T14:30:00Z">1 month ago</time>
+                    </div>
+                    <div>
+                        <!-- Using old class name -->
+                        <span class="MyEned">Average experience. Nothing special to report.</span>
+                    </div>
+                    <!-- Missing helpful section entirely -->
+                </div>
+            </div>
+
+            <!-- Review 3 - Extra nested elements -->
+            <div data-review-id="ChZDSUhNMG9nS0VJQ0FnSUNBd0lUU3dBRw">
+                <div class="outer-wrapper">
+                    <div class="inner-wrapper">
+                        <div data-owner-id="105234567890123456791">
+                            <div class="extra-nesting">
+                                <div class="author-container">
+                                    <div class="profile-section">
+                                        <a href="/maps/contrib/105234567890123456791">
+                                            <div class="name-wrapper">Mike Johnson</div>
+                                        </a>
+                                    </div>
+                                    <div class="meta-section">
+                                        <span>Local Guide</span>
+                                        <span>·</span>
+                                        <span>123 reviews</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rating-section-wrapper">
+                            <div class="rating-container">
+                                <span role="img" aria-label="3 stars">★★★☆☆</span>
+                            </div>
+                            <div class="time-container">
+                                <time datetime="2023-09-20T16:15:00Z">2 months ago</time>
+                            </div>
+                        </div>
+                        <div class="text-section-wrapper">
+                            <div class="text-container">
+                                <span class="MyEned">The interface changes made it confusing to find what I was looking
+                                    for. Staff were patient in helping though.</span>
+                            </div>
+                        </div>
+                        <div class="helpful-wrapper">
+                            <div class="helpful-container">
+                                <button aria-label="1 person found this review helpful">
+                                    <span>👍</span>
+                                    <span>1</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review 4 - Different attribute names -->
+            <div data-review-uuid="ChZDSUhNMG9nS0VJQ0FnSUNBd0lUU3dBSA" review-id="alternative-id">
+                <div>
+                    <div user-id="105234567890123456792">
+                        <div>
+                            <div>
+                                <a href="/maps/contrib/105234567890123456792" data-author-name="Sarah Wilson">Sarah
+                                    Wilson</a>
+                            </div>
+                            <div>
+                                <span badge-type="local-guide">Local Guide</span>
+                                <span>·</span>
+                                <span review-count="67">67 reviews</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <span role="img" stars="5" aria-label="5 stars">★★★★★</span>
+                        <time timestamp="2023-08-30T11:45:00Z">3 months ago</time>
+                    </div>
+                    <div>
+                        <span review-content="true" class="MyEned">Despite the UI changes, this place still serves
+                            excellent coffee. Quality hasn't changed even if the interface has.</span>
+                    </div>
+                    <div>
+                        <button helpful-count="8" aria-label="8 people found this review helpful">
+                            <span>👍</span>
+                            <span>8</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review 5 - Completely different structure -->
+            <article itemscope itemtype="https://schema.org/Review" data-review-id="ChZDSUhNMG9nS0VJQ0FnSUNBd0lUU3dBSQ">
+                <header>
+                    <div itemprop="author" itemscope itemtype="https://schema.org/Person">
+                        <span itemprop="name">Robert Brown</span>
+                        <meta itemprop="url" content="/maps/contrib/105234567890123456793">
+                    </div>
+                    <div itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
+                        <meta itemprop="ratingValue" content="2">
+                        <span>★★☆☆☆</span>
+                    </div>
+                    <time itemprop="datePublished" datetime="2023-07-15T09:30:00Z">4 months ago</time>
+                </header>
+                <div itemprop="reviewBody">
+                    The new layout is confusing and the coffee quality has declined. Not what it used to be.
+                </div>
+                <footer>
+                    <button type="button" data-helpful="0">
+                        <span>👍</span>
+                        <span>0</span>
+                    </button>
+                </footer>
+            </article>
+        </div>
+    </div>
+
+    <script>
+        // Simulate Google Maps URL structure
+        window.history.pushState({}, '', 'https://www.google.com/maps/place/Coffee+Shop+New+UI/@37.7749,-122.4194,17z/data=!3m1!4b1!4m6!3m5!1s0x80858064e8d85de5:0x123456789abcdef!8m2!3d37.7749!4d-122.4194!16s%2Fg%2F11newui_cafe?entry=ttu');
+    </script>
+</body>
+
+</html>
