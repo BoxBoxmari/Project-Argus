@@ -20,6 +20,8 @@
     "inventory": "node tools/inventory.js"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.3.0",
     "typescript": "^5.5.0"
   },
   "dependencies": {
