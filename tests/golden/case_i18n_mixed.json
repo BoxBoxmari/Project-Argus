@@ -1,0 +1,146 @@
+[
+    {
+        "place_id": "ChIJN1t_tDeuEmsRUsoyG83frY4",
+        "place_url": "https://www.google.com/maps/place/International+Cafe+Restaurant/",
+        "review_id": "ChZDSUhNMG9nS0VJQ0FnSURhcU1ESzF3RQ",
+        "author": "Nguyễn Văn Hoàng",
+        "rating": 5,
+        "text": "Quán cà phê này rất tuyệt vời! Cà phê sữa đá ở đây ngon như ở Việt Nam, nhân viên phục vụ nhiệt tình và thân thiện. Không gian thoáng mát, phù hợp để làm việc hoặc gặp gỡ bạn bè. Giá cả hợp lý, sẽ quay lại lần sau! 👍🇻🇳",
+        "relative_time": "1 tháng trước",
+        "time_unix": 1700315400,
+        "lang": "vi",
+        "likes": 7,
+        "crawl_meta": {
+            "run_id": "test-run-003",
+            "session": "session-003",
+            "ts": 1700315400000,
+            "source": "playwright"
+        }
+    },
+    {
+        "place_id": "ChIJN1t_tDeuEmsRUsoyG83frY4",
+        "place_url": "https://www.google.com/maps/place/International+Cafe+Restaurant/",
+        "review_id": "ChZDSUhNMG9nS0VJQ0FnSURhcU1ESzJ3RQ",
+        "author": "田中 太郎",
+        "rating": 4,
+        "text": "素晴らしいカフェです！コーヒーの味は本格的で、特にラテアートが美しいです。静かな環境で読書や仕事に最適です。スタッフは親切で、日本語も少し話せます。WiFiも安定しており、長時間滞在しても快適でした。🍵☕️✨",
+        "relative_time": "2か月前",
+        "time_unix": 1698142500,
+        "lang": "ja",
+        "likes": 4,
+        "crawl_meta": {
+            "run_id": "test-run-003",
+            "session": "session-003",
+            "ts": 1698142500000,
+            "source": "playwright"
+        }
+    },
+    {
+        "place_id": "ChIJN1t_tDeuEmsRUsoyG83frY4",
+        "place_url": "https://www.google.com/maps/place/International+Cafe+Restaurant/",
+        "review_id": "ChZDSUhNMG9nS0VJQ0FnSURhcU1ESzN3RQ",
+        "author": "أحمد محمد العلي",
+        "rating": 5,
+        "text": "مقهى رائع جداً! القهوة العربية هنا أصيلة والخدمة ممتازة. المكان نظيف ومريح، والأجواء هادئة ومناسبة للدراسة. الأسعار معقولة والموظفون ودودون. أنصح بزيارة هذا المقهى لجميع محبي القهوة. ☕️🌟",
+        "relative_time": "3 أشهر مضت",
+        "time_unix": 1694859300,
+        "lang": "ar",
+        "likes": 12,
+        "crawl_meta": {
+            "run_id": "test-run-003",
+            "session": "session-003",
+            "ts": 1694859300000,
+            "source": "playwright"
+        }
+    },
+    {
+        "place_id": "ChIJN1t_tDeuEmsRUsoyG83frY4",
+        "place_url": "https://www.google.com/maps/place/International+Cafe+Restaurant/",
+        "review_id": "ChZDSUhNMG9nS0VJQ0FnSURhcU1ESzR3RQ",
+        "author": "Marie Dubois",
+        "rating": 4,
+        "text": "Excellent café avec une atmosphère très parisienne ! Les croissants sont délicieux et le café est de qualité supérieure. J'ai particulièrement apprécié l'espresso qui était parfaitement équilibré. Le service est attentionné et le décor rappelle les bistrots français. Prix raisonnables pour la qualité offerte. Je recommande vivement ! 🥐☕️🇫🇷",
+        "relative_time": "3 mois",
+        "time_unix": 1693304400,
+        "lang": "fr",
+        "likes": 9,
+        "crawl_meta": {
+            "run_id": "test-run-003",
+            "session": "session-003",
+            "ts": 1693304400000,
+            "source": "playwright"
+        }
+    },
+    {
+        "place_id": "ChIJN1t_tDeuEmsRUsoyG83frY4",
+        "place_url": "https://www.google.com/maps/place/International+Cafe+Restaurant/",
+        "review_id": "ChZDSUhNMG9nS0VJQ0FnSURhcU1ESzV3RQ",
+        "author": "Klaus Müller",
+        "rating": 3,
+        "text": "Das Café ist in Ordnung, aber nicht außergewöhnlich. Der Kaffee war durchschnittlich und der Service etwas langsam. Die Einrichtung ist modern, aber es fehlt an Gemütlichkeit. Preise sind fair für die Gegend. Würde es für einen schnellen Kaffee empfehlen, aber nicht für einen längeren Aufenthalt. 🇩🇪☕️",
+        "relative_time": "4 Monate",
+        "time_unix": 1690279800,
+        "lang": "de",
+        "likes": 2,
+        "crawl_meta": {
+            "run_id": "test-run-003",
+            "session": "session-003",
+            "ts": 1690279800000,
+            "source": "playwright"
+        }
+    },
+    {
+        "place_id": "ChIJN1t_tDeuEmsRUsoyG83frY4",
+        "place_url": "https://www.google.com/maps/place/International+Cafe+Restaurant/",
+        "review_id": "ChZDSUhNMG9nS0VJQ0FnSURhcU1ESzZ3RQ",
+        "author": "Carlos Rodríguez",
+        "rating": 5,
+        "text": "¡Increíble cafetería! El café colombiano que sirven aquí es excepcional, con un sabor auténtico y un aroma maravilloso. El personal es muy amable y habla varios idiomas. El ambiente es perfecto para relajarse o trabajar. Los pasteles caseros están deliciosos. Definitivamente volveré pronto. ¡Muy recomendado! 🇨🇴☕️🥧",
+        "relative_time": "5 meses",
+        "time_unix": 1687362600,
+        "lang": "es",
+        "likes": 18,
+        "crawl_meta": {
+            "run_id": "test-run-003",
+            "session": "session-003",
+            "ts": 1687362600000,
+            "source": "playwright"
+        }
+    },
+    {
+        "place_id": "ChIJN1t_tDeuEmsRUsoyG83frY4",
+        "place_url": "https://www.google.com/maps/place/International+Cafe+Restaurant/",
+        "review_id": "ChZDSUhNMG9nS0VJQ0FnSURhcU1ESzd3RQ",
+        "author": "김민수",
+        "rating": 4,
+        "text": "정말 좋은 카페예요! 커피 맛이 진짜 최고이고, 특히 라떼가 부드럽고 맛있어요. 분위기도 아늑하고 조용해서 공부하기 좋습니다. 직원들도 친절하고 서비스가 빨라요. 가격도 합리적이에요. 다음에 또 올 예정입니다! 🇰🇷☕️📚",
+        "relative_time": "6개월 전",
+        "time_unix": 1683882300,
+        "lang": "ko",
+        "likes": 11,
+        "crawl_meta": {
+            "run_id": "test-run-003",
+            "session": "session-003",
+            "ts": 1683882300000,
+            "source": "playwright"
+        }
+    },
+    {
+        "place_id": "ChIJN1t_tDeuEmsRUsoyG83frY4",
+        "place_url": "https://www.google.com/maps/place/International+Cafe+Restaurant/",
+        "review_id": "ChZDSUhNMG9nS0VJQ0FnSURhcU1ESzh3RQ",
+        "author": "李明",
+        "rating": 5,
+        "text": "这家咖啡店真的很棒！咖啡的味道很正宗，环境也很舒适。服务员很友好，还会说一点中文。WiFi信号很好，适合办公和学习。价格也很合理。强烈推荐给所有咖啡爱好者！下次一定还会再来的。☕️🇨🇳✨",
+        "relative_time": "7个月前",
+        "time_unix": 1681636800,
+        "lang": "zh",
+        "likes": 6,
+        "crawl_meta": {
+            "run_id": "test-run-003",
+            "session": "session-003",
+            "ts": 1681636800000,
+            "source": "playwright"
+        }
+    }
+]

@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### 🔧 Enhanced
 
+- **Python Testing Infrastructure**: Fixed pandas import issues in conftest.py with module-level skip guard for environments without pandas
+- **Python Tooling Configuration**: Added basedpyright configuration with proper venv detection and reduced noise levels
+- **Spell Checking**: Added comprehensive cSpell configuration with pytest and domain-specific term whitelist
+- **CI Python Dependencies**: Enhanced CI workflow to properly install pandas via python-dev-requirements.txt
+- **VS Code Integration**: Added Python interpreter and analysis configuration for better local development experience
+
 - **Python Ingest Pipeline**: Simplified processor.py to remove external dependencies (pandas, pydantic) and standardize the ingest pipeline
 - **Go Orchestrator Service**: Added simple Go service for queue processing and metrics export preparation
 - **PowerShell Automation**: Updated setup script for streamlined Node.js and pnpm workspace management

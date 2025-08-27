@@ -1,0 +1,508 @@
+name: Argus Comprehensive Testing
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run daily at 2 AM UTC to catch issues early
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      test_suite:
+        description: 'Test suite to run'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - smoke
+          - unit
+          - integration
+          - schema
+          - performance
+          - e2e
+          - negative
+      coverage:
+        description: 'Generate coverage reports'
+        required: true
+        default: true
+        type: boolean
+
+env:
+  NODE_VERSION: '20'
+  PYTHON_VERSION: '3.11'
+  PNPM_VERSION: '9.0.0'
+
+jobs:
+  # Job 1: Setup and validation
+  setup:
+    runs-on: windows-latest
+    outputs:
+      should-run-tests: ${{ steps.changes.outputs.should-run }}
+      test-suite: ${{ steps.config.outputs.test-suite }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if ($env:GITHUB_EVENT_NAME -eq 'schedule' -or $env:GITHUB_EVENT_NAME -eq 'workflow_dispatch') {
+            echo "should-run=true" >> $env:GITHUB_OUTPUT
+          } else {
+            $changed_files = git diff --name-only ${{ github.event.before }} ${{ github.sha }}
+            $relevant_changes = $changed_files | Where-Object {
+              $_ -match '\.(ts|js|py|json|md)$' -or $_ -match '^(apps|libs|py|tests|scripts)/'
+            }
+            if ($relevant_changes) {
+              echo "should-run=true" >> $env:GITHUB_OUTPUT
+            } else {
+              echo "should-run=false" >> $env:GITHUB_OUTPUT
+            }
+          }
+
+      - name: Set test configuration
+        id: config
+        run: |
+          $test_suite = '${{ github.event.inputs.test_suite }}'
+          if (-not $test_suite) { $test_suite = 'all' }
+          echo "test-suite=$test_suite" >> $env:GITHUB_OUTPUT
+
+  # Job 2: Smoke tests (fast feedback)
+  smoke-tests:
+    runs-on: windows-latest
+    needs: setup
+    if: needs.setup.outputs.should-run-tests == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run smoke tests
+        run: |
+          ./scripts/test-runner.ps1 -TestSuite smoke -Coverage $false -Artifacts $true -Verbose $true
+
+      - name: Upload smoke test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-test-artifacts
+          path: .artifacts/test-run-*/
+          retention-days: 7
+
+  # Job 3: Unit tests (JavaScript/TypeScript)
+  unit-tests-js:
+    runs-on: windows-latest
+    needs: [setup, smoke-tests]
+    if: needs.setup.outputs.should-run-tests == 'true' && (needs.setup.outputs.test-suite == 'all' || needs.setup.outputs.test-suite == 'unit')
+    strategy:
+      matrix:
+        test-category: [schema, parser, dedup]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run unit tests - ${{ matrix.test-category }}
+        run: |
+          npx jest --config tests/jest.config.test.js --testPathPattern="tests/unit/${{ matrix.test-category }}" --coverage --json --outputFile=test-results-${{ matrix.test-category }}.json
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-results-${{ matrix.test-category }}
+          path: |
+            test-results-*.json
+            coverage/
+          retention-days: 7
+
+  # Job 4: Unit tests (Python)
+  unit-tests-python:
+    runs-on: windows-latest
+    needs: [setup, smoke-tests]
+    if: needs.setup.outputs.should-run-tests == 'true' && (needs.setup.outputs.test-suite == 'all' || needs.setup.outputs.test-suite == 'unit')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Create virtual environment
+        run: |
+          python -m venv .venv
+          .\.venv\Scripts\Activate.ps1
+          python -m pip install --upgrade pip
+
+      - name: Install Python dependencies
+        run: |
+          .\.venv\Scripts\Activate.ps1
+          pip install pytest pytest-cov pandas pandera pydantic
+
+      - name: Install project dependencies
+        run: |
+          .\.venv\Scripts\Activate.ps1
+          if (Test-Path py/requirements.txt) { pip install -r py/requirements.txt }
+          if (Test-Path py/ingest/requirements.txt) { pip install -r py/ingest/requirements.txt }
+
+      - name: Run Python unit tests
+        run: |
+          .\.venv\Scripts\Activate.ps1
+          $env:PYTHONPATH = "py/ingest/src;py/ingest/processor_python"
+          python -m pytest py/tests/ -v --tb=short --json-report --json-report-file=pytest-results.json --cov=py/ingest --cov=py/ingest/processor_python --cov-report=html:coverage-python --cov-report=json:coverage-python.json
+
+      - name: Upload Python test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-test-results
+          path: |
+            pytest-results.json
+            coverage-python/
+            coverage-python.json
+          retention-days: 7
+
+  # Job 5: Integration tests
+  integration-tests:
+    runs-on: windows-latest
+    needs: [setup, smoke-tests]
+    if: needs.setup.outputs.should-run-tests == 'true' && (needs.setup.outputs.test-suite == 'all' || needs.setup.outputs.test-suite == 'integration')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install chromium
+
+      - name: Run integration tests
+        run: |
+          ./scripts/test-runner.ps1 -TestSuite integration -Coverage $true -Artifacts $true -Verbose $true
+        env:
+          ARGUS_HEADFUL: 0
+          ARGUS_BROWSER_CHANNEL: chromium
+          ARGUS_TLS_BYPASS: 1
+
+      - name: Upload integration test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-test-artifacts
+          path: .artifacts/test-run-*/
+          retention-days: 7
+
+  # Job 6: Performance tests
+  performance-tests:
+    runs-on: windows-latest
+    needs: [setup, smoke-tests]
+    if: needs.setup.outputs.should-run-tests == 'true' && (needs.setup.outputs.test-suite == 'all' || needs.setup.outputs.test-suite == 'performance')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run performance tests
+        run: |
+          npx jest --config tests/jest.config.test.js --testPathPattern="tests/performance" --maxWorkers=1 --json --outputFile=performance-results.json
+        env:
+          NODE_ENV: test
+          PERFORMANCE_TEST_MODE: 1
+
+      - name: Upload performance test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-test-results
+          path: |
+            performance-results.json
+            .artifacts/test-run-*/
+          retention-days: 7
+
+  # Job 7: End-to-End tests
+  e2e-tests:
+    runs-on: windows-latest
+    needs: [setup, smoke-tests]
+    if: needs.setup.outputs.should-run-tests == 'true' && (needs.setup.outputs.test-suite == 'all' || needs.setup.outputs.test-suite == 'e2e')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          pnpm install --frozen-lockfile
+          python -m venv .venv
+          .\.venv\Scripts\Activate.ps1
+          pip install -r py/ingest/requirements.txt 2>$null || echo "No Python requirements found"
+
+      - name: Build project
+        run: pnpm run build
+
+      - name: Run E2E tests
+        run: |
+          ./scripts/test-runner.ps1 -TestSuite e2e -Coverage $false -Artifacts $true
+        env:
+          ARGUS_HEADFUL: 0
+          ARGUS_TEST_MODE: 1
+
+      - name: Upload E2E test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-test-artifacts
+          path: .artifacts/test-run-*/
+          retention-days: 7
+
+  # Job 8: Security and code quality
+  code-quality:
+    runs-on: windows-latest
+    needs: setup
+    if: needs.setup.outputs.should-run-tests == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run ESLint
+        run: pnpm run lint --format=json --output-file=eslint-results.json || true
+
+      - name: Run TypeScript checks
+        run: pnpm run typecheck
+
+      - name: Check for security vulnerabilities
+        run: npm audit --audit-level=moderate --json > security-audit.json || true
+
+      - name: Upload code quality results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-quality-results
+          path: |
+            eslint-results.json
+            security-audit.json
+          retention-days: 7
+
+  # Job 9: Aggregate results and reporting
+  aggregate-results:
+    runs-on: windows-latest
+    needs: [setup, smoke-tests, unit-tests-js, unit-tests-python, integration-tests, performance-tests, e2e-tests, code-quality]
+    if: always() && needs.setup.outputs.should-run-tests == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all-artifacts/
+
+      - name: Setup PowerShell
+        shell: pwsh
+        run: |
+          # Create comprehensive test report
+          $report = @{
+            workflow_run = @{
+              id = '${{ github.run_id }}'
+              number = '${{ github.run_number }}'
+              sha = '${{ github.sha }}'
+              ref = '${{ github.ref }}'
+              actor = '${{ github.actor }}'
+              event = '${{ github.event_name }}'
+              timestamp = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss UTC")
+            }
+            test_results = @{}
+            artifacts = @{}
+          }
+
+          # Process artifacts and generate summary
+          Get-ChildItem -Path "all-artifacts" -Recurse -Filter "*.json" | ForEach-Object {
+            $content = Get-Content $_.FullName -Raw | ConvertFrom-Json
+            $report.test_results[$_.Name] = $content
+          }
+
+          # Save aggregated report
+          $report | ConvertTo-Json -Depth 10 | Out-File -FilePath "aggregated-test-report.json"
+
+      - name: Generate test summary
+        shell: pwsh
+        run: |
+          Write-Host "## 🧪 Test Execution Summary" >> $env:GITHUB_STEP_SUMMARY
+          Write-Host "" >> $env:GITHUB_STEP_SUMMARY
+          Write-Host "| Test Suite | Status | Details |" >> $env:GITHUB_STEP_SUMMARY
+          Write-Host "|------------|--------|---------|" >> $env:GITHUB_STEP_SUMMARY
+
+          $jobs = @(
+            @{ name = "Smoke Tests"; status = "${{ needs.smoke-tests.result }}" }
+            @{ name = "Unit Tests (JS)"; status = "${{ needs.unit-tests-js.result }}" }
+            @{ name = "Unit Tests (Python)"; status = "${{ needs.unit-tests-python.result }}" }
+            @{ name = "Integration Tests"; status = "${{ needs.integration-tests.result }}" }
+            @{ name = "Performance Tests"; status = "${{ needs.performance-tests.result }}" }
+            @{ name = "E2E Tests"; status = "${{ needs.e2e-tests.result }}" }
+            @{ name = "Code Quality"; status = "${{ needs.code-quality.result }}" }
+          )
+
+          foreach ($job in $jobs) {
+            $icon = switch ($job.status) {
+              "success" { "✅" }
+              "failure" { "❌" }
+              "cancelled" { "⏹️" }
+              "skipped" { "⏭️" }
+              default { "❓" }
+            }
+            Write-Host "| $($job.name) | $icon $($job.status) | [View Details](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) |" >> $env:GITHUB_STEP_SUMMARY
+          }
+
+          Write-Host "" >> $env:GITHUB_STEP_SUMMARY
+          Write-Host "### 📊 Coverage and Artifacts" >> $env:GITHUB_STEP_SUMMARY
+          Write-Host "- Test artifacts are available for download for 7 days" >> $env:GITHUB_STEP_SUMMARY
+          Write-Host "- Coverage reports included in test artifacts" >> $env:GITHUB_STEP_SUMMARY
+          Write-Host "- Performance benchmarks saved for trending analysis" >> $env:GITHUB_STEP_SUMMARY
+
+      - name: Upload aggregated results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aggregated-test-results
+          path: |
+            aggregated-test-report.json
+            all-artifacts/
+          retention-days: 30
+
+      - name: Comment on PR (if applicable)
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = JSON.parse(fs.readFileSync('aggregated-test-report.json', 'utf8'));
+
+            let comment = '## 🧪 Test Results Summary\n\n';
+            comment += `**Run ID:** ${{ github.run_id }}\n`;
+            comment += `**Commit:** ${{ github.sha }}\n\n`;
+
+            const jobs = [
+              { name: 'Smoke Tests', result: '${{ needs.smoke-tests.result }}' },
+              { name: 'Unit Tests (JS)', result: '${{ needs.unit-tests-js.result }}' },
+              { name: 'Unit Tests (Python)', result: '${{ needs.unit-tests-python.result }}' },
+              { name: 'Integration Tests', result: '${{ needs.integration-tests.result }}' },
+              { name: 'Performance Tests', result: '${{ needs.performance-tests.result }}' },
+              { name: 'E2E Tests', result: '${{ needs.e2e-tests.result }}' },
+              { name: 'Code Quality', result: '${{ needs.code-quality.result }}' }
+            ];
+
+            comment += '| Test Suite | Status |\n|------------|--------|\n';
+            jobs.forEach(job => {
+              const icon = job.result === 'success' ? '✅' : job.result === 'failure' ? '❌' : '⏭️';
+              comment += `| ${job.name} | ${icon} ${job.result} |\n`;
+            });
+
+            comment += '\n[View full results](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})';
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  # Job 10: Failure notification
+  notify-failure:
+    runs-on: windows-latest
+    needs: [smoke-tests, unit-tests-js, unit-tests-python, integration-tests, performance-tests, e2e-tests, code-quality]
+    if: failure() && (github.event_name == 'schedule' || github.ref == 'refs/heads/main')
+    steps:
+      - name: Notify on failure
+        run: |
+          Write-Host "🚨 Critical test failures detected in Argus project!" -ForegroundColor Red
+          Write-Host "Run ID: ${{ github.run_id }}" -ForegroundColor Yellow
+          Write-Host "Commit: ${{ github.sha }}" -ForegroundColor Yellow
+          Write-Host "Branch: ${{ github.ref }}" -ForegroundColor Yellow
+          Write-Host ""
+          Write-Host "Please investigate immediately: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" -ForegroundColor Red
