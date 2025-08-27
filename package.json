@@ -41,11 +41,18 @@
     "test": "pnpm -r run test",
     "start:scraper": "pnpm -C apps/scraper-playwright start",
     "dev:scraper": "pnpm -C apps/scraper-playwright dev",
-    "py:test": "node -e \"process.chdir('py');\" && pytest -q || exit 0",
-    "py:lint": "node -e \"process.chdir('py');\" && ruff check . || exit 0",
+    "py:test": "pwsh -c \"if (Test-Path 'py/**/*.py') { & scripts/python-check.ps1 } else { echo 'No Python files found, skipping tests' }\"",
+    "py:lint": "pwsh -c \"if (Test-Path 'py/**/*.py') { & scripts/python-check.ps1 } else { echo 'No Python files found, skipping lint' }\"",
+    "test:all": "pwsh -f scripts/test-suite.ps1",
+    "test:manual": "pwsh -f scripts/manual-test-suite.ps1",
     "repo:inventory": "node tools/inventory.js",
     "repo:doctor": "node tools/doctor.mjs",
     "inventory": "node tools/inventory.js"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.3.0",
+    "typescript": "^5.6.0"
   }
 >>>>>>> 2c6bb0c (\chore(structure): move Python config to py/, harden jest/ts excludes, add repo doctor, tighten ignores\)
 }

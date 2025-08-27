@@ -5,7 +5,14 @@ const config = {
   roots: ['<rootDir>/apps', '<rootDir>/libs'],
   testMatch: ['**/__tests__/**/*.ts', '**/*.test.ts'],
   testPathIgnorePatterns: ['/node_modules/', '/dist/', '/datasets/', '/artifacts/', '/storage/'],
-  modulePathIgnorePatterns: ['/dist/', '/datasets/', '/artifacts/']
+  modulePathIgnorePatterns: ['/dist/', '/datasets/', '/artifacts/'],
+  globals: {
+    'ts-jest': {
+      tsconfig: {
+        types: ['node', 'jest']
+      }
+    }
+  }
 };
 
 module.exports = config;
