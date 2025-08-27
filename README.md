@@ -50,7 +50,7 @@ argus/
    ```bash
    # Node.js dependencies
    pnpm -w install
-   
+
    # Python environments
    cd py/ingest && uv venv && uv pip sync requirements.txt
    cd ../analysis && uv venv && uv pip sync requirements.txt
@@ -112,6 +112,94 @@ pwsh -f scripts/ps/cleanup.ps1
 
 # Repository hardening
 pwsh -f scripts/ps/repo-hardening.ps1
+```
+
+## 🧪 Execution Flow Diagrams
+
+### Plugin System Execution Flow
+```
+sequenceDiagram
+participant Orchestrator
+participant PluginManager
+participant Plugin1 as \"Plugin A\"
+participant Plugin2 as \"Plugin B\"
+
+Orchestrator->>PluginManager : init(ctx)
+PluginManager->>Plugin1 : init(ctx)
+Plugin1-->>PluginManager : Complete
+PluginManager->>Plugin2 : init(ctx)
+Plugin2-->>PluginManager : Complete
+PluginManager-->>Orchestrator : All plugins initialized
+
+Orchestrator->>PluginManager : run(ctx)
+PluginManager->>Plugin1 : run(ctx)
+Plugin1-->>PluginManager : Complete
+PluginManager->>Plugin2 : run(ctx)
+Plugin2-->>PluginManager : Complete
+PluginManager-->>Orchestrator : All plugins executed
+
+Orchestrator->>PluginManager : teardown(ctx)
+PluginManager->>Plugin1 : teardown(ctx)
+Plugin1-->>PluginManager : Complete
+PluginManager->>Plugin2 : teardown(ctx)
+Plugin2-->>PluginManager : Complete
+PluginManager-->>Orchestrator : All plugins cleaned up
+```
+
+### Playwright Scraper Execution Flow
+```
+flowchart TD
+Start([Start]) --> ReadConfig[\"Read Environment Variables\"]
+ReadConfig --> ValidateConfig[\"Validate Configuration\"]
+ValidateConfig --> CreateOrchestrator[\"Create ScraperOrchestrator\"]
+CreateOrchestrator --> AddUrls[\"Add URLs to Queue\"]
+AddUrls --> StartOrchestrator[\"Start Orchestrator\"]
+StartOrchestrator --> ProcessRequests[\"Process Requests with Retry Logic\"]
+ProcessRequests --> CheckRateLimit[\"Check Domain Rate Limits\"]
+CheckRateLimit --> ExecuteScrape[\"Execute Scrape with Browser\"]
+ExecuteScrape --> ExtractData[\"Extract Reviews from Page\"]
+ExtractData --> ValidateData[\"Validate Review Schema\"]
+ValidateData --> StoreResults[\"Store Results in NDJSON\"]
+StoreResults --> MonitorProgress[\"Monitor Progress and Statistics\"]
+MonitorProgress --> Complete[\"Scraping Complete\"]
+Complete --> Exit[\"Exit with Status Code\"]
+style Start fill:#6f9,stroke:#333
+style Exit fill:#6f9,stroke:#333
+```
+
+### Retry Mechanism Flow
+```
+flowchart TD
+Start([Attempt Request]) --> Success{\"Success?\"}
+Success --> |Yes| Complete([Request Complete])
+Success --> |No| ShouldRetry[\"Check shouldRetry Condition\"]
+ShouldRetry --> |No| Fail([Final Failure])
+ShouldRetry --> |Yes| IsLastAttempt[\"Is Last Attempt?\"]
+IsLastAttempt --> |Yes| ThrowError([Throw RetryError])
+IsLastAttempt --> |No| CalculateDelay[\"Calculate Delay with Exponential Backoff\"]
+CalculateDelay --> Wait[\"Wait for Delay Period\"]
+Wait --> Start
+```
+
+### Navigation and Error Resilience Flow
+```
+flowchart TD
+Start([Start]) --> ReadEnv[\"Read Environment Variables\"]
+ReadEnv --> DefineProfiles[\"Define Security Profiles\"]
+DefineProfiles --> LoopProfiles[\"For each profile: secure → insecure → insecure_no_sandbox\"]
+LoopProfiles --> LaunchBrowser[\"Launch Browser with Profile\"]
+LaunchBrowser --> Navigate[\"Navigate to Target URL\"]
+Navigate --> Success{\"Navigation Success?\"}
+Success --> |Yes| ExitSuccess[\"Exit Successfully\"]
+Success --> |No| Retry{\"Attempts Remaining?\"}
+Retry --> |Yes| Wait[\"Wait with Backoff\"]
+Wait --> Navigate
+Retry --> |No| NextProfile[\"Try Next Profile\"]
+NextProfile --> LaunchBrowser
+NextProfile --> FinalFailure[\"All Profiles Failed\"]
+FinalFailure --> ThrowError[\"Throw Protocol Error\"]
+style ExitSuccess fill:#6f9,stroke:#333
+style ThrowError fill:#f66,stroke:#333
 ```
 
 ## 📊 Data Flow
