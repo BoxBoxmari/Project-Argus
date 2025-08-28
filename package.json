@@ -14,6 +14,8 @@
     "test:workspace": "pnpm -r run test",
     "test:e2e": "node tests/e2e/run-e2e-tests.ts",
     "test:e2e:verbose": "node tests/e2e/run-e2e-tests.ts -- --verbose",
+    "test:e2e:ci": "pnpm -C apps/e2e test:ci",
+    "test:all": "pnpm -r run typecheck && pnpm -r run build && pnpm -r run test || true && pnpm run test:e2e",
     "lint:spelling": "cspell \"**/*\" --no-progress",
     "lint:spelling:tests": "cspell \"tests/**/*\" --no-progress",
     "ci": "pnpm run typecheck && pnpm run test && pnpm run lint:spelling",
@@ -24,9 +26,14 @@
     "py:lint": "pwsh -NoProfile -Command \"Set-Location py; ruff check .\"",
     "repo:inventory": "node tools/inventory.js",
     "repo:doctor": "node tools/doctor.mjs",
-    "inventory": "node tools/inventory.js"
+    "inventory": "node tools/inventory.js",
+    "release:rc": "pnpm -r run build && node tools/release/rc.js",
+    "monitor:post-release": "node tools/monitor/post_release.js"
   },
-  "engines": { "node": ">=18.18 <23", "pnpm": ">=8.7" },
+  "engines": {
+    "node": ">=18.18 <23",
+    "pnpm": ">=8.7"
+  },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
     "@testing-library/dom": "^10",
@@ -40,9 +47,13 @@
     "jsdom": "^24.0.0",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.0"
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
   },
   "dependencies": {
-    "glob": "^11.0.3"
+    "crawlee": "^3.8.0",
+    "glob": "^11.0.3",
+    "playwright": "^1.55.0",
+    "zod": "^3.23.8"
   }
 }

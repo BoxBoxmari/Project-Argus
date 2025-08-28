@@ -1,0 +1,10 @@
+steps:
+  - chrome.open: ${ARGUS_TEST_URL}
+  - chrome.waitFor: "#pane,[aria-label*='Reviews'],[aria-label*='Bài đánh giá']"
+  - chrome.getAccessibilityTree: { scope: "#pane", out: "apps/userscript/tools/audit/a11y.json" }
+  - chrome.outerHTML: { scope: "#pane", out: "apps/userscript/tools/audit/pane.html" }
+  - chrome.selectorSuggest:
+      fields: [author, rating, text]
+      locale: ${ARGUS_LOCALE}
+      write: "apps/userscript/selector_map.json"
+limit: 20

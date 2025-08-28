@@ -1,0 +1,24 @@
+{
+  "name": "@argus/runner-crawlee",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -b",
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "test-extractor": "tsx src/test-extractor.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "crawlee": "^3.8.0",
+    "playwright": "^1.47.0",
+    "robots-txt-parse": "^2.0.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.4.0"
+  }
+}

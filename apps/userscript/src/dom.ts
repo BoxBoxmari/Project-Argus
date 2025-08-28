@@ -2,6 +2,8 @@
  * DOM utilities for review extraction
  */
 
+import { L } from './locators';
+
 export interface ReviewElement {
   reviewId: string;
   element: HTMLElement;
@@ -17,11 +19,11 @@ export interface ReviewSelectors {
 }
 
 const DEFAULT_SELECTORS: ReviewSelectors = {
-  reviewContainer: '[data-review-id], [jsaction*="review"], .review-item',
+  reviewContainer: L.pane,
   reviewId: '[data-review-id]',
-  author: 'a[href*="/maps/contrib"], .review-author',
-  rating: '[aria-label*="star"], [role="img"][aria-label*="star"]',
-  text: '[data-review-text], .review-text, [jsaction*="review"]',
+  author: L.author,
+  rating: L.rating,
+  text: L.text,
   timestamp: 'span[title], .review-time, time'
 };
 

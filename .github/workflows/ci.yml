@@ -27,3 +27,40 @@ jobs:
       - uses: actions/setup-go@v5
         with: { go-version: '1.22' }
       - run: go vet ./... && go test ./... || true
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 8 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: 'pnpm' }
+      - run: pnpm install
+      - run: npx playwright install --with-deps
+      - run: ARGUS_BLOCK_RESOURCES=1 ARGUS_TEST_URL="https://maps.app.goo.gl/q6Rus1W5HMFsHBb3A" pnpm -C apps/e2e test
+      - name: Enforce perf budget
+        run: |
+          FILE=apps/e2e/metrics/real.json
+          open=$(node -e "console.log(require('./'+process.argv[1]).open)" $FILE || echo 0)
+          pane=$(node -e "console.log(require('./'+process.argv[1]).pane)" $FILE || echo 0)
+          [ "$open" != "0" ] && [ "$open" -lt 3500 ] || (echo "open p95 fail: $open"; exit 1)
+          [ "$pane" != "0" ] && [ "$pane" -lt 3500 ] || (echo "pane p95 fail: $pane"; exit 1)
+  crawlee-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 8 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: 'pnpm' }
+      - run: pnpm install
+      - run: npx playwright install --with-deps
+      - run: CRAWLEE_STORAGE_DIR=apps/scraper-playwright/datasets ARGUS_BLOCK_RESOURCES=1 ARGUS_TEST_URL="https://maps.app.goo.gl/q6Rus1W5HMFsHBb3A" pnpm -C libs/runner-crawlee start
+      - name: Assert dataset exists
+        run: test -d apps/scraper-playwright/datasets/datasets/default
+  budgets:
+    runs-on: ubuntu-latest
+    needs: [e2e, crawlee-smoke]
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "Enforce dupRate < 1% via test; perf enforced in e2e job."

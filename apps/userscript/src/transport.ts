@@ -4,6 +4,8 @@
  */
 
 import { RawReview } from './normalize';
+import { gm } from './polyfills/gm';
+import { logEvent } from './logging';
 
 export interface TransportConfig {
   batchSize: number;
@@ -54,9 +56,9 @@ export class Transport {
   private async sendBatch(reviews: RawReview[], attempt = 1): Promise<void> {
     try {
       await this.saveBatch(reviews);
-      console.log(`Sent batch of ${reviews.length} reviews`);
+      logEvent('batch_sent', { count: reviews.length });
     } catch (error: unknown) {
-      console.error(`Failed to send batch (attempt ${attempt}):`, error);
+      logEvent('batch_error', { attempt, error: String(error) });
 
       if (attempt < this.config.maxRetries) {
         const delay = this.config.retryDelay * Math.pow(2, attempt - 1); // Exponential backoff
@@ -65,7 +67,7 @@ export class Transport {
       } else {
         // Add to retry queue for later
         this.retryQueue.push(...reviews);
-        console.error(`Batch failed after ${this.config.maxRetries} attempts, added to retry queue`);
+        logEvent('batch_failed', { attempts: this.config.maxRetries, count: reviews.length });
       }
     }
   }
@@ -81,24 +83,18 @@ export class Transport {
     const ndjsonContent = reviews.map(review => JSON.stringify(review)).join('\\n');
 
     // Try to use GM_download if available
-    if (typeof GM_download !== 'undefined') {
+    try {
       const blob = new Blob([ndjsonContent], { type: 'application/x-ndjson' });
       const url = URL.createObjectURL(blob);
-
-      return new Promise((resolve, reject) => {
-        GM_download({
-          url,
-          name: filename,
-          onload: () => {
-            URL.revokeObjectURL(url);
-            resolve();
-          },
-          onerror: (error: unknown) => {
-            URL.revokeObjectURL(url);
-            reject(error);
-          }
-        });
+      gm.download({
+        url,
+        name: filename
       });
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      // Fallback to localStorage
+      const storageKey = `argus_batch_${timestamp}`;
+      localStorage.setItem(storageKey, ndjsonContent);
     }
 
     // Fallback to localStorage

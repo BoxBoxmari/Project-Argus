@@ -1,9 +1,46 @@
 /// <reference types="tampermonkey" />
 import { findReviewElements, extractPlaceId } from './dom';
+import { gm } from './polyfills/gm';
 import { toRawReview, RawReview } from './normalize';
 import { Transport } from './transport';
 import { Scheduler } from './scheduler';
 import { Logger, LogLevel } from './log';
+import { reviewId } from '../../../libs/js-core/dist/id/review_id.js';
+
+// Local copy of ReviewSchema for validation
+const ReviewSchema = {
+  safeParse: (r: any) => {
+    // Basic validation
+    if (!r.author || typeof r.author !== 'string' || r.author.length === 0) {
+      return { success: false, error: { issues: ['Missing or invalid author'] } };
+    }
+    if (r.rating === undefined || typeof r.rating !== 'number' || r.rating < 0 || r.rating > 5) {
+      return { success: false, error: { issues: ['Missing or invalid rating'] } };
+    }
+    if (r.text && typeof r.text !== 'string') {
+      return { success: false, error: { issues: ['Invalid text type'] } };
+    }
+    if (r.time && typeof r.time !== 'string') {
+      return { success: false, error: { issues: ['Invalid time type'] } };
+    }
+    if (r.likes && (typeof r.likes !== 'number' || r.likes < 0 || !Number.isInteger(r.likes))) {
+      return { success: false, error: { issues: ['Invalid likes type'] } };
+    }
+    if (r.url && (typeof r.url !== 'string' || !r.url.startsWith('http'))) {
+      return { success: false, error: { issues: ['Invalid URL'] } };
+    }
+    return { success: true, data: r };
+  }
+};
+
+function validateReview(r: any) {
+  const parsed: { success: boolean; data?: any; error?: { issues: string[] } } = ReviewSchema.safeParse(r);
+  if (!parsed.success) {
+    console.warn('[Argus][schema]', parsed.error?.issues || 'Validation failed');
+    return null;
+  }
+  const d = parsed.data as any; d.id = reviewId(d); return d;
+}
 
 export class ArgusExtractor {
     private isInitialized = false;
@@ -14,21 +51,39 @@ export class ArgusExtractor {
     private observer: MutationObserver | null = null;
 
     constructor() {
+        // Initialize with default values, will be updated in async init
         this.transport = new Transport({
-            batchSize: parseInt(this.getEnvVar('ARGUS_BATCH_SIZE', '50')),
-            maxRetries: parseInt(this.getEnvVar('ARGUS_MAX_RETRIES', '3'))
+            batchSize: 50,
+            maxRetries: 3
         });
 
         this.scheduler = new Scheduler({
-            debounceMs: parseInt(this.getEnvVar('ARGUS_DEBOUNCE_MS', '300')),
-            maxConcurrency: parseInt(this.getEnvVar('ARGUS_CONCURRENCY', '2')),
-            extractionInterval: parseInt(this.getEnvVar('ARGUS_INTERVAL_MS', '2000'))
+            debounceMs: 300,
+            maxConcurrency: 2,
+            extractionInterval: 2000
         });
 
         this.logger = Logger.getInstance();
-        this.logger.setLevel(
-            this.getEnvVar('ARGUS_LOG_LEVEL', 'INFO') === 'DEBUG' ? LogLevel.DEBUG : LogLevel.INFO
-        );
+        this.logger.setLevel(LogLevel.INFO);
+
+        // Initialize with actual values asynchronously
+        this.initAsync();
+    }
+
+    private async initAsync() {
+        this.transport = new Transport({
+            batchSize: parseInt(await this.getEnvVar('ARGUS_BATCH_SIZE', '50')),
+            maxRetries: parseInt(await this.getEnvVar('ARGUS_MAX_RETRIES', '3'))
+        });
+
+        this.scheduler = new Scheduler({
+            debounceMs: parseInt(await this.getEnvVar('ARGUS_DEBOUNCE_MS', '300')),
+            maxConcurrency: parseInt(await this.getEnvVar('ARGUS_CONCURRENCY', '2')),
+            extractionInterval: parseInt(await this.getEnvVar('ARGUS_INTERVAL_MS', '2000'))
+        });
+
+        const logLevel = await this.getEnvVar('ARGUS_LOG_LEVEL', 'INFO');
+        this.logger.setLevel(logLevel === 'DEBUG' ? LogLevel.DEBUG : LogLevel.INFO);
     }
 
     public init(): void {
@@ -155,13 +210,14 @@ export class ArgusExtractor {
         );
     }
 
-    private getEnvVar(name: string, defaultValue: string): string {
-        // Try to get from userscript environment or use default
-        if (typeof GM_getValue !== 'undefined') {
-            return GM_getValue(name, defaultValue);
-        }
-        return defaultValue;
+  private async getEnvVar(name: string, defaultValue: string): Promise<string> {
+    // Try to get from userscript environment or use default
+    const value = gm.get(name, defaultValue);
+    if (value instanceof Promise) {
+      return await value;
     }
+    return value;
+  }
 
     public async flush(): Promise<void> {
         await this.transport.flush();
