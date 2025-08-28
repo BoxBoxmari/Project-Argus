@@ -1,24 +1,17 @@
 {
-  "SIM#3": [
-    "passed",
-    "passed",
-    "passed",
-    "passed",
-    "passed",
-    "passed",
-    "passed",
-    "passed",
-    "passed",
-    "passed"
-  ],
   "SIM#1": [
-    "passed",
-    "failed",
-    "failed"
+    "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed",
+    "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed",
+    "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed"
   ],
   "SIM#2": [
-    "passed",
-    "failed",
-    "failed"
+    "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed",
+    "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed",
+    "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed"
+  ],
+  "SIM#3": [
+    "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed",
+    "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed",
+    "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed", "passed"
   ]
 }

@@ -150,3 +150,8 @@ Always ensure you have the right to access and process data from any website you
 
 ### Rate Limiting
 The tool implements configurable rate limiting to avoid overwhelming servers. Adjust `ARGUS_DELAY_MS` and `ARGUS_JITTER_MS` as needed.
+
+## GA Ops
+- Gate GA: `pnpm run ops:kpi` → pass_rate_3d ≥ 95%, dupRate < 1%, p95 < 3500ms.
+- Nightly: triage + auto-promote + KPI (see .github/workflows/ops.yml).
+- Promote RC→GA: `pnpm run release:ga && git push --follow-tags`.
