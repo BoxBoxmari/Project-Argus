@@ -27,7 +27,7 @@
   "dictionaries": ["argus-words", "softwareTerms", "en_US"],
   "language": "en",
   "allowCompoundWords": true,
-  "words": ["Experiencia", "peor", "lugar", "Playwright", "Argus"],
+  "words": ["Experiencia", "peor", "lugar", "Playwright", "Argus", "jsaction"],
   "overrides": [
     {
       "filename": "tests/**/*.ts",
