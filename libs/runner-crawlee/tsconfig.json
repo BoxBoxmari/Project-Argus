@@ -12,7 +12,7 @@
     "types": ["node"],
     "baseUrl": ".",
     "paths": {
-      "@argus/js-core/*": ["../js-core/src/*"]
+      "@argus/js-core/*": ["../js-core/dist/*"]
     }
   },
   "include": ["src"]

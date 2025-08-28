@@ -1,0 +1,6 @@
+{
+  "$schema": "https://stryker-mutator.io/stryker.schema.json",
+  "testRunner": "vitest",
+  "mutate": ["libs/js-core/src/**/*.ts", "!**/__tests__/**"],
+  "thresholds": { "high": 80, "low": 60, "break": 20 }
+}

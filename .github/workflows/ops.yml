@@ -1,0 +1,54 @@
+name: ops
+on:
+  schedule:
+    - cron: "15 18 * * *"   # nightly UTC
+    - cron: "30 19 * * 1"   # weekly UTC
+  workflow_dispatch:
+jobs:
+  nightly-kpi-and-triage:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: 'pnpm' }
+      - run: pnpm install
+      - run: npx playwright install --with-deps
+      - run: E2E_GREP='' ARGUS_BLOCK_RESOURCES=1 pnpm -C apps/e2e test
+      - run: pnpm run e2e:triage
+      - run: pnpm run ops:auto-promote
+      - run: pnpm run ops:kpi
+      - run: ARGUS_REDACT_PII=1 pnpm run data:quality || true
+      - run: pnpm exec tsx tools/ops/retention.ts
+      - uses: actions/upload-artifact@v4
+        with: { name: ops-report, path: OPS_REPORT.md, if-no-files-found: error }
+      - uses: actions/upload-artifact@v4
+        with: { name: retention-report, path: RETENTION_REPORT.md, if-no-files-found: error }
+      - uses: actions/upload-artifact@v4
+        with: { name: data-quality-report-nightly, path: DATA_QUALITY_REPORT.md, if-no-files-found: ignore }
+      - name: Commit tag/ops updates if any
+        if: failure()
+        run: |
+          git config user.name "argus-bot"
+          git config user.email "argus-bot@users.noreply.github.com"
+          git add apps/e2e/tests/*.spec.ts apps/e2e/reports/history.json OPS_REPORT.md RETENTION_REPORT.md DATA_QUALITY_REPORT.md
+          git commit -m "chore(ops): nightly triage/promote + OPS KPI + retention + data quality" || true
+          git push || true
+      - name: Open issue on SLO breach
+        if: ${{ always() && steps.kpi.outcome == 'failure' }}
+        run: |
+          gh issue create -t "SLO breach" -b "$(cat OPS_REPORT.md)" || true
+
+  weekly-deps-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: 'pnpm' }
+      - run: pnpm install
+      - run: pnpm update --latest --interactive=false || true
+      - run: pnpm audit --audit-level=high || true

@@ -30,6 +30,10 @@
     "./id/review_id": {
       "types": "./dist/id/review_id.d.ts",
       "default": "./dist/id/review_id.js"
+    },
+    "./sanitize/pii": {
+      "types": "./dist/sanitize/pii.d.ts",
+      "default": "./dist/sanitize/pii.js"
     }
   },
   "main": "dist/index.js",

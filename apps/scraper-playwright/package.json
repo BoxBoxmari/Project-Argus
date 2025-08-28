@@ -1,26 +1,20 @@
 {
   "name": "@argus/scraper-playwright",
-  "version": "0.1.0",
-  "type": "module",
-  "main": "dist/main.js",
-  "types": "dist/main.d.ts",
+  "private": true,
+  "type": "commonjs",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "node dist/cli.js",
-    "dev": "tsx src/cli.ts",
-    "build": "tsc -b",
-    "typecheck": "tsc --noEmit",
-    "lint": "eslint . --ignore-pattern dist",
-    "test:maps": "tsx src/test-google-maps.ts"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts"
   },
   "dependencies": {
-    "@argus/js-core": "file:../../libs/js-core",
-    "playwright": "^1.40.0"
+    "playwright": "^1.47.0"
   },
   "devDependencies": {
-    "tsx": "^4.20.5",
-    "@types/node": "^20.0.0",
-    "@types/jest": "^29.5.0",
+    "@types/node": "^20.11.0",
     "typescript": "^5.4.0",
-    "eslint": "^9.0.0"
+    "tsx": "^4.7.0"
   }
 }

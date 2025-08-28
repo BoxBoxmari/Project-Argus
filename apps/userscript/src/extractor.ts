@@ -6,6 +6,8 @@ import { Transport } from './transport';
 import { Scheduler } from './scheduler';
 import { Logger, LogLevel } from './log';
 import { reviewId } from '../../../libs/js-core/dist/id/review_id.js';
+import { maybeRedact } from '../../../libs/js-core/dist/sanitize/pii.js';
+import { authorHash as mkAuthorHash } from './pseudo.js';
 
 // Local copy of ReviewSchema for validation
 const ReviewSchema = {
@@ -32,6 +34,17 @@ const ReviewSchema = {
     return { success: true, data: r };
   }
 };
+
+const __REDACT__ = (txt:string)=> maybeRedact(txt, (gm.get('ARGUS_REDACT_PII','1') ?? '1') === '1').text;
+
+async function __PSEUDO_AUTHOR__(name:string): Promise<{author:string; authorHash?:string}> {
+  const pseudo = (typeof GM_getValue === 'function' ? GM_getValue('ARGUS_PSEUDONYMIZE_AUTHOR','1') : '1') === '1';
+  if (!pseudo) return { author: name };
+  const salt = (typeof GM_getValue === 'function' ? GM_getValue('ARGUS_PII_SALT','argus-default-salt') : 'argus-default-salt');
+  const h = await mkAuthorHash(name, salt, 32);
+  const drop = (typeof GM_getValue === 'function' ? GM_getValue('ARGUS_DROP_AUTHOR','0') : '0') === '0' ? false : true;
+  return { author: drop ? '[redacted-author]' : name, authorHash: h };
+}
 
 function validateReview(r: any) {
   const parsed: { success: boolean; data?: any; error?: { issues: string[] } } = ReviewSchema.safeParse(r);
@@ -181,10 +194,19 @@ export class ArgusExtractor {
                 }
 
                 const rawReview = toRawReview(reviewElement);
-                newReviews.push(rawReview);
+
+                // Apply pseudonymization to the author
+                const pseudoAuthor = await __PSEUDO_AUTHOR__(rawReview.user as string || '');
+                const processedReview = {
+                  ...rawReview,
+                  user: pseudoAuthor.author,
+                  authorHash: pseudoAuthor.authorHash
+                };
+
+                newReviews.push(processedReview);
                 this.seenReviews.add(reviewId);
 
-                this.logger.debug('ArgusExtractor', 'Extracted review', { reviewId, rawReview });
+                this.logger.debug('ArgusExtractor', 'Extracted review', { reviewId, processedReview });
             }
 
             if (newReviews.length > 0) {

@@ -1,0 +1,3 @@
+{
+  "ignore": ["**/apps/e2e/**", "**/*.spec.ts", "**/fixtures/**"]
+}

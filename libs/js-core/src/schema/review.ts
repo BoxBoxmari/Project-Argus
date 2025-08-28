@@ -1,12 +1,14 @@
-import { z } from 'zod';
+import { z } from "zod";
 export const ReviewSchema = z.object({
   author: z.string().min(1),
   rating: z.number().min(0).max(5),
-  text: z.string().default(''),
+  text: z.string().default(""),
   time: z.string().optional(),
   likes: z.number().int().nonnegative().optional(),
   url: z.string().url().optional(),
   placeId: z.string().optional(),
-  lang: z.string().optional()
+  lang: z.string().optional(),
+  id: z.string().optional(),
+  authorHash: z.string().regex(/^[a-f0-9]{16,64}$/).optional()
 });
 export type Review = z.infer<typeof ReviewSchema>;
