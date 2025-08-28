@@ -300,3 +300,42 @@ Implemented an automated triage system that:
 - Created robust tagging system that only updates SIM#/REAL# test lines
 - Implemented CI workflow updates with artifact uploading and automatic commits
 - Added comprehensive documentation for the new functionality
+
+## GA Ops
+
+### Implementation Details
+Implemented operational guardrails for GA launch and ongoing operations:
+
+1. **GA Gate Verification**: 
+   - 3-day stable pass rate calculation from `apps/e2e/reports/history.json`
+   - SLO enforcement: dupRate < 1%, p95(open|pane) < 3500ms, robots_guard=passed
+   - Automatic issue creation if SLOs are violated
+
+2. **Release Process**:
+   - RC→GA promotion when pass-rate [stable] ≥95% for 3 consecutive days
+   - Automated tagging with v0.1.0
+
+3. **Operational Jobs**:
+   - Nightly: Full test run + triage + auto-promotion + KPI reporting
+   - Weekly: Dependency updates + security audit
+
+4. **Quarantine Cleanup**:
+   - Auto-promote tests that have been stable for ≥14 days
+   - Automatic commit of tag updates
+
+### Files
+- `tools/ops/kpi.ts`: KPI aggregator that calculates pass rates and SLO compliance
+- `tools/e2e/auto_promote.ts`: Auto-promotion script for stable quarantine tests
+- `tools/release/ga.js`: GA release script
+- `.github/workflows/ops.yml`: Operational workflow with nightly and weekly jobs
+- `OPS_REPORT.md`: Generated operational report with KPIs
+
+### Commands
+- Verify GA gate: `pnpm run ops:kpi`
+- Auto-promote stable tests: `pnpm run ops:auto-promote`
+- Release GA: `pnpm run release:ga`
+
+### CI Integration
+- Nightly workflow processes all tests, updates tags, and reports KPIs
+- Weekly workflow updates dependencies and runs security audits
+- Automatic issue creation on SLO breaches

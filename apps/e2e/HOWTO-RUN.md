@@ -100,3 +100,8 @@ Check test results in `test-results/` directory for detailed logs and screenshot
 - Reports: `apps/e2e/reports/results.json` (latest), `history.json` (rolling 10).
 - Promote if pass≥98% in last 10; demote if ≥2 fails in last 3.
 - Run locally: `pnpm run e2e:report && pnpm run e2e:triage`.
+
+## GA Ops
+- Gate GA: `pnpm run ops:kpi` → pass_rate_3d ≥ 95%, dupRate < 1%, p95 < 3500ms.
+- Nightly: triage + auto-promote + KPI (see .github/workflows/ops.yml).
+- Promote RC→GA: `pnpm run release:ga && git push --follow-tags`.

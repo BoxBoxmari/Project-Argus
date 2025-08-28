@@ -28,6 +28,7 @@
     "repo:doctor": "node tools/doctor.mjs",
     "inventory": "node tools/inventory.js",
     "release:rc": "pnpm -r run build && node tools/release/rc.js",
+    "release:ga": "node tools/release/ga.js",
     "monitor:post-release": "node tools/monitor/post_release.js",
     "gen:sim": "tsx apps/e2e/tools/gen-scenarios.ts",
     "test:sim": "pnpm -C apps/e2e test -g 'SIM#'",
@@ -49,7 +50,9 @@
     "test:e2e:all": "cross-env E2E_GREP=\"\" pnpm -C apps/e2e test",
     "test:e2e:quarantine": "cross-env E2E_GREP=\"\\\\[quarantine\\\\]\" pnpm -C apps/e2e test",
     "e2e:report": "cross-env E2E_GREP='' pnpm -C apps/e2e test",
-    "e2e:triage": "node tools/e2e/triage.ts"
+    "e2e:triage": "node tools/e2e/triage.ts",
+    "ops:kpi": "tsx tools/ops/kpi.ts",
+    "ops:auto-promote": "tsx tools/e2e/auto_promote.ts"
   },
   "engines": {
     "node": ">=18.18 <23",
