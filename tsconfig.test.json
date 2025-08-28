@@ -1,0 +1,31 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["es2022", "dom"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "types": ["jest", "node", "jsdom"],
+    "esModuleInterop": true,
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "composite": false,
+    "paths": {
+      "@/*": ["./libs/*"],
+      "@argus/*": ["./libs/*"]
+    }
+  },
+  "include": [
+    "tests/**/*",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "libs/**/__tests__/**/*",
+    "apps/**/__tests__/**/*"
+  ],
+  "exclude": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/datasets/**",
+    "**/artifacts/**"
+  ]
+}

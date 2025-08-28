@@ -8,7 +8,7 @@ import os
 import sys
 import tempfile
 from datetime import datetime
-from typing import Any, Dict, List
+from typing import Any
 from pathlib import Path
 
 import pytest
@@ -58,9 +58,9 @@ def artifacts_dir():
 
 
 @pytest.fixture
-def temp_ndjson_file(tmp_path):
+def temp_ndjson_file(tmp_path: Path):
     """Create temporary NDJSON file for testing"""
-    def _create_ndjson(data: List[Dict[str, Any]]) -> str:
+    def _create_ndjson(data: list[dict[str, Any]]) -> str:
         ndjson_path = tmp_path / "test_data.ndjson"
         with open(ndjson_path, 'w', encoding='utf-8') as f:
             for record in data:
@@ -70,7 +70,7 @@ def temp_ndjson_file(tmp_path):
 
 
 @pytest.fixture
-def sample_review_data():
+def sample_review_data() -> dict[str, Any]:
     """Sample review data for testing"""
     return {
         "place_id": "ChIJN1t_tDeuEmsRUsoyG83frY4",
@@ -92,7 +92,7 @@ def sample_review_data():
 
 
 @pytest.fixture
-def invalid_review_data():
+def invalid_review_data() -> list[dict[str, Any]]:
     """Invalid review data for negative testing"""
     return [
         # Missing required fields
@@ -113,7 +113,7 @@ def invalid_review_data():
 @pytest.fixture
 def large_dataset():
     """Generate large dataset for performance testing"""
-    def _generate(size: int) -> List[Dict[str, Any]]:
+    def _generate(size: int) -> list[dict[str, Any]]:
         reviews = []
         for i in range(size):
             reviews.append({
@@ -135,76 +135,6 @@ def large_dataset():
             })
         return reviews
     return _generate
-
-
-class QualityGate:
-    """Quality gate for data validation tests"""
-
-    @staticmethod
-    def check_schema_compliance(df: pd.DataFrame) -> Dict[str, Any]:
-        """Check if DataFrame complies with review schema"""
-        required_columns = {
-            "place_id", "place_url", "review_id", "author", "rating",
-            "text", "relative_time", "time_unix"
-        }
-
-        missing_columns = required_columns - set(df.columns)
-        extra_columns = set(df.columns) - required_columns - {"lang", "crawl_meta"}
-
-        rating_issues = df[~df['rating'].between(1, 5, inclusive='both')].index.tolist() if 'rating' in df.columns else []
-        time_issues = df[df['time_unix'] <= 0].index.tolist() if 'time_unix' in df.columns else []
-
-        return {
-            "compliant": len(missing_columns) == 0 and len(rating_issues) == 0 and len(time_issues) == 0,
-            "missing_columns": list(missing_columns),
-            "extra_columns": list(extra_columns),
-            "rating_issues": rating_issues,
-            "time_issues": time_issues,
-            "total_records": len(df),
-            "null_counts": df.isnull().sum().to_dict()
-        }
-
-    @staticmethod
-    def check_uniqueness(df: pd.DataFrame) -> Dict[str, Any]:
-        """Check for duplicate reviews"""
-        if 'place_id' not in df.columns or 'review_id' not in df.columns:
-            return {"error": "Missing place_id or review_id columns"}
-
-        duplicates = df.duplicated(subset=['place_id', 'review_id'])
-        duplicate_groups = df[duplicates].groupby(['place_id', 'review_id']).size()
-
-        return {
-            "unique": not duplicates.any(),
-            "duplicate_count": duplicates.sum(),
-            "duplicate_groups": duplicate_groups.to_dict(),
-            "total_records": len(df)
-        }
-
-    @staticmethod
-    def check_data_quality(df: pd.DataFrame) -> Dict[str, Any]:
-        """Comprehensive data quality check"""
-        quality_report = {
-            "schema_compliance": QualityGate.check_schema_compliance(df),
-            "uniqueness": QualityGate.check_uniqueness(df),
-            "timestamp": datetime.now().isoformat()
-        }
-
-        # Additional quality checks
-        if 'text' in df.columns:
-            empty_text = df['text'].isna() | (df['text'].str.strip() == '')
-            quality_report["empty_text_count"] = empty_text.sum()
-
-        if 'author' in df.columns:
-            missing_authors = df['author'].isna() | (df['author'].str.strip() == '')
-            quality_report["missing_authors_count"] = missing_authors.sum()
-
-        return quality_report
-
-
-@pytest.fixture
-def quality_gate():
-    """Quality gate fixture for data validation"""
-    return QualityGate
 
 
 def pytest_configure(config):

@@ -5,7 +5,7 @@
  * memory usage patterns, and stress conditions.
  */
 
-import { describe, test, expect, beforeEach, afterEach } from '@jest/globals';
+// Jest globals are available globally, no import needed
 import { performance } from 'perf_hooks';
 import { collectItems } from '../utils/dom-guards';
 

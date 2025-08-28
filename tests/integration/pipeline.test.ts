@@ -1,3 +1,4 @@
+// cspell:ignore MyEned
 /**
  * Integration Tests - End-to-End Pipeline Testing
  *
@@ -5,7 +6,7 @@
  * instead of real Google Maps pages, ensuring reliable and fast testing.
  */
 
-import { describe, test, expect, beforeEach, afterEach, jest } from '@jest/globals';
+// Jest globals are available globally, no import needed
 import { promises as fs } from 'fs';
 import path from 'path';
 import { JSDOM } from 'jsdom';

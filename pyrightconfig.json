@@ -1,0 +1,15 @@
+{
+  "venvPath": ".",
+  "venv": ".venv",
+  "reportMissingImports": "error",
+  "executionEnvironments": [
+    {
+      "root": "./python",
+      "extraPaths": ["./python/src"]
+    },
+    {
+      "root": ".",
+      "extraPaths": ["./python/src"]
+    }
+  ]
+}

@@ -5,7 +5,7 @@
  * duplicate reviews, ensuring idempotent operations and data integrity.
  */
 
-import { describe, test, expect, beforeEach } from '@jest/globals';
+// Jest globals are available globally, no import needed
 import crypto from 'crypto';
 
 // Mock deduplication utilities

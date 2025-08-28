@@ -5,7 +5,7 @@
  * and scenarios that mimic real-world usage patterns.
  */
 
-import { describe, test, expect, beforeEach, afterEach } from '@jest/globals';
+// Jest globals are available globally, no import needed
 import fs from 'fs/promises';
 import path from 'path';
 import { existsSync } from 'fs';

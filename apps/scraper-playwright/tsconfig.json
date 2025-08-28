@@ -6,7 +6,8 @@
     "declaration": true,
     "moduleResolution": "Bundler",
     "composite": true,
-    "noEmit": false
+    "noEmit": false,
+    "types": ["node", "jest"]
   },
   "include": [
     "src"

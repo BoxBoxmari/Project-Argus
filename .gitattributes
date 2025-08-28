@@ -1,16 +1,3 @@
 * text=auto eol=lf
-
-# Windows files
-*.ps1 text eol=crlf
-*.bat text eol=crlf
-*.cmd text eol=crlf
-
-# Binary files
-*.png binary
-*.jpg binary
-*.jpeg binary
-*.gif binary
-*.ico binary
-*.zip binary
-*.exe binary
-*.dll binary
+*.bat eol=crlf
+*.ps1 eol=crlf

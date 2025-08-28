@@ -1,0 +1,19 @@
+pandas>=2.0
+pydantic>=2
+pandera>=0.18
+
+[dev]
+ruff
+mypy
+pytest
+black
+isort
+
+[test]
+pytest>=7.0
+
+[test:python_version < "3.9"]
+pandas>=1.5
+
+[test:python_version >= "3.9"]
+pandas>=2.2

@@ -1,0 +1,17 @@
+Metadata-Version: 2.4
+Name: processor-python
+Version: 0.1.0
+Requires-Python: >=3.10
+Requires-Dist: pandas>=2.0
+Requires-Dist: pydantic>=2
+Requires-Dist: pandera>=0.18
+Provides-Extra: dev
+Requires-Dist: ruff; extra == "dev"
+Requires-Dist: mypy; extra == "dev"
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: black; extra == "dev"
+Requires-Dist: isort; extra == "dev"
+Provides-Extra: test
+Requires-Dist: pytest>=7.0; extra == "test"
+Requires-Dist: pandas>=2.2; python_version >= "3.9" and extra == "test"
+Requires-Dist: pandas>=1.5; python_version < "3.9" and extra == "test"
