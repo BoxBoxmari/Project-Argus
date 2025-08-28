@@ -1,4 +1,7 @@
-# Project Argus - Diagnostic Report
+# Project Argus - System Diagnostics
+
+## Overview
+This document provides a comprehensive diagnosis of the Project Argus system, including all components and their current status.
 
 ## Summary
 
@@ -197,6 +200,53 @@ The following production hardening features have been implemented:
 - Duplication rate verification (< 1%)
 - Performance budgets enforcement (p95 < 3.5s)
 
+### Deadcode Consolidation
+
+The following deadcode items have been identified and will be handled according to the action plan:
+
+| Path | Reason | Action |
+|------|--------|--------|
+| test-implementation.ts | knip | remove |
+| ref/Project Argus Master Scraper.js | knip | remove |
+| tests/e2e/test-utilities.ts | knip | remove |
+| tools/structure/tree.ts | knip | remove |
+| tools/release/rollback.js | knip | remove |
+| .venv/Lib/site-packages/basedpyright/index.js | knip | remove |
+| .venv/Lib/site-packages/basedpyright/langserver.index.js | knip | remove |
+| apps/scraper-playwright/scripts/install-deps.mjs | knip | remove |
+| apps/scraper-playwright/src/config/env.ts | knip | remove |
+| apps/scraper-playwright/src/core/browser.ts | knip | remove |
+| apps/scraper-playwright/src/tests/tls-smoke.ts | knip | remove |
+| apps/userscript/src/page-extractor.ts | knip | remove |
+| libs/js-core/.eslintrc.cjs | knip | remove |
+| libs/js-core/test-runner.js | knip | remove |
+| libs/js-core/src/autoscale.ts | knip | remove |
+| libs/js-core/src/example-usage.ts | knip | remove |
+| libs/js-core/src/rate-limit.ts | knip | remove |
+| libs/js-core/src/scraper-orchestrator.ts | knip | remove |
+| libs/js-core/src/types.ts | knip | remove |
+| libs/js-core/src/utils.ts | knip | remove |
+| libs/js-core/src/contracts/mcp.ts | knip | remove |
+| libs/js-core/src/session/uas.cjs | knip | remove |
+| libs/js-core/src/session/uasLoader.ts | knip | remove |
+| libs/js-core/src/utils/jsonLoader.ts | knip | remove |
+| libs/runner-crawlee/src/schema/review.ts | knip | remove |
+| dep:crawlee | depcheck | remove |
+| dep:glob | depcheck | remove |
+| dep:zod | depcheck | remove |
+
+Tools created for deadcode management:
+- `tools/tidy/apply-deletions.js`: Handles moving files to attic or removing them
+- `knip-ignore.json`: Safelists files needed for tests/fixtures
+- `tsprune-ignore.txt`: Safelists exports intentionally kept for public API or tests
+
+NPM scripts added:
+- `tidy:plan`: Generates deadcode report from knip/ts-prune/depcheck
+- `tidy:apply`: Applies deadcode removal actions
+- `qa:strict`: Runs full QA suite with matrix testing
+
+CI workflow updated with `qa-strict` job to enforce quality gates.
+
 ### CI/CD Integration
 - Budgets job in CI workflow to enforce performance and duplication limits
 - Automated testing of all production hardening features
@@ -212,3 +262,41 @@ The following production hardening features have been implemented:
 6. **Production Hardening**: Monitor the effectiveness of the new hardening features and adjust as needed
 7. **QA Infrastructure**: Continue to refine and improve the QA infrastructure, addressing the unused files and dependencies identified by knip and depcheck
 8. **Security**: Address the low severity vulnerability identified by pnpm audit
+
+## E2E Triage Automation
+
+### Problem
+Flaky tests can cause CI instability and make it difficult to identify genuine issues. Without automated triage, test stability tags need to be manually updated, which is time-consuming and error-prone.
+
+### Solution
+Implemented an automated triage system that:
+1. Tracks test performance history in a rolling window
+2. Automatically promotes stable tests to [stable] tag
+3. Automatically demotes flaky tests to [quarantine] tag
+4. Commits tag updates automatically in CI
+
+### Implementation Details
+- **Promotion Criteria**: Tests are promoted to [stable] if they pass ≥98% in the last 10 runs
+- **Demotion Criteria**: Tests are demoted to [quarantine] if they fail ≥2 times in the last 3 runs
+- **History Tracking**: Test results are tracked in `apps/e2e/reports/history.json` with a rolling window of 10 runs
+- **Automatic Tag Updates**: The system automatically updates test tags in the spec files based on the triage decisions
+
+### Files
+- `apps/e2e/playwright.config.ts`: Configured to output JSON reports to `apps/e2e/reports/results.json`
+- `tools/e2e/triage.ts`: Main triage script that processes test results and updates tags
+- `apps/e2e/reports/history.json`: Test history tracking with rolling window
+- `apps/e2e/reports/results.json`: Latest test results from Playwright
+
+### Commands
+- Run tests and generate report: `pnpm run e2e:report`
+- Run triage: `pnpm run e2e:triage`
+
+### CI Integration
+- Nightly runs process all tests and update tags automatically
+- Changes are committed back to the repository with the message "chore(e2e): auto-triage tags"
+
+### Results
+- Successfully implemented automated test triage system
+- Created robust tagging system that only updates SIM#/REAL# test lines
+- Implemented CI workflow updates with artifact uploading and automatic commits
+- Added comprehensive documentation for the new functionality

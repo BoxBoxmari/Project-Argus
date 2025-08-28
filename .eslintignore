@@ -8,3 +8,4 @@ dist/
 datasets/
 artifacts/
 storage/
+apps/scraper-playwright/dist/**

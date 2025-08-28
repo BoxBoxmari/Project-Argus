@@ -1,5 +1,9 @@
 name: ci
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 2 * * *'  # Run nightly at 2 AM UTC
 jobs:
   node:
     runs-on: ubuntu-latest
@@ -47,7 +51,9 @@ jobs:
         with: { node-version: 20, cache: 'pnpm' }
       - run: pnpm install
       - run: npx playwright install --with-deps
-      - run: ARGUS_BLOCK_RESOURCES=1 ARGUS_TEST_URL="https://maps.app.goo.gl/q6Rus1W5HMFsHBb3A" pnpm -C apps/e2e test
+      - run: E2E_GREP='\[stable\]' ARGUS_BLOCK_RESOURCES=1 pnpm -C apps/e2e test
+      - uses: actions/upload-artifact@v4
+        with: { name: e2e-stable-report, path: apps/e2e/reports/results.json, if-no-files-found: ignore }
       - name: Enforce perf budget
         run: |
           FILE=apps/e2e/metrics/real.json
@@ -55,6 +61,30 @@ jobs:
           pane=$(node -e "console.log(require('./'+process.argv[1]).pane)" $FILE || echo 0)
           [ "$open" != "0" ] && [ "$open" -lt 3500 ] || (echo "open p95 fail: $open"; exit 1)
           [ "$pane" != "0" ] && [ "$pane" -lt 3500 ] || (echo "pane p95 fail: $pane"; exit 1)
+  e2e-nightly:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: 'pnpm' }
+      - run: pnpm install
+      - run: npx playwright install --with-deps
+      - run: E2E_GREP='' ARGUS_BLOCK_RESOURCES=1 pnpm -C apps/e2e test
+      - run: pnpm run e2e:triage
+      - name: Commit tag updates if any
+        if: failure()  # exit code 2 from triage marks "changes"
+        run: |
+          git config user.name "argus-bot"
+          git config user.email "argus-bot@users.noreply.github.com"
+          git add apps/e2e/tests/*.spec.ts apps/e2e/reports/history.json
+          git commit -m "chore(e2e): auto-triage tags"
+          git push || true
+      - uses: actions/upload-artifact@v4
+        with: { name: e2e-full-report, path: apps/e2e/reports/results.json, if-no-files-found: ignore }
   crawlee-smoke:
     runs-on: ubuntu-latest
     steps:
@@ -97,3 +127,14 @@ jobs:
       - run: pnpm run deps:unused
       - run: pnpm run audit
       - run: pnpm run licenses
+  qa-strict:
+    runs-on: ubuntu-latest
+    needs: [unit-and-coverage, quality-scans, e2e, crawlee-smoke, budgets]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: 'pnpm' }
+      - run: pnpm install
+      - run: pnpm run qa:strict

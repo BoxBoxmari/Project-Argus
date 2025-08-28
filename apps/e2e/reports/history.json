@@ -1,0 +1,24 @@
+{
+  "SIM#3": [
+    "passed",
+    "passed",
+    "passed",
+    "passed",
+    "passed",
+    "passed",
+    "passed",
+    "passed",
+    "passed",
+    "passed"
+  ],
+  "SIM#1": [
+    "passed",
+    "failed",
+    "failed"
+  ],
+  "SIM#2": [
+    "passed",
+    "failed",
+    "failed"
+  ]
+}

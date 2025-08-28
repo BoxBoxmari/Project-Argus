@@ -4,7 +4,8 @@ const cases = [
   { locale:'en-US', block:'on' }, { locale:'vi-VN', block:'on' }, { locale:'vi-VN', block:'off' }
 ];
 for (const [i,c] of cases.entries()) {
-  test(`REAL#${i+1} ${c.locale} block:${c.block}`, async ({ page, context }) => {
+  const label = process.env.REAL_STABLE==='1' ? '[stable]' : '[quarantine]';
+  test(`REAL#${i+1} ${label} ${c.locale} block:${c.block}`, async ({ page, context }) => {
     await context.grantPermissions(['geolocation']);
     if (c.block==='on') {
       await page.route('**/*', (route) => {

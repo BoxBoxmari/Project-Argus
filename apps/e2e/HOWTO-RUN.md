@@ -86,3 +86,17 @@ Check test results in `test-results/` directory for detailed logs and screenshot
 ## Perf/Flaky Budgets
 - SIM p95 open < 3.5s; REAL p95 open/pane < 3.5s
 - Flaky threshold < 2% (re-run count: 2). Override via ARGUS_PERF_STRICT=0.
+
+## E2E Stability Tags
+- `[stable]`: SIM headless+Desktop+normal+block=on, and REAL only when REAL_STABLE=1.
+- `[quarantine]`: remaining tests. Not run in default CI.
+
+### Commands
+- Stable only: `pnpm run test:e2e:stable`
+- All: `pnpm run test:e2e:all`
+- Quarantine only: `pnpm run test:e2e:quarantine`
+
+## E2E Triage Automation
+- Reports: `apps/e2e/reports/results.json` (latest), `history.json` (rolling 10).
+- Promote if pass≥98% in last 10; demote if ≥2 fails in last 3.
+- Run locally: `pnpm run e2e:report && pnpm run e2e:triage`.

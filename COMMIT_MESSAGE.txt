@@ -1,0 +1,15 @@
+chore(tidy): apply deadcode consolidation tools and processes
+
+- Created tools/tidy/apply-deletions.js to handle deadcode removal
+- Created tools/tidy/plan.mjs to combine knip/ts-prune/depcheck reports
+- Added knip-ignore.json and tsprune-ignore.txt for safelisting
+- Updated package.json with tidy:plan, tidy:apply, and qa:strict scripts
+- Updated CI workflow with qa-strict job
+- Generated DEADCODE_REPORT.json with 29 items for removal
+- Applied deadcode removal actions
+- Created DIAGNOSIS.md entries for deadcode consolidation
+- Added DEADCODE_CONSOLIDATION_SUMMARY.md documentation
+
+This change implements the deadcode consolidation phase of the project,
+providing tools to identify, categorize, and remove unused code while
+maintaining safety through attic archiving and proper safelisting.

@@ -1,8 +1,9 @@
 import { test, expect, devices } from '@playwright/test';
 import fs from 'node:fs'; import path from 'node:path';
-const cases = JSON.parse(fs.readFileSync(path.resolve('apps/e2e/scenarios/sim.cases.json'),'utf8'));
+const cases = JSON.parse(fs.readFileSync(path.resolve('scenarios/sim.cases.json'),'utf8'));
 for (const [i,c] of cases.entries()) {
-  test(`SIM#${i+1} ${c.locale} ${c.mode} ${c.device} ${c.network} block:${c.block}`, async ({ page, context, browserName }) => {
+  const stable = c.mode==='headless' && c.device==='Desktop' && c.network==='normal' && c.block==='on';
+  test(`SIM#${i+1} ${stable?'[stable]':'[quarantine]'} ${c.locale} ${c.mode} ${c.device} ${c.network} block:${c.block}`, async ({ page, context }) => {
     // device
     const dev = c.device==='Mobile' ? devices['Pixel 5'] : devices['Desktop Chrome'];
     await context.setGeolocation({ latitude: 10.78, longitude: 106.70 });
@@ -25,11 +26,11 @@ for (const [i,c] of cases.entries()) {
       window.GM_download = (o)=>console.log('GM_download',o?.name);
     });
     // inject userscript build if exists
-    const us = path.resolve('apps/userscript/dist/argus.user.js');
+    const us = path.resolve('../userscript/dist/argus.user.js');
     if (fs.existsSync(us)) await page.addInitScript({ path: us });
 
     // open local fixture
-    const html = path.resolve('apps/e2e/fixtures/gmaps_sample.html');
+    const html = path.resolve('fixtures/gmaps_sample.html');
     await page.goto('file://'+html, { waitUntil:'domcontentloaded' });
     await page.waitForTimeout(c.scroll.pause);
     const author = page.locator('.d4r55'); await expect(author).toBeVisible();

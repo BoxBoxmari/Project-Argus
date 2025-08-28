@@ -1,15 +1,16 @@
 {
-  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "dist",
+    "target": "ES2020",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
     "rootDir": "src",
-    "declaration": true,
-    "moduleResolution": "Bundler",
-    "composite": true,
-    "noEmit": false,
-    "types": ["node", "jest"]
+    "outDir": "dist",
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "types": ["node", "playwright"]
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src/index.ts", "src/launcher.ts", "types.d.ts"]
 }
