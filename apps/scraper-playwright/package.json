@@ -9,7 +9,7 @@
     "dev": "tsx src/cli.ts",
     "build": "tsc -b",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint .",
+    "lint": "eslint . --ignore-pattern dist",
     "test:maps": "tsx src/test-google-maps.ts"
   },
   "dependencies": {
@@ -17,6 +17,10 @@
     "playwright": "^1.40.0"
   },
   "devDependencies": {
-    "tsx": "^4.20.5"
+    "tsx": "^4.20.5",
+    "@types/node": "^20.0.0",
+    "@types/jest": "^29.5.0",
+    "typescript": "^5.4.0",
+    "eslint": "^9.0.0"
   }
 }

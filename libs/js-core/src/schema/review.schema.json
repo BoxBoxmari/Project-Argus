@@ -1,0 +1,5 @@
+{ "$schema":"http://json-schema.org/draft-07/schema#", "$id":"https://argus/schema/review",
+  "type":"object","properties":{"author":{"type":"string"},"rating":{"type":"number","minimum":0,"maximum":5},
+  "text":{"type":"string"},"time":{"type":"string"},"likes":{"type":"integer","minimum":0},
+  "url":{"type":"string","format":"uri"},"placeId":{"type":"string"},"lang":{"type":"string"}},
+  "required":["author","rating"] }

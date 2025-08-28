@@ -5,7 +5,7 @@
  * including configuration handling, error scenarios, and real data processing.
  */
 
-import { describe, test, expect, beforeEach, afterEach } from '@jest/globals';
+// Jest globals are available globally, no import needed
 import { spawn, ChildProcess } from 'child_process';
 import fs from 'fs/promises';
 import path from 'path';

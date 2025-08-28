@@ -18,6 +18,18 @@
     "./obs/events": {
       "types": "./dist/obs/events.d.ts",
       "default": "./dist/obs/events.js"
+    },
+    "./extractors/gmaps": {
+      "types": "./dist/extractors/gmaps.d.ts",
+      "default": "./dist/extractors/gmaps.js"
+    },
+    "./schema/review": {
+      "types": "./dist/schema/review.d.ts",
+      "default": "./dist/schema/review.js"
+    },
+    "./id/review_id": {
+      "types": "./dist/id/review_id.d.ts",
+      "default": "./dist/id/review_id.js"
     }
   },
   "main": "dist/index.js",
@@ -25,7 +37,12 @@
   "scripts": {
     "build": "tsc -b",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint .",
+    "lint": "eslint . --ignore-pattern dist --ignore-pattern test-runner.js",
     "test": "vitest run"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "ts-jest": "^29.1.0",
+    "jest": "^29.7.0"
   }
 }

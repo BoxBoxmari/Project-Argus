@@ -1,99 +1,254 @@
+/// <reference types="tampermonkey" />
+import { findReviewElements, extractPlaceId } from './dom';
+import { gm } from './polyfills/gm';
+import { toRawReview, RawReview } from './normalize';
+import { Transport } from './transport';
+import { Scheduler } from './scheduler';
+import { Logger, LogLevel } from './log';
+import { reviewId } from '../../../libs/js-core/dist/id/review_id.js';
+
+// Local copy of ReviewSchema for validation
+const ReviewSchema = {
+  safeParse: (r: any) => {
+    // Basic validation
+    if (!r.author || typeof r.author !== 'string' || r.author.length === 0) {
+      return { success: false, error: { issues: ['Missing or invalid author'] } };
+    }
+    if (r.rating === undefined || typeof r.rating !== 'number' || r.rating < 0 || r.rating > 5) {
+      return { success: false, error: { issues: ['Missing or invalid rating'] } };
+    }
+    if (r.text && typeof r.text !== 'string') {
+      return { success: false, error: { issues: ['Invalid text type'] } };
+    }
+    if (r.time && typeof r.time !== 'string') {
+      return { success: false, error: { issues: ['Invalid time type'] } };
+    }
+    if (r.likes && (typeof r.likes !== 'number' || r.likes < 0 || !Number.isInteger(r.likes))) {
+      return { success: false, error: { issues: ['Invalid likes type'] } };
+    }
+    if (r.url && (typeof r.url !== 'string' || !r.url.startsWith('http'))) {
+      return { success: false, error: { issues: ['Invalid URL'] } };
+    }
+    return { success: true, data: r };
+  }
+};
+
+function validateReview(r: any) {
+  const parsed: { success: boolean; data?: any; error?: { issues: string[] } } = ReviewSchema.safeParse(r);
+  if (!parsed.success) {
+    console.warn('[Argus][schema]', parsed.error?.issues || 'Validation failed');
+    return null;
+  }
+  const d = parsed.data as any; d.id = reviewId(d); return d;
+}
+
 export class ArgusExtractor {
     private isInitialized = false;
+    private transport: Transport;
+    private scheduler: Scheduler;
+    private logger: Logger;
+    private seenReviews = new Set<string>();
+    private observer: MutationObserver | null = null;
 
     constructor() {
-        // Initialize extractor
+        // Initialize with default values, will be updated in async init
+        this.transport = new Transport({
+            batchSize: 50,
+            maxRetries: 3
+        });
+
+        this.scheduler = new Scheduler({
+            debounceMs: 300,
+            maxConcurrency: 2,
+            extractionInterval: 2000
+        });
+
+        this.logger = Logger.getInstance();
+        this.logger.setLevel(LogLevel.INFO);
+
+        // Initialize with actual values asynchronously
+        this.initAsync();
+    }
+
+    private async initAsync() {
+        this.transport = new Transport({
+            batchSize: parseInt(await this.getEnvVar('ARGUS_BATCH_SIZE', '50')),
+            maxRetries: parseInt(await this.getEnvVar('ARGUS_MAX_RETRIES', '3'))
+        });
+
+        this.scheduler = new Scheduler({
+            debounceMs: parseInt(await this.getEnvVar('ARGUS_DEBOUNCE_MS', '300')),
+            maxConcurrency: parseInt(await this.getEnvVar('ARGUS_CONCURRENCY', '2')),
+            extractionInterval: parseInt(await this.getEnvVar('ARGUS_INTERVAL_MS', '2000'))
+        });
+
+        const logLevel = await this.getEnvVar('ARGUS_LOG_LEVEL', 'INFO');
+        this.logger.setLevel(logLevel === 'DEBUG' ? LogLevel.DEBUG : LogLevel.INFO);
     }
 
     public init(): void {
         if (this.isInitialized) return;
-        
+
+        this.logger.info('ArgusExtractor', 'Initializing extractor');
+
         this.setupEventListeners();
+        this.setupPeriodicExtraction();
+        this.setupBeforeUnload();
+
         this.isInitialized = true;
-        console.log('Argus Extractor initialized');
+        this.logger.info('ArgusExtractor', 'Extractor initialized successfully');
     }
 
     private setupEventListeners(): void {
-        // Listen for page changes
-        const observer = new MutationObserver(() => {
-            this.checkForReviews();
+        // Use MutationObserver for incremental updates
+        this.observer = new MutationObserver((mutations) => {
+            let hasRelevantChanges = false;
+
+            for (const mutation of mutations) {
+                if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                    // Check if added nodes contain review elements
+                    for (const node of mutation.addedNodes) {
+                        if (node.nodeType === Node.ELEMENT_NODE) {
+                            const element = node as Element;
+                            if (this.isReviewElement(element)) {
+                                hasRelevantChanges = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (hasRelevantChanges) break;
+            }
+
+            if (hasRelevantChanges) {
+                this.scheduler.recordActivity();
+                this.scheduler.scheduleExtraction(() => this.extractReviews());
+            }
         });
 
-        observer.observe(document.body, {
+        this.observer.observe(document.body, {
             childList: true,
-            subtree: true
+            subtree: true,
+            attributeFilter: ['data-review-id', 'data-review-key']
+        });
+
+        // Listen for scroll events (throttled)
+        let scrollTimeout: number | null = null;
+        window.addEventListener('scroll', () => {
+            if (scrollTimeout) clearTimeout(scrollTimeout);
+            scrollTimeout = window.setTimeout(() => {
+                this.scheduler.recordActivity();
+                this.scheduler.scheduleExtraction(() => this.extractReviews());
+            }, 200);
         });
     }
 
-    private checkForReviews(): void {
-        // Check if we're on a reviews page
-        if (window.location.pathname.includes('/reviews')) {
-            this.extractReviews();
-        }
+    private setupPeriodicExtraction(): void {
+        // Start periodic extraction for missed reviews
+        this.scheduler.startPeriodicExtraction(() => this.extractReviews());
     }
 
-    private extractReviews(): void {
-        // Extract review data
-        const reviews = document.querySelectorAll('[data-review-id]');
-        const reviewData = Array.from(reviews).map(review => {
-            return this.parseReview(review as HTMLElement);
+    private setupBeforeUnload(): void {
+        window.addEventListener('beforeunload', () => {
+            this.cleanup();
         });
+    }
 
-        if (reviewData.length > 0) {
-            this.saveReviews(reviewData);
+    private isReviewElement(element: Element): boolean {
+        return element.matches('[data-review-id], [jsaction*="review"], .review-item') ||
+               element.querySelector('[data-review-id], [jsaction*="review"]') !== null;
+    }
+
+    private async extractReviews(): Promise<void> {
+        if (!this.isOnReviewsPage()) {
+            this.logger.debug('ArgusExtractor', 'Not on reviews page, skipping extraction');
+            return;
+        }
+
+        this.logger.debug('ArgusExtractor', 'Starting review extraction');
+
+        try {
+            const reviewElements = findReviewElements();
+            const newReviews: RawReview[] = [];
+
+            for (const reviewElement of reviewElements) {
+                const { reviewId } = reviewElement;
+
+                // Skip if already processed
+                if (this.seenReviews.has(reviewId)) {
+                    continue;
+                }
+
+                const rawReview = toRawReview(reviewElement);
+                newReviews.push(rawReview);
+                this.seenReviews.add(reviewId);
+
+                this.logger.debug('ArgusExtractor', 'Extracted review', { reviewId, rawReview });
+            }
+
+            if (newReviews.length > 0) {
+                this.logger.info('ArgusExtractor', `Extracted ${newReviews.length} new reviews`);
+
+                // Add to transport for batching
+                for (const review of newReviews) {
+                    this.transport.add(review);
+                }
+            }
+
+        } catch (error) {
+            this.logger.error('ArgusExtractor', 'Failed to extract reviews', error);
         }
     }
 
-    private parseReview(element: HTMLElement): any {
-        const reviewId = element.getAttribute('data-review-id');
-        const author = element.querySelector('a')?.textContent?.trim();
-        const rating = this.extractRating(element);
-        const text = element.querySelector('[data-review-text]')?.textContent?.trim();
-        const time = element.querySelector('span')?.textContent?.trim();
+    private isOnReviewsPage(): boolean {
+        const url = window.location.href;
+        return url.includes('/maps') && (
+            url.includes('/reviews') ||
+            url.includes('@') ||
+            extractPlaceId() !== null
+        );
+    }
 
+  private async getEnvVar(name: string, defaultValue: string): Promise<string> {
+    // Try to get from userscript environment or use default
+    const value = gm.get(name, defaultValue);
+    if (value instanceof Promise) {
+      return await value;
+    }
+    return value;
+  }
+
+    public async flush(): Promise<void> {
+        await this.transport.flush();
+        await this.transport.processRetryQueue();
+    }
+
+    public getStats(): { transport: any; scheduler: any; seenReviews: number } {
         return {
-            review_id: reviewId,
-            author,
-            rating,
-            text,
-            time,
-            extracted_at: new Date().toISOString()
+            transport: this.transport.getStats(),
+            scheduler: this.scheduler.getStats(),
+            seenReviews: this.seenReviews.size
         };
     }
 
-    private extractRating(element: HTMLElement): number | null {
-        const starElement = element.querySelector('[aria-label*="stars"]');
-        if (starElement) {
-            const ariaLabel = starElement.getAttribute('aria-label');
-            const match = ariaLabel?.match(/(\d+(?:\.\d+)?)/);
-            return match ? parseFloat(match[1]) : null;
-        }
-        return null;
-    }
+    public cleanup(): void {
+        this.logger.info('ArgusExtractor', 'Cleaning up extractor');
 
-    private saveReviews(reviews: any[]): void {
-        const data = {
-            url: window.location.href,
-            place_id: this.extractPlaceId(),
-            reviews,
-            extracted_at: new Date().toISOString()
-        };
-
-        // Save to GM storage
-        GM_setValue('argus_reviews', JSON.stringify(data));
-        
-        // Download as JSON
-        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        GM_download({
-            url,
-            name: `argus_reviews_${Date.now()}.json`,
-            onload: () => URL.revokeObjectURL(url)
+        // Flush any remaining data
+        this.flush().catch(error => {
+            this.logger.error('ArgusExtractor', 'Failed to flush during cleanup', error);
         });
-    }
 
-    private extractPlaceId(): string | null {
-        const match = window.location.pathname.match(/place\/([^\/]+)/);
-        return match ? match[1] : null;
+        // Cleanup scheduler
+        this.scheduler.cleanup();
+
+        // Cleanup observer
+        if (this.observer) {
+            this.observer.disconnect();
+            this.observer = null;
+        }
+
+        this.logger.info('ArgusExtractor', 'Extractor cleanup completed');
     }
 }

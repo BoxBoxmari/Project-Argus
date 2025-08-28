@@ -3,19 +3,19 @@
  * This file runs before all tests and sets up global utilities and environment
  */
 
-// Import Jest globals for TypeScript support
-import '@jest/globals';
-import { jest } from '@jest/globals';
+// Import testing library extensions for Jest DOM matchers
+import '@testing-library/jest-dom';
 import { promises as fs } from 'fs';
 import path from 'path';
-import { TextEncoder, TextDecoder } from 'util';
+import { TextEncoder, TextDecoder } from 'node:util';
 
-// JSDOM polyfills for browser APIs
+// Polyfills for Node.js environment
+// Assign Node.js TextEncoder/TextDecoder to global scope
 if (typeof global.TextEncoder === 'undefined') {
-    global.TextEncoder = TextEncoder;
+    (global as any).TextEncoder = TextEncoder;
 }
 if (typeof global.TextDecoder === 'undefined') {
-    global.TextDecoder = TextDecoder;
+    (global as any).TextDecoder = TextDecoder;
 }
 
 // Add fetch polyfill if needed (jsdom doesn't include it by default)

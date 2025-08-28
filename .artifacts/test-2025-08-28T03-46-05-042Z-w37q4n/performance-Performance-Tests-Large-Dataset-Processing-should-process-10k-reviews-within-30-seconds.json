@@ -1,0 +1,25 @@
+{
+  "startTime": 450881.4515,
+  "endTime": 451898.603,
+  "duration": 1017.1514999999781,
+  "memoryStart": {
+    "rss": 96526336,
+    "heapTotal": 278532096,
+    "heapUsed": 264647664,
+    "external": 8631623,
+    "arrayBuffers": 5273836
+  },
+  "memoryEnd": {
+    "rss": 280715264,
+    "heapTotal": 303353856,
+    "heapUsed": 261331000,
+    "external": 8560363,
+    "arrayBuffers": 3934181
+  },
+  "memoryDelta": {
+    "rss": 184188928,
+    "heapUsed": -3316664,
+    "heapTotal": 24821760,
+    "external": -71260
+  }
+}

@@ -1,3 +1,4 @@
+// cspell:ignore مقهى رائع جداً أحمد José Müller 咖啡店 素晴らしいカフェです
 /**
  * Schema Contract Tests - JavaScript/TypeScript
  *
@@ -5,7 +6,7 @@
  * and that validation logic correctly identifies valid/invalid data.
  */
 
-import { describe, test, expect, beforeEach } from '@jest/globals';
+// Jest globals are available globally, no import needed
 import {
     ReviewSchemaV1,
     validateReview,

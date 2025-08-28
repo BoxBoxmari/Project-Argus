@@ -17,19 +17,19 @@ async function runTests() {
     console.log('2. Testing Request Queue...');
     const queue = new RequestQueue('./test-queue.ndjson');
     await queue.init();
-    
+
     const req = {
       url: 'https://maps.google.com/place/test',
       priority: 10,
       uniqueKey: 'test-123'
     };
-    
+
     const item = await queue.add(req);
     console.log(`✅ Added item: ${item.id}`);
-    
+
     const stats = queue.getStats();
     console.log(`✅ Queue stats: ${JSON.stringify(stats)}`);
-    
+
     await queue.close();
     console.log('✅ Request Queue test passed\n');
 
@@ -37,7 +37,7 @@ async function runTests() {
     console.log('3. Testing Domain Utilities...');
     const domain = extractDomain('https://maps.google.com/place/restaurant');
     console.log(`✅ Extracted domain: ${domain}`);
-    
+
     const rateLimit = getRateLimit(domain);
     console.log(`✅ Rate limit: ${JSON.stringify(rateLimit)}`);
     console.log('✅ Domain utilities test passed\n');
@@ -61,32 +61,54 @@ async function runTests() {
       console.log(`  Task ${taskCount} executed`);
       await new Promise(resolve => setTimeout(resolve, 100));
     });
-    
+
     await pool.start();
     await new Promise(resolve => setTimeout(resolve, 500));
-    
+
     const poolStats = pool.getStats();
     console.log(`✅ Pool stats: ${JSON.stringify(poolStats)}`);
-    
+
     pool.stop();
     console.log('✅ Autoscaling Pool test passed\n');
 
     console.log('🎉 All tests passed successfully!');
     console.log('\nThe new @argus/js-core components are working correctly.');
-    
+
   } catch (error) {
     console.error('❌ Test failed:', error);
     process.exit(1);
   }
 }
 
-// Clean up test files
-process.on('exit', () => {
+// Clean up test files on exit
+const cleanup = () => {
   try {
-    require('fs').unlinkSync('./test-queue.ndjson');
+    import('fs').then(fs => {
+      try {
+        fs.unlinkSync('./test-queue.ndjson');
+      } catch {
+        // File might not exist
+      }
+    });
   } catch {
-    // File might not exist
+    // Ignore cleanup errors
   }
+};
+
+// Handle different exit scenarios
+process.on('exit', cleanup);
+process.on('SIGINT', () => {
+  cleanup();
+  process.exit(0);
+});
+process.on('SIGTERM', () => {
+  cleanup();
+  process.exit(0);
+});
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught exception:', error);
+  cleanup();
+  process.exit(1);
 });
 
 runTests();

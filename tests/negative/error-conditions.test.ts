@@ -1,3 +1,4 @@
+// cspell:ignore cmdshell MyEned
 /**
  * Negative Tests - Error Conditions and Edge Cases
  *
@@ -5,7 +6,7 @@
  * malformed inputs, and edge cases to ensure robustness.
  */
 
-import { describe, test, expect, beforeEach } from '@jest/globals';
+// Jest globals are available globally, no import needed
 
 describe('Negative Tests - Error Conditions', () => {
     describe('Malformed Input Handling', () => {
@@ -163,7 +164,7 @@ describe('Negative Tests - Error Conditions', () => {
 
     describe('Memory and Resource Limits', () => {
         test('should handle memory pressure gracefully', async () => {
-            const largeDatas = [
+            const largeDataSets = [
                 new Array(1000000).fill('x'), // Large array
                 { data: 'x'.repeat(10 * 1024 * 1024) }, // Large string
                 new Array(100).fill(null).map(() => ({
@@ -171,7 +172,7 @@ describe('Negative Tests - Error Conditions', () => {
                 })) // Array of large objects
             ];
 
-            for (const largeData of largeDatas) {
+            for (const largeData of largeDataSets) {
                 await expect(async () => {
                     const result = await processLargeData(largeData);
                     expect(typeof result).toBe('object');

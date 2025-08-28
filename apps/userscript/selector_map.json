@@ -1,0 +1,12 @@
+{
+  "base": {
+    "card": ".jftiEf",
+    "author": ".d4r55,[itemprop='author']",
+    "rating": ".kvMYJc,[role='img'][aria-label*='Rated']",
+    "text": ".wiI7pd,[jsname='fbQN7e']"
+  },
+  "vi-VN": {
+    "rating": "[aria-label*='điểm'],[aria-label*='sao']",
+    "text": ".wiI7pd,[jsname='fbQN7e']"
+  }
+}

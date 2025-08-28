@@ -1,0 +1,5 @@
+{
+  "test_name": "tests/unit/test_schema_validation_python.py::TestQualityGate::test_schema_compliance_missing_fields",
+  "failure_reason": "place_id is required",
+  "timestamp": "2025-08-28T13:02:46.739182"
+}

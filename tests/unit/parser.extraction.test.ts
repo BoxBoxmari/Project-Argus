@@ -1,3 +1,4 @@
+// cspell:ignore đánh MyEned émojis spëcial
 /**
  * Unit Tests - Review Parsing and Field Extraction
  *
@@ -5,7 +6,7 @@
  * using mocked DOM elements and fixtures to ensure robust extraction logic.
  */
 
-import { describe, test, expect, beforeEach } from '@jest/globals';
+// Jest globals are available globally, no import needed
 import { JSDOM } from 'jsdom';
 import { asElement, asHTMLElement, safeTextContent, createTestDocument } from '../utils/dom-guards';
 

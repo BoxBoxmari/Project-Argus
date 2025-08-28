@@ -1,4 +1,5 @@
-import { chromium, LaunchOptions, Browser, BrowserContext, Page } from "playwright";
+import { LaunchOptions, Browser, BrowserContext, Page } from "playwright";
+import { launchBrowser } from "./playwright";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -30,18 +31,7 @@ if (!fs.existsSync(outputDir)) {
 type Profile = "secure" | "insecure" | "insecure_no_sandbox";
 
 async function launch(profile: Profile): Promise<{ browser: Browser; context: BrowserContext }> {
-  const args: string[] = [...extraArgs];
-  const insecure = profile !== "secure";
-  if (insecure) args.push("--ignore-certificate-errors", "--allow-running-insecure-content");
-  if (profile === "insecure_no_sandbox" || noSandbox) args.push("--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage");
-  const opts: LaunchOptions = { headless: !headful, channel, args, proxy: proxyUrl ? { server: proxyUrl } : undefined };
-  const browser = await chromium.launch(opts);
-  const context = await browser.newContext({
-    ignoreHTTPSErrors: insecure,
-    serviceWorkers: "block",
-    bypassCSP: true,
-    locale: "en-US",
-  });
+  const { browser, context } = await launchBrowser("chromium");
   return { browser, context };
 }
 

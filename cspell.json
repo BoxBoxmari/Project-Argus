@@ -1,0 +1,48 @@
+{
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "version": "0.2",
+  "useGitignore": true,
+  "ignorePaths": [
+    "node_modules",
+    "dist",
+    "build",
+    "coverage",
+    "**/datasets/**",
+    "**/artifacts/**",
+    "**/.venv/**",
+    "**/storage/**",
+    "**/*.tsbuildinfo",
+    "ref/**/*",
+    "scripts/**",
+    "services/**",
+    "config/cspell-words.txt"
+  ],
+  "dictionaryDefinitions": [
+    {
+      "name": "argus-words",
+      "path": "./config/cspell-words.txt",
+      "addWords": true
+    }
+  ],
+  "dictionaries": ["argus-words", "softwareTerms", "en_US"],
+  "language": "en",
+  "allowCompoundWords": true,
+  "words": ["Experiencia", "peor", "lugar", "Playwright", "Argus", "jsaction"],
+  "overrides": [
+    {
+      "filename": "tests/**/*.ts",
+      "enabled": true,
+      "allowCompoundWords": true
+    },
+    {
+      "filename": "**/*.md",
+      "enabled": true,
+      "ignoreRegExpList": [
+        "/```[\\s\\S]*?```/g",
+        "/`[^`]*`/g",
+        "/\\b[A-Z0-9_]{3,}\\b/g"
+      ]
+    },
+    { "filename": "**/tests/**", "ignoreRegExpList": ["\\b[lL]orem\\b"] }
+  ]
+}

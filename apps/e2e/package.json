@@ -1,0 +1,12 @@
+{
+  "name": "@argus/e2e",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@playwright/test": "^1.47.0"
+  },
+  "scripts": {
+    "test": "playwright test --reporter=list",
+    "test:ci": "playwright test --reporter=dot"
+  }
+}

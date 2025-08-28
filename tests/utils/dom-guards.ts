@@ -1,3 +1,4 @@
+// cspell:ignore Crawlee parsererror
 /**
  * Type-safe DOM element guards and utilities
  * Following Crawlee methodology for resilient selector handling

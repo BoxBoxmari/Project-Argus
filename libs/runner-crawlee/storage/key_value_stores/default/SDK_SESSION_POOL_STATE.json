@@ -1,0 +1,59 @@
+{
+  "usableSessionsCount": 2,
+  "retiredSessionsCount": 0,
+  "sessions": [
+    {
+      "id": "session_vwuchAeQbc",
+      "cookieJar": {
+        "version": "tough-cookie@5.1.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2025-08-28T10:46:53.676Z",
+      "createdAt": "2025-08-28T09:56:53.676Z",
+      "usageCount": 0,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_bs0lWMq1W7",
+      "cookieJar": {
+        "version": "tough-cookie@5.1.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": [
+          {
+            "key": "NID",
+            "value": "525=VaxGVsbWyYllJzPEb5ezeTGgHdOlAJpvsQVZOY093f8NpCOEs7rT6evWp80KIy1h4jUj8sM7F1a3vU414p3-K4CZ3eH5vmlNHdRo9zthrCqz5ISxafiCs4130zq2qaGwt451lvM6gRuxeyWCGSEaXaxX_jh-17nmVanf_GdrifzOoPwgL8ivGhIQtWbFo3BSSShM2Mv8ctEAp_s",
+            "expires": "2026-02-27T09:56:57.160Z",
+            "domain": "google.com",
+            "path": "/",
+            "secure": true,
+            "httpOnly": true,
+            "hostOnly": false,
+            "creation": "2025-08-28T09:56:59.088Z",
+            "lastAccessed": "2025-08-28T09:56:59.088Z"
+          }
+        ]
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2025-08-28T10:46:53.693Z",
+      "createdAt": "2025-08-28T09:56:53.693Z",
+      "usageCount": 1,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    }
+  ]
+}
