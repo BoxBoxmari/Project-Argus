@@ -70,7 +70,7 @@
   "devDependencies": {
     "@cyclonedx/cyclonedx-npm": "^4.0.0",
     "@jest/globals": "^29.7.0",
-    "@stryker-mutator/core": "^8.2.0",
+    "@stryker-mutator/core": "^9.0.1",
     "@testing-library/dom": "^10",
     "@testing-library/jest-dom": "^6",
     "@types/jest": "^30.0.0",
