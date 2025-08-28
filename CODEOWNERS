@@ -1,0 +1,6 @@
+# Update owners per team
+/apps/userscript/        @owner
+/libs/js-core/           @owner
+/libs/runner-crawlee/    @owner
+/apps/e2e/               @owner
+/.github/                @owner

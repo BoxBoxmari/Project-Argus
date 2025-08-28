@@ -155,3 +155,24 @@ The tool implements configurable rate limiting to avoid overwhelming servers. Ad
 - Gate GA: `pnpm run ops:kpi` → pass_rate_3d ≥ 95%, dupRate < 1%, p95 < 3500ms.
 - Nightly: triage + auto-promote + KPI (see .github/workflows/ops.yml).
 - Promote RC→GA: `pnpm run release:ga && git push --follow-tags`.
+
+## Data Retention & Security
+- TTL for datasets/reports: default 14 days. Override: `ARGUS_TTL_DAYS=30 pnpm run ops:retention`.
+- Secrets scan: weekly via gitleaks (see .github/workflows/security.yml).
+
+## Data Quality & PII
+- Enable redaction: `ARGUS_REDACT_PII=1` (default in CI).
+- Check data quality: `pnpm run data:quality` → DATA_QUALITY_REPORT.md.
+
+## Pseudonymize tác giả
+- Bật: `ARGUS_PSEUDONYMIZE_AUTHOR=1 ARGUS_PII_SALT="<your_salt>"`.
+- Ẩn author: thêm `ARGUS_DROP_AUTHOR=1` (vẫn giữ `authorHash` để join).
+## Safe export
+- `ARGUS_FAIL_ON_PII=1 ARGUS_REDACT_PII=1 pnpm run data:export:safe`
+- Đặt `ARGUS_INCLUDE_AUTHOR=1` nếu cần export kèm author (không khuyến nghị trong CI).
+
+## Supply chain
+- SBOM: `pnpm run sbom:make` → `sbom.cdx.json`.
+- Schema export: `pnpm run schema:export` → `schemas/review.schema.json`.
+- Provenance: `pnpm run provenance:make` → `PROVENANCE.json`.
+- Lockfile policy: CI dùng `pnpm install --frozen-lockfile`.

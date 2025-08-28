@@ -1,6 +1,8 @@
 import type { Page } from 'playwright';
 import { ReviewSchema } from '../schema/review.js';
 import { reviewId } from '../id/review_id_node.js';
+import { maybeRedact } from "../sanitize/pii.js";
+import { authorHash as mkAuthorHash } from "../sanitize/pseudo.js";
 
 // Simple selector map - we'll inline this for now to avoid import issues
 const selectorMap: Record<string, Record<string, string>> = {
@@ -38,10 +40,25 @@ export async function extractOnPage(page: Page, locale = 'en-US') {
     return out;
   }, S);
 
+  const enableRedact = process.env.ARGUS_REDACT_PII === '1';
   const valid = items
+    .map((r:any) => {
+      const red = maybeRedact(r.text || '', enableRedact);
+      return { ...r, text: red.text, _pii: red.stats };
+    })
     .map((r:any) => ReviewSchema.safeParse(r))
     .filter((p:any) => p.success)
     .map((p:any) => ({ ...p.data, id: reviewId(p.data) }));
+
   const seen = new Set<string>();
-  return valid.filter((r:any)=> { if(seen.has(r.id)) return false; seen.add(r.id); return true; });
+  const withAuth = await Promise.all(valid.map(async (r:any) => {
+    if (process.env.ARGUS_PSEUDONYMIZE_AUTHOR === '1') {
+      const salt = process.env.ARGUS_PII_SALT || 'argus-default-salt';
+      const h = await mkAuthorHash(r.author || '', salt, 32);
+      const drop = process.env.ARGUS_DROP_AUTHOR === '1';
+      return { ...r, authorHash: h, author: drop ? '[redacted-author]' : r.author };
+    }
+    return r;
+  }));
+  return withAuth.filter((r:any)=> { if(seen.has(r.id)) return false; seen.add(r.id); return true; });
 }

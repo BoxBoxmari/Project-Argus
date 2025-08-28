@@ -5,136 +5,63 @@ All notable changes to Project Argus will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - Advanced Request Queue & Autoscaling System
-
-### 🔧 Enhanced
-
-- **Python Testing Infrastructure**: Fixed pandas import issues in conftest.py with module-level skip guard for environments without pandas
-- **Python Tooling Configuration**: Added basedpyright configuration with proper venv detection and reduced noise levels
-- **Spell Checking**: Added comprehensive cSpell configuration with pytest and domain-specific term whitelist
-- **CI Python Dependencies**: Enhanced CI workflow to properly install pandas via python-dev-requirements.txt
-- **VS Code Integration**: Added Python interpreter and analysis configuration for better local development experience
-
-- **Python Ingest Pipeline**: Simplified processor.py to remove external dependencies (pandas, pydantic) and standardize the ingest pipeline
-- **Go Orchestrator Service**: Added simple Go service for queue processing and metrics export preparation
-- **PowerShell Automation**: Updated setup script for streamlined Node.js and pnpm workspace management
-- **CI/CD Pipeline**: Simplified GitHub Actions workflow to avoid hashFiles warnings and improve robustness
-- **Repository Structure**: Added specs/ directory with JSON schemas for queue items and scraping results
-- **Data Directory**: Created datasets/ directory with .gitkeep for local data storage (gitignored)
-- **Seed URLs**: Added sample seed URLs file for testing the scraper system
-- **Bloom Filter**: Improved hashing for better distribution and lower collision rate (`libs/js-core/src/queue.ts`)
-- **Dataset Validation**: Required field checks now guard against `null`/`undefined` (`libs/js-core/src/dataset.ts`)
-- **Autoscaled Pool**: Timers cleared on shutdown with memory stats (`libs/js-core/src/autoscale.ts`)
-- **Python Ingest**: Schema validation via generator for NDJSON lines (`py/ingest/src/processor.py`)
+## [Unreleased] - Day-2 Ops Hardening and Data Governance
 
 ### 🚀 Added
 
-- **Advanced Request Queue System** (`libs/js-core/src/request-queue.ts`)
-  - Persistent NDJSON storage for request items
-  - Idempotent operations via uniqueKey
-  - Priority-based queuing with domain-aware concurrency limits
-  - Automatic domain extraction and rate limiting
-  - Comprehensive state management (queued, in-progress, handled, failed)
-  - Retry mechanism with configurable attempts
-  - Real-time statistics and monitoring
+- **Data Retention System**
+  - Automatic cleanup of expired datasets, reports, and artifacts
+  - Configurable TTL with default 14 days (override via `ARGUS_TTL_DAYS`)
+  - Retention script (`tools/ops/retention.ts`) with reporting
+  - Integration with ops workflow for nightly cleanup
 
-- **Intelligent Autoscaling Pool** (`libs/js-core/src/autoscale.ts`)
-  - CPU usage monitoring with configurable thresholds
-  - Event loop delay detection and optimization
-  - Dynamic concurrency adjustment based on system load
-  - Configurable min/max concurrency bounds
-  - Performance metrics collection and reporting
-  - Graceful shutdown and resource cleanup
+- **Security Hardening**
+  - Weekly secret scanning via gitleaks with custom configuration (`.gitleaks.toml`)
+  - Weekly npm audit for production dependencies
+  - Security workflow (`.github/workflows/security.yml`)
 
-- **Advanced Retry Mechanism** (`libs/js-core/src/retry.ts`)
-  - Exponential backoff with configurable factors
-  - Jitter addition to prevent thundering herd
-  - Predefined retry strategies for common scenarios:
-    - `rateLimit`: 5 retries, 1s base delay, 10s cap
-    - `network`: 3 retries, 500ms base delay, 5s cap
-    - `serverError`: 3 retries, 2s base delay, 20s cap
-    - `aggressive`: 10 retries, 100ms base delay, 1s cap
-  - Custom retry logic with `shouldRetry` callbacks
-  - Comprehensive error handling with `RetryError` class
+- **CI Optimization**
+  - Heavy operations moved to nightly/weekly schedules
+  - PR builds focus on stable tests only
+  - Ops workflow updated with retention reporting
 
-- **Domain-Aware Rate Limiting** (`libs/js-core/src/domain-utils.ts`)
-  - Intelligent domain extraction from URLs
-  - Subdomain and base domain identification
-  - Predefined rate limits for Google services:
-    - `google.com`: 1 req/sec, 30 req/min, burst size 3
-    - `maps.google.com`: 0.5 req/sec, 20 req/min, burst size 2
-  - Default rate limits for unknown domains
-  - Burst size management and cooldown periods
-  - Rate limit delay calculations
+- **Documentation Updates**
+  - Added Data Retention & Security section to `HOWTO-RUN.md`
+  - Enhanced `DIAGNOSIS.md` with Day-2 Ops implementation details
 
-- **Integrated Scraper Orchestrator** (`libs/js-core/src/scraper-orchestrator.ts`)
-  - Unified interface combining all components
-  - Abstract base class for custom scrapers
-  - Automatic queue management and autoscaling
-  - Comprehensive logging and monitoring
-  - Result persistence in NDJSON format
-  - Graceful error handling and recovery
+### 🛠️ Changed
 
-- **JSON Schema Contracts** (`specs/`)
-  - `queue.schema.json`: Request queue item validation
-  - `scraping-result.schema.json`: Scraping result validation
-  - Comprehensive property definitions and constraints
-  - Conditional validation logic for success/failure states
+- **Ops Workflow** (`.github/workflows/ops.yml`)
+  - Added retention script execution to nightly job
+  - Added retention report artifact upload
+  - Updated commit message to include retention
 
-- **Comprehensive Test Suite** (`libs/js-core/src/__tests__/`)
-  - Unit tests for all new components
-  - Mock implementations and edge case coverage
-  - Performance testing for autoscaling
-  - Error scenario validation
-  - Integration test examples
+### 🔧 Enhanced
 
-- **Example Usage & Documentation** (`libs/js-core/src/example-usage.ts`)
-  - Complete working examples of all features
-  - Google Maps scraper implementation
-  - Queue management demonstrations
-  - Autoscaling pool examples
-  - Retry mechanism showcases
-  - Full orchestrator integration
+- **Package Scripts** (`package.json`)
+  - Added `ops:retention` script for manual retention cleanup
 
-### 🔧 Enhanced 1
+## [0.3.0] - GA Launch and Ops Guardrails
 
-- **Monorepo Structure**: Added advanced JavaScript core library
-- **Type Safety**: Comprehensive TypeScript interfaces and types
-- **Error Handling**: Robust error handling with custom error classes
-- **Performance**: Optimized algorithms for high-throughput scenarios
-- **Monitoring**: Built-in metrics and statistics collection
+### 🚀 Added
 
-### 🏗️ Architecture Improvements
+- **GA Launch Guardrails**
+  - KPI aggregator script (`tools/ops/kpi.ts`) for calculating pass rates and SLO compliance
+  - Auto-promotion script (`tools/e2e/auto_promote.ts`) for promoting stable quarantine tests
+  - GA release script (`tools/release/ga.js`) for tagging v0.1.0
+  - SLO enforcement: dupRate < 1%, p95(open|pane) < 3500ms, robots_guard=passed
+  - 3-day stable pass rate calculation from `apps/e2e/reports/history.json`
 
-- **Queue as Source of Truth**: All components read/write through the persistent queue
-- **Domain Isolation**: Rate limiting prevents cross-domain interference
-- **Idempotent Operations**: Safe retry and recovery mechanisms
-- **Resource Management**: Automatic scaling based on system capacity
-- **Data Persistence**: NDJSON format for easy processing and analysis
+- **Operational Guardrails**
+  - Ops workflow (`.github/workflows/ops.yml`) with nightly and weekly jobs
+  - Nightly: Full test run + triage + auto-promotion + KPI reporting
+  - Weekly: Dependency updates + security audit
+  - Automatic issue creation on SLO breaches
+  - Quarantine cleanup: Auto-promote tests stable for ≥14 days
 
-### 📊 Performance Features
-
-- **Concurrent Processing**: Configurable concurrency with autoscaling
-- **Rate Limiting**: Domain-aware rate limiting to prevent blocking
-- **Resource Optimization**: CPU and event loop monitoring
-- **Efficient Storage**: NDJSON format for streaming and processing
-- **Memory Management**: Configurable memory limits and cleanup
-
-### 🛡️ Reliability Features
-
-- **Fault Tolerance**: Comprehensive retry mechanisms
-- **Data Integrity**: Idempotent operations and validation
-- **Graceful Degradation**: Automatic fallback and recovery
-- **Monitoring**: Real-time statistics and health checks
-- **Logging**: Comprehensive logging for debugging and audit
-
-### 🔍 Monitoring & Observability
-
-- **Real-time Stats**: Queue status, processing rates, error counts
-- **Performance Metrics**: CPU usage, event loop delays, concurrency levels
-- **Error Tracking**: Detailed error logging with context
-- **Health Checks**: System health monitoring and alerts
-- **Audit Trail**: Complete request lifecycle tracking
+- **Documentation Updates**
+  - Added GA Ops section to `HOWTO-RUN.md`
+  - Enhanced `DIAGNOSIS.md` with GA Ops implementation details
 
 ## [0.2.0] - Monorepo Restructuring
 

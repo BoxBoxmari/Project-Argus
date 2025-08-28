@@ -3,6 +3,8 @@
  */
 
 import { ReviewElement, extractText, extractRating, extractPlaceId } from './dom';
+import { maybeRedact } from '../../../libs/js-core/dist/sanitize/pii.js';
+import { gm } from './polyfills/gm.js';
 
 export interface RawReview {
   place_id?: unknown;
@@ -25,8 +27,8 @@ export function toRawReview(reviewElement: ReviewElement): RawReview {
     review_id: reviewId,
     schema_version: "v1",
     rating: extractRating(element),
-    text: extractReviewText(element),
-    user: extractAuthor(element),
+    text: __REDACT__(extractReviewText(element) || ''),
+    user: extractAuthor(element), // This will be processed in the extractor with pseudonymization
     ts: extractTimestamp(element)
   };
 }
@@ -144,3 +146,5 @@ function parseRelativeTime(timeText: string): number | null {
 
   return null;
 }
+
+const __REDACT__ = (txt: string) => maybeRedact(txt, (gm.get('ARGUS_REDACT_PII', '1') ?? '1') === '1').text;

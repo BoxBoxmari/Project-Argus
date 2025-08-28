@@ -339,3 +339,103 @@ Implemented operational guardrails for GA launch and ongoing operations:
 - Nightly workflow processes all tests, updates tags, and reports KPIs
 - Weekly workflow updates dependencies and runs security audits
 - Automatic issue creation on SLO breaches
+
+## Day-2 Ops Hardening and Data Governance
+
+### Implementation Details
+Implemented operational guardrails for ongoing maintenance and data governance:
+
+1. **Data Retention**:
+   - Automatic cleanup of expired datasets, reports, and artifacts
+   - Configurable TTL with default 14 days (override via `ARGUS_TTL_DAYS`)
+
+2. **Secrets & Security**:
+   - Weekly secret scanning via gitleaks with custom configuration
+   - Weekly npm audit for production dependencies
+
+3. **SLO Guard**:
+   - Nightly KPI checking with automatic issue creation on SLO violations
+   - Integrated with existing ops workflow
+
+4. **CI Optimization**:
+   - Heavy operations moved to nightly/weekly schedules
+   - PR builds focus on stable tests only
+
+### Files
+- `tools/ops/retention.ts`: Data retention script for automatic cleanup
+- `.gitleaks.toml`: Gitleaks configuration for secret scanning
+- `.github/workflows/security.yml`: Security workflow for secret scanning and npm audit
+- `.github/workflows/ops.yml`: Updated ops workflow with retention reporting
+- `RETENTION_REPORT.md`: Generated retention report with cleanup details
+
+### Commands
+- Run data retention: `pnpm run ops:retention`
+- Override TTL: `ARGUS_TTL_DAYS=30 pnpm run ops:retention`
+
+### CI Integration
+- Nightly workflow includes retention cleanup and reporting
+- Weekly security workflow runs gitleaks and npm audit
+- Artifacts uploaded for both ops and retention reports
+
+## Data Quality & PII Guardrails and Ops
+
+### Implementation Details
+Implemented data quality monitoring and PII protection features:
+
+1. **PII Sanitization**:
+   - Automatic redaction of email addresses and phone numbers at the source
+   - Configurable via `ARGUS_REDACT_PII` environment variable
+   - Applied in both js-core extractor and userscript
+
+2. **Data Quality KPIs**:
+   - Duplication rate monitoring
+   - Null author rate tracking
+   - Empty text rate monitoring
+   - PII leak rate detection
+
+3. **CI Integration**:
+   - Automatic failure when PII leaks are detected
+   - Automatic failure when duplication rate ≥ 1%
+   - Data quality reports generated in CI and nightly runs
+
+### Files
+- `libs/js-core/src/sanitize/pii.ts`: PII sanitization module
+- `tools/data/quality.ts`: Data quality KPI script
+- `.github/workflows/ci.yml`: Updated CI workflow with data quality job
+- `.github/workflows/ops.yml`: Updated ops workflow with data quality checks
+- `DATA_QUALITY_REPORT.md`: Generated data quality report
+
+### Commands
+- Check data quality: `pnpm run data:quality`
+- Enable PII redaction: `ARGUS_REDACT_PII=1`
+
+### CI Integration
+- Data quality job runs after E2E and Crawlee smoke tests
+- Nightly ops workflow includes data quality checks
+- Automatic failure on PII leaks or high duplication rates
+
+# Diagnosis Log
+
+## Supply chain lockdown
+
+Successfully implemented supply chain lockdown features for Project Argus:
+
+1. SBOM Generation: Added `@cyclonedx/cyclonedx-npm` dependency and `sbom:make` script to generate CycloneDX SBOM
+2. JSON Schema Export: Created tool to export Zod schema as JSON Schema
+3. Provenance Tracking: Created tool to generate SHA-256 hashes of build artifacts
+4. Lockfile Policy: Added `lockfile:check` script to enforce frozen lockfile in CI
+5. CodeQL Integration: Added CodeQL workflow for JS/TS and Go code scanning
+6. Dependabot Configuration: Added configuration for npm and GitHub Actions updates
+
+All new commands are working correctly:
+- `pnpm run sbom:make` → Generates `sbom.cdx.json`
+- `pnpm run schema:export` → Generates `schemas/review.schema.json`
+- `pnpm run provenance:make` → Generates `PROVENANCE.json`
+- `pnpm run lockfile:check` → Enforces frozen lockfile
+
+CI/CD workflows have been updated to include:
+- Lockfile validation job
+- SBOM and schema generation job
+- Provenance generation job
+- CodeQL security scanning
+- Dependabot configuration for automated updates

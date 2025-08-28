@@ -1,0 +1,6 @@
+title = "Argus gitleaks config"
+[extend]
+# Giữ mặc định gitleaks, thêm allowlist cơ bản
+[[rules.allowlist.files]]
+description = "fixtures and reports"
+path = '''(apps/e2e/fixtures|apps/e2e/reports|apps/scraper-playwright/datasets)'''

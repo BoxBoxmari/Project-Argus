@@ -5,7 +5,7 @@
     "type": "module",
     "scripts": {
         "clean": "rimraf dist || true",
-        "build": "esbuild src/index.ts --bundle --minify --outfile=dist/argus.user.js --format=iife --legal-comments=none",
+        "build": "esbuild src/index.ts --bundle --minify --outfile=dist/argus.user.js --format=iife --legal-comments=none --platform=browser",
         "typecheck": "tsc --noEmit",
         "lint": "echo 'ESLint temporarily disabled - basic checks pass'",
         "test": "echo 'No tests configured'"
