@@ -72,8 +72,11 @@ function extractTimestamp(element: HTMLElement): string | number | null {
 
   // Try title attribute
   const titleElement = element.querySelector('span[title]');
-  if (titleElement?.title) {
-    return titleElement.title;
+  if (titleElement) {
+    const title = getElementTitle(titleElement);
+    if (title) {
+      return title;
+    }
   }
 
   // Try text content with relative time parsing
@@ -89,6 +92,16 @@ function extractTimestamp(element: HTMLElement): string | number | null {
   }
 
   return null;
+}
+
+/**
+ * Safely get the title attribute from an Element
+ */
+function getElementTitle(element: Element): string | null {
+  if (element instanceof HTMLElement && element.title) {
+    return element.title;
+  }
+  return element.getAttribute ? element.getAttribute('title') : null;
 }
 
 /**

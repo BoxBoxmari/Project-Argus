@@ -1,3 +1,4 @@
+/// <reference types="tampermonkey" />
 import { findReviewElements, extractPlaceId } from './dom';
 import { toRawReview, RawReview } from './normalize';
 import { Transport } from './transport';

@@ -7,7 +7,7 @@
     "declarationMap": true,
     "sourceMap": true,
     "composite": true,
-    "types": ["greasemonkey"]
+    "types": ["tampermonkey", "node"]
   },
   "include": [
     "src/**/*"
