@@ -52,13 +52,23 @@
     "e2e:report": "cross-env E2E_GREP='' pnpm -C apps/e2e test",
     "e2e:triage": "node tools/e2e/triage.ts",
     "ops:kpi": "tsx tools/ops/kpi.ts",
-    "ops:auto-promote": "tsx tools/e2e/auto_promote.ts"
+    "ops:auto-promote": "tsx tools/e2e/auto_promote.ts",
+    "ops:retention": "tsx tools/ops/retention.ts",
+    "data:quality": "tsx tools/data/quality.ts",
+    "data:export:safe": "tsx tools/data/export_safe.ts",
+    "qa:pii": "vitest run libs/js-core/test/pii*.spec.ts",
+    "sbom:workspaces": "tsx tools/sbom/gen-workspaces.ts && tsx tools/sbom/merge.ts",
+    "sbom:assert": "node tools/sbom/assert.js",
+    "schema:export": "tsx tools/schema/export-jsonschema.ts",
+    "provenance:make": "node tools/release/provenance.js",
+    "lockfile:check": "pnpm install --frozen-lockfile"
   },
   "engines": {
     "node": ">=18.18 <23",
     "pnpm": ">=8.7"
   },
   "devDependencies": {
+    "@cyclonedx/cyclonedx-npm": "^4.0.0",
     "@jest/globals": "^29.7.0",
     "@stryker-mutator/core": "^8.2.0",
     "@testing-library/dom": "^10",
@@ -79,14 +89,15 @@
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.2",
     "ts-prune": "^0.10.3",
-    "tsx": "^4.20.5",
     "typescript": "^5.9.2",
-    "vitest": "^2.0.0"
+    "vitest": "^2.0.0",
+    "zod-to-json-schema": "^3.22.5"
   },
   "dependencies": {
     "crawlee": "^3.8.0",
     "glob": "^11.0.3",
     "playwright": "^1.55.0",
+    "tsx": "^4.7.0",
     "zod": "^3.23.8"
   }
 }

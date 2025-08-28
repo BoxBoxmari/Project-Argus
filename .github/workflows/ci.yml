@@ -138,3 +138,74 @@ jobs:
         with: { node-version: 20, cache: 'pnpm' }
       - run: pnpm install
       - run: pnpm run qa:strict
+  data-quality:
+    runs-on: ubuntu-latest
+    needs: [e2e, crawlee-smoke, budgets]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: 'pnpm' }
+      - run: pnpm install
+      - run: ARGUS_REDACT_PII=1 pnpm run data:quality
+      - uses: actions/upload-artifact@v4
+        with: { name: data-quality-report, path: DATA_QUALITY_REPORT.md, if-no-files-found: error }
+  data-export:
+    runs-on: ubuntu-latest
+    needs: [data-quality]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: 'pnpm' }
+      - run: pnpm install
+      - run: ARGUS_FAIL_ON_PII=1 ARGUS_REDACT_PII=1 pnpm run data:export:safe
+      - uses: actions/upload-artifact@v4
+        with: { name: reviews-safe-jsonl, path: export/reviews.safe.jsonl, if-no-files-found: error }
+  lockfile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: 'pnpm' }
+      - run: pnpm install --frozen-lockfile
+
+  sbom-and-schema:
+    runs-on: ubuntu-latest
+    needs: [e2e, data-quality]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: 'pnpm' }
+      - run: pnpm install
+      - run: pnpm run sbom:workspaces
+      - run: pnpm run sbom:assert
+      - run: pnpm run schema:export
+      - uses: actions/upload-artifact@v4
+        with: { name: sbom-per-workspace, path: sbom/*.cdx.json, if-no-files-found: error }
+      - uses: actions/upload-artifact@v4
+        with: { name: sbom-combined, path: sbom/combined.cdx.json, if-no-files-found: error }
+      - uses: actions/upload-artifact@v4
+        with: { name: review-jsonschema, path: schemas/review.schema.json, if-no-files-found: error }
+
+  provenance:
+    runs-on: ubuntu-latest
+    needs: [sbom-and-schema]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: 'pnpm' }
+      - run: pnpm install
+      - run: pnpm -r run build
+      - run: pnpm run data:export:safe || true
+      - run: pnpm run provenance:make
+      - uses: actions/upload-artifact@v4
+        with: { name: provenance, path: PROVENANCE.json, if-no-files-found: error }
