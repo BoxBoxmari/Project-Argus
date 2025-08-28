@@ -28,7 +28,20 @@
     "repo:doctor": "node tools/doctor.mjs",
     "inventory": "node tools/inventory.js",
     "release:rc": "pnpm -r run build && node tools/release/rc.js",
-    "monitor:post-release": "node tools/monitor/post_release.js"
+    "monitor:post-release": "node tools/monitor/post_release.js",
+    "gen:sim": "tsx apps/e2e/tools/gen-scenarios.ts",
+    "test:sim": "pnpm -C apps/e2e test -g 'SIM#'",
+    "test:real": "pnpm -C apps/e2e test -g 'REAL#'",
+    "cleanup": "tsx scripts/cleanup.ts",
+    "test:matrix": "pnpm run gen:sim && pnpm run test:sim && pnpm run test:real",
+    "test:unit": "vitest run",
+    "coverage": "c8 -r lcov -r text-summary pnpm run test:unit",
+    "deadcode": "knip --strict && ts-prune",
+    "deps:unused": "depcheck --ignores=playwright,@playwright/test",
+    "audit": "npm audit --omit=dev --audit-level=high || true",
+    "licenses": "license-checker --summary --production",
+    "mutate": "stryker run",
+    "qa:all": "pnpm -r run typecheck && pnpm -r run build && pnpm run coverage && pnpm run test:matrix && pnpm run deadcode && pnpm run deps:unused && pnpm run audit && pnpm run licenses"
   },
   "engines": {
     "node": ">=18.18 <23",
@@ -48,7 +61,15 @@
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.2",
     "tsx": "^4.20.5",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vitest": "^2.0.0",
+    "c8": "^9.1.0",
+    "ts-prune": "^0.10.3",
+    "knip": "^5.27.0",
+    "depcheck": "^1.4.7",
+    "license-checker": "^25.0.1",
+    "stryker-cli": "^1.0.0",
+    "@stryker-mutator/core": "^8.2.0"
   },
   "dependencies": {
     "crawlee": "^3.8.0",

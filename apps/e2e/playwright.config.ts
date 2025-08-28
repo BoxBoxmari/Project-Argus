@@ -3,6 +3,7 @@ export default defineConfig({
   timeout: 120000,
   expect: { timeout: 15000 },
   use: {
+    coverageName: 'e2e-sim',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',

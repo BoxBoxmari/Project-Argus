@@ -10,3 +10,7 @@ __pycache__/
 .mypy_cache/
 ruff_cache/
 bin/
+**/*.tmp
+**/*.bak
+apps/scraper-playwright/datasets/*
+!apps/scraper-playwright/datasets/.keep

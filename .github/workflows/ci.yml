@@ -74,3 +74,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: echo "Enforce dupRate < 1% via test; perf enforced in e2e job."
+  unit-and-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: 'pnpm' }
+      - run: pnpm install
+      - run: pnpm run coverage
+  quality-scans:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: 'pnpm' }
+      - run: pnpm install
+      - run: pnpm run deadcode
+      - run: pnpm run deps:unused
+      - run: pnpm run audit
+      - run: pnpm run licenses
