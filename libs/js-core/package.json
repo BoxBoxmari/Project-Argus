@@ -25,7 +25,7 @@
   "scripts": {
     "build": "tsc -b",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint . --ignore-path .eslintignore",
+    "lint": "eslint . --ignore-pattern dist --ignore-pattern test-runner.js",
     "test": "vitest run"
   },
   "devDependencies": {

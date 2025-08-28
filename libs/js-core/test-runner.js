@@ -80,13 +80,35 @@ async function runTests() {
   }
 }
 
-// Clean up test files
-process.on('exit', () => {
+// Clean up test files on exit
+const cleanup = () => {
   try {
-    require('fs').unlinkSync('./test-queue.ndjson');
+    import('fs').then(fs => {
+      try {
+        fs.unlinkSync('./test-queue.ndjson');
+      } catch {
+        // File might not exist
+      }
+    });
   } catch {
-    // File might not exist
+    // Ignore cleanup errors
   }
+};
+
+// Handle different exit scenarios
+process.on('exit', cleanup);
+process.on('SIGINT', () => {
+  cleanup();
+  process.exit(0);
+});
+process.on('SIGTERM', () => {
+  cleanup();
+  process.exit(0);
+});
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught exception:', error);
+  cleanup();
+  process.exit(1);
 });
 
 runTests();

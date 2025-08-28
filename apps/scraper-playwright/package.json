@@ -9,7 +9,7 @@
     "dev": "tsx src/cli.ts",
     "build": "tsc -b",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint .",
+    "lint": "eslint . --ignore-pattern dist",
     "test:maps": "tsx src/test-google-maps.ts"
   },
   "dependencies": {
