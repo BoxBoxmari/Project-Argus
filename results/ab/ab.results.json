@@ -6,7 +6,8 @@
     "device": "Desktop",
     "network": "normal",
     "ok": false,
-    "ts": 1756461103470
+    "exitCode": null,
+    "ts": 1756461957064
   },
   {
     "backend": "mcp",
@@ -15,7 +16,8 @@
     "device": "Desktop",
     "network": "slow3g",
     "ok": false,
-    "ts": 1756461103479
+    "exitCode": null,
+    "ts": 1756461957076
   },
   {
     "backend": "mcp",
@@ -24,7 +26,8 @@
     "device": "Mobile",
     "network": "normal",
     "ok": false,
-    "ts": 1756461103489
+    "exitCode": null,
+    "ts": 1756461957089
   },
   {
     "backend": "mcp",
@@ -33,7 +36,8 @@
     "device": "Mobile",
     "network": "slow3g",
     "ok": false,
-    "ts": 1756461103502
+    "exitCode": null,
+    "ts": 1756461957102
   },
   {
     "backend": "mcp",
@@ -42,7 +46,8 @@
     "device": "Desktop",
     "network": "normal",
     "ok": false,
-    "ts": 1756461103511
+    "exitCode": null,
+    "ts": 1756461957114
   },
   {
     "backend": "mcp",
@@ -51,7 +56,8 @@
     "device": "Desktop",
     "network": "slow3g",
     "ok": false,
-    "ts": 1756461103522
+    "exitCode": null,
+    "ts": 1756461957129
   },
   {
     "backend": "mcp",
@@ -60,7 +66,8 @@
     "device": "Mobile",
     "network": "normal",
     "ok": false,
-    "ts": 1756461103531
+    "exitCode": null,
+    "ts": 1756461957141
   },
   {
     "backend": "mcp",
@@ -69,7 +76,8 @@
     "device": "Mobile",
     "network": "slow3g",
     "ok": false,
-    "ts": 1756461103540
+    "exitCode": null,
+    "ts": 1756461957151
   },
   {
     "backend": "mcp",
@@ -78,7 +86,8 @@
     "device": "Desktop",
     "network": "normal",
     "ok": false,
-    "ts": 1756461103549
+    "exitCode": null,
+    "ts": 1756461957161
   },
   {
     "backend": "mcp",
@@ -87,7 +96,8 @@
     "device": "Desktop",
     "network": "slow3g",
     "ok": false,
-    "ts": 1756461103558
+    "exitCode": null,
+    "ts": 1756461957172
   },
   {
     "backend": "mcp",
@@ -96,7 +106,8 @@
     "device": "Mobile",
     "network": "normal",
     "ok": false,
-    "ts": 1756461103566
+    "exitCode": null,
+    "ts": 1756461957182
   },
   {
     "backend": "mcp",
@@ -105,7 +116,8 @@
     "device": "Mobile",
     "network": "slow3g",
     "ok": false,
-    "ts": 1756461103575
+    "exitCode": null,
+    "ts": 1756461957193
   },
   {
     "backend": "mcp",
@@ -114,7 +126,8 @@
     "device": "Desktop",
     "network": "normal",
     "ok": false,
-    "ts": 1756461103583
+    "exitCode": null,
+    "ts": 1756461957204
   },
   {
     "backend": "mcp",
@@ -123,7 +136,8 @@
     "device": "Desktop",
     "network": "slow3g",
     "ok": false,
-    "ts": 1756461103592
+    "exitCode": null,
+    "ts": 1756461957214
   },
   {
     "backend": "mcp",
@@ -132,7 +146,8 @@
     "device": "Mobile",
     "network": "normal",
     "ok": false,
-    "ts": 1756461103601
+    "exitCode": null,
+    "ts": 1756461957225
   },
   {
     "backend": "mcp",
@@ -141,7 +156,8 @@
     "device": "Mobile",
     "network": "slow3g",
     "ok": false,
-    "ts": 1756461103609
+    "exitCode": null,
+    "ts": 1756461957236
   },
   {
     "backend": "crawlee",
@@ -150,7 +166,8 @@
     "device": "Desktop",
     "network": "normal",
     "ok": false,
-    "ts": 1756461103618
+    "exitCode": null,
+    "ts": 1756461957247
   },
   {
     "backend": "crawlee",
@@ -159,7 +176,8 @@
     "device": "Desktop",
     "network": "slow3g",
     "ok": false,
-    "ts": 1756461103628
+    "exitCode": null,
+    "ts": 1756461957257
   },
   {
     "backend": "crawlee",
@@ -168,7 +186,8 @@
     "device": "Mobile",
     "network": "normal",
     "ok": false,
-    "ts": 1756461103637
+    "exitCode": null,
+    "ts": 1756461957268
   },
   {
     "backend": "crawlee",
@@ -177,7 +196,8 @@
     "device": "Mobile",
     "network": "slow3g",
     "ok": false,
-    "ts": 1756461103646
+    "exitCode": null,
+    "ts": 1756461957279
   },
   {
     "backend": "crawlee",
@@ -186,7 +206,8 @@
     "device": "Desktop",
     "network": "normal",
     "ok": false,
-    "ts": 1756461103656
+    "exitCode": null,
+    "ts": 1756461957290
   },
   {
     "backend": "crawlee",
@@ -195,7 +216,8 @@
     "device": "Desktop",
     "network": "slow3g",
     "ok": false,
-    "ts": 1756461103665
+    "exitCode": null,
+    "ts": 1756461957301
   },
   {
     "backend": "crawlee",
@@ -204,7 +226,8 @@
     "device": "Mobile",
     "network": "normal",
     "ok": false,
-    "ts": 1756461103674
+    "exitCode": null,
+    "ts": 1756461957314
   },
   {
     "backend": "crawlee",
@@ -213,7 +236,8 @@
     "device": "Mobile",
     "network": "slow3g",
     "ok": false,
-    "ts": 1756461103682
+    "exitCode": null,
+    "ts": 1756461957325
   },
   {
     "backend": "crawlee",
@@ -222,7 +246,8 @@
     "device": "Desktop",
     "network": "normal",
     "ok": false,
-    "ts": 1756461103692
+    "exitCode": null,
+    "ts": 1756461957339
   },
   {
     "backend": "crawlee",
@@ -231,7 +256,8 @@
     "device": "Desktop",
     "network": "slow3g",
     "ok": false,
-    "ts": 1756461103700
+    "exitCode": null,
+    "ts": 1756461957353
   },
   {
     "backend": "crawlee",
@@ -240,7 +266,8 @@
     "device": "Mobile",
     "network": "normal",
     "ok": false,
-    "ts": 1756461103710
+    "exitCode": null,
+    "ts": 1756461957366
   },
   {
     "backend": "crawlee",
@@ -249,7 +276,8 @@
     "device": "Mobile",
     "network": "slow3g",
     "ok": false,
-    "ts": 1756461103718
+    "exitCode": null,
+    "ts": 1756461957378
   },
   {
     "backend": "crawlee",
@@ -258,7 +286,8 @@
     "device": "Desktop",
     "network": "normal",
     "ok": false,
-    "ts": 1756461103729
+    "exitCode": null,
+    "ts": 1756461957388
   },
   {
     "backend": "crawlee",
@@ -267,7 +296,8 @@
     "device": "Desktop",
     "network": "slow3g",
     "ok": false,
-    "ts": 1756461103738
+    "exitCode": null,
+    "ts": 1756461957399
   },
   {
     "backend": "crawlee",
@@ -276,7 +306,8 @@
     "device": "Mobile",
     "network": "normal",
     "ok": false,
-    "ts": 1756461103746
+    "exitCode": null,
+    "ts": 1756461957411
   },
   {
     "backend": "crawlee",
@@ -285,6 +316,167 @@
     "device": "Mobile",
     "network": "slow3g",
     "ok": false,
-    "ts": 1756461103756
+    "exitCode": null,
+    "ts": 1756461957421
+  },
+  {
+    "backend": "userscript",
+    "block": true,
+    "locale": "en-US",
+    "device": "Desktop",
+    "network": "normal",
+    "ok": false,
+    "exitCode": null,
+    "ts": 1756461957432
+  },
+  {
+    "backend": "userscript",
+    "block": true,
+    "locale": "en-US",
+    "device": "Desktop",
+    "network": "slow3g",
+    "ok": false,
+    "exitCode": null,
+    "ts": 1756461957443
+  },
+  {
+    "backend": "userscript",
+    "block": true,
+    "locale": "en-US",
+    "device": "Mobile",
+    "network": "normal",
+    "ok": false,
+    "exitCode": null,
+    "ts": 1756461957453
+  },
+  {
+    "backend": "userscript",
+    "block": true,
+    "locale": "en-US",
+    "device": "Mobile",
+    "network": "slow3g",
+    "ok": false,
+    "exitCode": null,
+    "ts": 1756461957463
+  },
+  {
+    "backend": "userscript",
+    "block": true,
+    "locale": "vi-VN",
+    "device": "Desktop",
+    "network": "normal",
+    "ok": false,
+    "exitCode": null,
+    "ts": 1756461957475
+  },
+  {
+    "backend": "userscript",
+    "block": true,
+    "locale": "vi-VN",
+    "device": "Desktop",
+    "network": "slow3g",
+    "ok": false,
+    "exitCode": null,
+    "ts": 1756461957484
+  },
+  {
+    "backend": "userscript",
+    "block": true,
+    "locale": "vi-VN",
+    "device": "Mobile",
+    "network": "normal",
+    "ok": false,
+    "exitCode": null,
+    "ts": 1756461957495
+  },
+  {
+    "backend": "userscript",
+    "block": true,
+    "locale": "vi-VN",
+    "device": "Mobile",
+    "network": "slow3g",
+    "ok": false,
+    "exitCode": null,
+    "ts": 1756461957523
+  },
+  {
+    "backend": "userscript",
+    "block": false,
+    "locale": "en-US",
+    "device": "Desktop",
+    "network": "normal",
+    "ok": false,
+    "exitCode": null,
+    "ts": 1756461957538
+  },
+  {
+    "backend": "userscript",
+    "block": false,
+    "locale": "en-US",
+    "device": "Desktop",
+    "network": "slow3g",
+    "ok": false,
+    "exitCode": null,
+    "ts": 1756461957548
+  },
+  {
+    "backend": "userscript",
+    "block": false,
+    "locale": "en-US",
+    "device": "Mobile",
+    "network": "normal",
+    "ok": false,
+    "exitCode": null,
+    "ts": 1756461957559
+  },
+  {
+    "backend": "userscript",
+    "block": false,
+    "locale": "en-US",
+    "device": "Mobile",
+    "network": "slow3g",
+    "ok": false,
+    "exitCode": null,
+    "ts": 1756461957570
+  },
+  {
+    "backend": "userscript",
+    "block": false,
+    "locale": "vi-VN",
+    "device": "Desktop",
+    "network": "normal",
+    "ok": false,
+    "exitCode": null,
+    "ts": 1756461957580
+  },
+  {
+    "backend": "userscript",
+    "block": false,
+    "locale": "vi-VN",
+    "device": "Desktop",
+    "network": "slow3g",
+    "ok": false,
+    "exitCode": null,
+    "ts": 1756461957593
+  },
+  {
+    "backend": "userscript",
+    "block": false,
+    "locale": "vi-VN",
+    "device": "Mobile",
+    "network": "normal",
+    "ok": false,
+    "exitCode": null,
+    "ts": 1756461957606
+  },
+  {
+    "backend": "userscript",
+    "block": false,
+    "locale": "vi-VN",
+    "device": "Mobile",
+    "network": "slow3g",
+    "ok": false,
+    "exitCode": null,
+    "ts": 1756461957617
   }
 ]

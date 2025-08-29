@@ -13,5 +13,12 @@
       "archive/tests/metrics"
     ]
   ],
-  "ts": "2025-08-29T09:52:57.545Z"
+  "purged": [
+    "dist",
+    "coverage",
+    "playwright-report",
+    ".cache",
+    "playwright"
+  ],
+  "ts": "2025-08-29T10:09:53.704Z"
 }

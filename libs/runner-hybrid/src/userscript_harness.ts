@@ -1,13 +1,24 @@
 import { chromium } from 'playwright';
 import { readFileSync } from 'node:fs';
-import { DEFAULT_CONFIG } from './config/defaults';
-type Opts = { block:boolean; locale:string; headful:boolean };
+import { DEFAULTS } from './config/defaults';
+
+type Opts = {
+  block: boolean;
+  locale: string;
+  headful: boolean;
+  delayMs: number;
+  jitterMs: number;
+  backoffBaseMs: number;
+  paneTimeoutMs: number;
+};
+
 export async function runUserscriptHarness(url:string, opts:Opts){
-  const browser = await chromium.launch({ headless: !opts.headful, channel: process.env.ARGUS_BROWSER_CHANNEL || DEFAULT_CONFIG.browserChannel });
+  const browser = await chromium.launch({ headless: !opts.headful, channel: process.env.ARGUS_BROWSER_CHANNEL || 'chrome' });
   const context = await browser.newContext({ locale: opts.locale });
   const page = await context.newPage();
 
-  if (opts.block) {
+  // Bật block tài nguyên mặc định (img, font, media, stylesheet) ở Userscript khi PERF_MODE=1
+  if (process.env.PERF_MODE === '1' && opts.block) {
     await page.route('**/*', route => {
       const t = route.request().resourceType();
       if (['image','media','font','stylesheet'].includes(t)) return route.abort();

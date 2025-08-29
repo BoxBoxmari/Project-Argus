@@ -182,3 +182,4 @@ The tool implements configurable rate limiting to avoid overwhelming servers. Ad
 - Chạy Crawlee: `ARGUS_BACKEND=crawlee pnpm run hybrid:start`
 - Chạy Userscript harness: `ARGUS_BACKEND=userscript pnpm run hybrid:start`
 - A/B matrix: `pnpm run perf:ab` (điều khiển backends qua `AB_BACKENDS=mcp,crawlee,userscript`)
+- Performance mode: Set `PERF_MODE=1` to enable resource blocking for better performance
