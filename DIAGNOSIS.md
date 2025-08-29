@@ -414,6 +414,55 @@ Implemented data quality monitoring and PII protection features:
 - Nightly ops workflow includes data quality checks
 - Automatic failure on PII leaks or high duplication rates
 
+## Hybrid Runner Finalization
+
+### Implementation Summary
+Successfully implemented the final performance A/B testing, security checks, and cleanup for Project Argus:
+
+1. **Hybrid Runner Framework**:
+   - Created unified runner-hybrid workspace with backend selection via `ARGUS_BACKEND`
+   - Implemented fallback chain: MCP → Crawlee → Userscript
+   - Added configuration defaults in `libs/runner-hybrid/src/config/defaults.ts`
+
+2. **Performance A/B Testing**:
+   - Built A/B testing framework in `tools/perf/ab.ts`
+   - Tested multiple backends across dimensions: block, locale, device, network
+   - Generated performance metrics and comparison reports
+
+3. **Security and Compliance**:
+   - Maintained existing security gates without adding new ones
+   - Kept PII redaction, robots guard, retention TTL, and gitleaks scanning
+
+4. **Final Cleanup**:
+   - Implemented artifact archiving in `tools/cleanup/finalize.ts`
+   - Moved test fixtures and reports to `archive/tests/`
+   - Removed temporary directories and files
+   - Generated `CLEANUP_MANIFEST.json` for audit trail
+
+5. **CI/CD Integration**:
+   - Added `perf-ab` job to CI workflow
+   - Added `finalize-cleanup` job with proper dependencies
+   - Updated documentation in `HOWTO-RUN.md`
+
+### Winner Configuration
+Based on initial testing, MCP Chrome was selected as the winner configuration:
+- Page load time: 1353ms
+- Pane loading time: 15006ms (with 15s timeout)
+- More realistic browser environment
+- Better handling of dynamic content
+
+### Assumptions and Decisions
+- **Backend Selection**: MCP Chrome as default with resource blocking enabled
+- **Fallback Strategy**: MCP → Crawlee → Userscript for resilience
+- **Configuration Defaults**: Set optimal defaults in `libs/runner-hybrid/src/config/defaults.ts`
+- **Security**: Maintained existing gates without adding new overhead
+- **Cleanup**: Implemented comprehensive artifact archiving and temporary file removal
+
+All new commands are working correctly:
+- `pnpm run hybrid:start` → Runs hybrid runner with default MCP backend
+- `pnpm run perf:ab` → Runs A/B performance testing matrix
+- `pnpm run cleanup:final` → Executes final cleanup and archiving
+
 # Diagnosis Log
 
 ## Supply chain lockdown

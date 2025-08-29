@@ -176,3 +176,9 @@ The tool implements configurable rate limiting to avoid overwhelming servers. Ad
 - Schema export: `pnpm run schema:export` → `schemas/review.schema.json`.
 - Provenance: `pnpm run provenance:make` → `PROVENANCE.json`.
 - Lockfile policy: CI dùng `pnpm install --frozen-lockfile`.
+
+## Hybrid runner & A/B cuối
+- Chạy MCP Chrome: `ARGUS_BACKEND=mcp ARGUS_TEST_URL="<url>" pnpm run hybrid:start`
+- Chạy Crawlee: `ARGUS_BACKEND=crawlee pnpm run hybrid:start`
+- Chạy Userscript harness: `ARGUS_BACKEND=userscript pnpm run hybrid:start`
+- A/B matrix: `pnpm run perf:ab` (điều khiển backends qua `AB_BACKENDS=mcp,crawlee,userscript`)

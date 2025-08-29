@@ -209,3 +209,31 @@ jobs:
       - run: pnpm run provenance:make
       - uses: actions/upload-artifact@v4
         with: { name: provenance, path: PROVENANCE.json, if-no-files-found: error }
+
+  perf-ab:
+    runs-on: ubuntu-latest
+    needs: [e2e]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: 'pnpm' }
+      - run: pnpm install
+      - run: ARGUS_TEST_URL="${{ secrets.ARGUS_TEST_URL || 'https://www.google.com/maps' }}" pnpm run perf:ab
+      - uses: actions/upload-artifact@v4
+        with: { name: ab-results, path: results/ab/ab.results.json, if-no-files-found: error }
+
+  finalize-cleanup:
+    runs-on: ubuntu-latest
+    needs: [perf-ab, data-quality, sbom-and-schema]  # vẫn giữ gates đã có nhưng ưu tiên hiệu năng
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: 'pnpm' }
+      - run: pnpm install
+      - run: pnpm run cleanup:final
+      - uses: actions/upload-artifact@v4
+        with: { name: cleanup-manifest, path: CLEANUP_MANIFEST.json, if-no-files-found: error }

@@ -61,7 +61,11 @@
     "sbom:assert": "node tools/sbom/assert.js",
     "schema:export": "tsx tools/schema/export-jsonschema.ts",
     "provenance:make": "node tools/release/provenance.js",
-    "lockfile:check": "pnpm install --frozen-lockfile"
+    "lockfile:check": "pnpm install --frozen-lockfile",
+    "perf:ab": "tsx tools/perf/ab.ts",
+    "hybrid:dev": "pnpm -C libs/runner-hybrid dev",
+    "hybrid:start": "pnpm -C libs/runner-hybrid build && node libs/runner-hybrid/dist/index.js",
+    "cleanup:final": "tsx tools/cleanup/finalize.ts"
   },
   "engines": {
     "node": ">=18.18 <23",

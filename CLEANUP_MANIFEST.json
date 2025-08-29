@@ -1,0 +1,17 @@
+{
+  "moved": [
+    [
+      "apps/e2e/fixtures",
+      "archive/tests/fixtures"
+    ],
+    [
+      "apps/e2e/reports",
+      "archive/tests/reports"
+    ],
+    [
+      "apps/e2e/metrics",
+      "archive/tests/metrics"
+    ]
+  ],
+  "ts": "2025-08-29T09:52:57.545Z"
+}
