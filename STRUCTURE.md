@@ -6,5 +6,6 @@
 - libs/
   - js-core/ (schema, id, extractors)
   - runner-crawlee/ (crawler + middleware)
+- archive/ (test artifacts, reports, fixtures)
 - scripts/ (cleanup, release)
 - tools/ (release, monitor, structure)

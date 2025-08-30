@@ -202,3 +202,9 @@ The project includes a framework for implementing and testing performance improv
 3) Gate cải thiện ≥10% (open_ms mặc định): `pnpm run perf:gate:improve`
    - Đổi mục tiêu: `SPIKE_TARGET=pane_ms`
 4) Lưu hồ sơ spike: `SPIKE_ID=SPIKE-00X pnpm run perf:spike:close`
+
+## Cleanup & Archive
+- Dry run cleanup: `pnpm run cleanup:dry`
+- Run cleanup: `pnpm run cleanup:restructure`
+- Test artifacts and reports are archived in `archive/tests/` directory
+- Build artifacts are purged from `dist/`, `coverage/`, and other directories
