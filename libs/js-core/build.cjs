@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const { execFileSync } = require('child_process');
 
 // Function to get all .ts files recursively
 function getAllTsFiles(dir) {
@@ -40,7 +40,19 @@ tsFiles.forEach(file => {
   }
 
   try {
-    execSync(`npx tsc ${file} --outDir ${outputDir} --declaration --declarationMap --sourceMap --module ESNext --target ES2022 --moduleResolution node --esModuleInterop --skipLibCheck`, { stdio: 'inherit' });
+    execFileSync('npx', [
+      'tsc',
+      file,
+      '--outDir', outputDir,
+      '--declaration',
+      '--declarationMap',
+      '--sourceMap',
+      '--module', 'ESNext',
+      '--target', 'ES2022',
+      '--moduleResolution', 'node',
+      '--esModuleInterop',
+      '--skipLibCheck'
+    ], { stdio: 'inherit' });
     console.log(`Compiled ${file}`);
   } catch (error) {
     console.error(`Error compiling ${file}:`, error.message);
