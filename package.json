@@ -37,6 +37,8 @@
     "cleanup:restructure": "cross-env SAFE_MODE=0 FORCE_PURGE=1 tsx tools/cleanup/restructure.ts --write",
     "cleanup:dry": "cross-env SAFE_MODE=1 tsx tools/cleanup/restructure.ts --dry-run",
     "cleanup:tree": "tsx tools/cleanup/restructure.ts --tree-only",
+    "cleanup:root": "tsx tools/cleanup/restructure.ts",
+    "cleanup:root:dry": "DRY_RUN=1 tsx tools/cleanup/restructure.ts",
     "test:matrix": "pnpm run gen:sim && pnpm run test:sim && pnpm run test:real",
     "test:unit": "vitest run",
     "coverage": "c8 -r lcov -r text-summary pnpm run test:unit",

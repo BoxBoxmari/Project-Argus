@@ -7,5 +7,11 @@
   - js-core/ (schema, id, extractors)
   - runner-crawlee/ (crawler + middleware)
 - archive/ (test artifacts, reports, fixtures)
+- docs/
+  - reports/ (consolidated reports and summaries)
+  - contracts/ (data contracts and specifications)
+  - history/ (refactoring changelogs)
+  - release/ (release notes and process documentation)
+  - inventory/ (workspace inventory files)
 - scripts/ (cleanup, release)
 - tools/ (release, monitor, structure)

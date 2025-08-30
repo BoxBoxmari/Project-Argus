@@ -163,19 +163,20 @@ out/
 
 # Cleanup & archives
 archive/
-!archive/README.md
-!archive/index.md
-**/dist/**
-**/build/**
-**/coverage/**
-**/.pytest_cache/**
-**/.mypy_cache/**
-**/.ruff_cache/**
-**/playwright-report/**
-**/.playwright/**
-**/.cache/**
 CLEANUP_MANIFEST.json
 TREE.md
+
+# Generated during CI/tools
+results/
+.playwright-cache/
+
+# Reports and archives reorganized
+docs/reports/
+docs/history/
+docs/release/
+docs/contracts/
+docs/inventory/
+archive/
 
 # Generated during CI/tools
 results/

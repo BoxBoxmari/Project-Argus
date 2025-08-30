@@ -1,16 +1,6 @@
 {
-  "entries": [
-    {
-      "action": "summary",
-      "from": "cleanup_process",
-      "to": "completed",
-      "ts": "2025-08-30T17:56:36.862Z"
-    }
-  ],
-  "startTime": "2025-08-30T17:56:36.636Z",
-  "endTime": "2025-08-30T17:56:36.862Z",
-  "duration": "1970-01-01T00:00:00.226Z",
-  "dryRun": false,
-  "safeMode": false,
-  "forcePurge": true
+  "moved": [],
+  "purged": [],
+  "removedEmpty": [],
+  "ts": "2025-08-30T19:15:40.203Z"
 }
