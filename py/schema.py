@@ -2,7 +2,7 @@
 Legacy schema validation functions
 """
 
-from typing import Tuple, List, Dict, Any
+from typing import Any, Dict, List, Tuple
 
 REQUIRED_FIELDS = ["place_id", "review_id"]
 

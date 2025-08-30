@@ -1,0 +1,53 @@
+{
+  "$ref": "#/definitions/Review",
+  "definitions": {
+    "Review": {
+      "type": "object",
+      "properties": {
+        "author": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rating": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "text": {
+          "type": "string",
+          "default": ""
+        },
+        "time": {
+          "type": "string"
+        },
+        "likes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "placeId": {
+          "type": "string"
+        },
+        "lang": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "authorHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{16,64}$"
+        }
+      },
+      "required": [
+        "author",
+        "rating"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

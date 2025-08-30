@@ -1,0 +1,21 @@
+name: repo-tidy
+on:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  tidy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: corepack enable
+      - run: pnpm i --frozen-lockfile
+      - run: pnpm run cleanup:dry
+      - run: pnpm run verify:repo
+      - uses: actions/upload-artifact@v4
+        with:
+          name: repo-tree-and-manifest
+          path: |
+            TREE.md
+            CLEANUP_MANIFEST.json

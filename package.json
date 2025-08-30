@@ -34,6 +34,11 @@
     "test:sim": "pnpm -C apps/e2e test -g 'SIM#'",
     "test:real": "pnpm -C apps/e2e test -g 'REAL#'",
     "cleanup": "tsx scripts/cleanup.ts",
+    "cleanup:restructure": "cross-env SAFE_MODE=0 FORCE_PURGE=1 tsx tools/cleanup/restructure.ts --write",
+    "cleanup:dry": "cross-env SAFE_MODE=1 tsx tools/cleanup/restructure.ts --dry-run",
+    "cleanup:tree": "tsx tools/cleanup/restructure.ts --tree-only",
+    "cleanup:root": "tsx tools/cleanup/restructure.ts",
+    "cleanup:root:dry": "DRY_RUN=1 tsx tools/cleanup/restructure.ts",
     "test:matrix": "pnpm run gen:sim && pnpm run test:sim && pnpm run test:real",
     "test:unit": "vitest run",
     "coverage": "c8 -r lcov -r text-summary pnpm run test:unit",
@@ -61,7 +66,17 @@
     "sbom:assert": "node tools/sbom/assert.js",
     "schema:export": "tsx tools/schema/export-jsonschema.ts",
     "provenance:make": "node tools/release/provenance.js",
-    "lockfile:check": "pnpm install --frozen-lockfile"
+    "lockfile:check": "pnpm install --frozen-lockfile",
+    "perf:ab": "tsx tools/perf/ab.ts",
+    "perf:baseline": "tsx tools/perf/baseline.ts",
+    "perf:check": "tsx tools/perf/check-regress.ts",
+    "perf:baseline:detail": "tsx tools/perf/baseline.detail.ts",
+    "perf:gate:improve": "tsx tools/perf/improve-gate.ts",
+    "perf:spike:close": "tsx tools/perf/spike-close.ts",
+    "hybrid:dev": "pnpm -C libs/runner-hybrid dev",
+    "hybrid:start": "pnpm -C libs/runner-hybrid build && node libs/runner-hybrid/dist/index.js",
+    "cleanup:final": "tsx tools/cleanup/finalize.ts",
+    "verify:repo": "pnpm -r run typecheck && pnpm -r run lint && pnpm -r run build && ruff check . && mypy . && pytest -q && (cd apps/api-go && go vet ./... && go test ./...)"
   },
   "engines": {
     "node": ">=18.18 <23",
@@ -80,6 +95,7 @@
     "cross-env": "^10.0.0",
     "cspell": "^8.19.4",
     "depcheck": "^1.4.7",
+    "glob": "^11.0.3",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29",
     "jsdom": "^24.0.0",
@@ -95,7 +111,6 @@
   },
   "dependencies": {
     "crawlee": "^3.8.0",
-    "glob": "^11.0.3",
     "playwright": "^1.55.0",
     "tsx": "^4.7.0",
     "zod": "^3.23.8"

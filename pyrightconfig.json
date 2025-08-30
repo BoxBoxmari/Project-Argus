@@ -2,14 +2,21 @@
   "venvPath": ".",
   "venv": ".venv",
   "reportMissingImports": "error",
+  "exclude": [
+    "**/node_modules",
+    "**/__pycache__",
+    "py/.ruff_cache",
+    "py/analysis/src",
+    "py/ingest/src"
+  ],
   "executionEnvironments": [
     {
-      "root": "./python",
-      "extraPaths": ["./python/src"]
+      "root": "./py",
+      "extraPaths": ["./py/src"]
     },
     {
       "root": ".",
-      "extraPaths": ["./python/src"]
+      "extraPaths": ["./py/src"]
     }
   ]
 }
