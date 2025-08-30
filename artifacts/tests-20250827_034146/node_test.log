@@ -1,7 +1,0 @@
-Scope: 3 of 4 workspace projects
-apps/userscript test$ echo 'No tests configured'
-libs/js-core test$ echo 'No tests configured'
-apps/userscript test: 'No tests configured'
-apps/userscript test: Done
-libs/js-core test: 'No tests configured'
-libs/js-core test: Done

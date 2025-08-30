@@ -515,7 +515,8 @@ class TestQualityGate:
     def test_schema_compliance_missing_fields(self):
         """Test schema compliance check with missing required fields"""
         # Create review that passes from_raw but has empty place_id to test quality gates
-        review = Review.from_raw({
+        # Note: We're not assigning to a variable since we're just testing the validation
+        Review.from_raw({
             "place_id": "temp",  # Temporary place_id to pass validation
             "review_id": "test"
         })

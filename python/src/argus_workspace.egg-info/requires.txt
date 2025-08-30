@@ -1,7 +1,0 @@
-pandas>=2.0
-pydantic>=2
-
-[dev]
-basedpyright>=1.30.0
-pytest
-pandas-stubs

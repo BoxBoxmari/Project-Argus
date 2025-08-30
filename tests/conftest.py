@@ -6,50 +6,48 @@ Comprehensive test setup for Python components with quality gates
 import json
 import os
 import sys
-import tempfile
+import pytest
 from datetime import datetime
 from typing import Any
 from pathlib import Path
 
-import pytest
+# Add the project root to the Python path for imports
+project_root = Path(__file__).parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
+# Try importing pandas if available
+HAS_PANDAS = False
 try:
     import pandas as pd  # type: ignore[import-not-found]
-except ImportError as _err:
-    pytest.skip("pandas not available for test environment", allow_module_level=True)
+    HAS_PANDAS = True
+except ImportError:
+    pass
 
-# Add project root to path
-PROJECT_ROOT = Path(__file__).parent.parent
-sys.path.insert(0, str(PROJECT_ROOT / "py" / "ingest" / "src"))
-sys.path.insert(0, str(PROJECT_ROOT / "py" / "ingest" / "processor_python"))
+# Skip tests if pandas is not available
+if not HAS_PANDAS:
+    pytest.skip("pandas not available for test environment", allow_module_level=True)
 
 # Test environment setup
 TEST_ENV = {
     "PYTHONPATH": ":".join([
-        str(PROJECT_ROOT / "py" / "ingest" / "src"),
-        str(PROJECT_ROOT / "py" / "ingest" / "processor_python")
+        str(project_root / "py" / "ingest" / "src"),
+        str(project_root / "py" / "ingest" / "processor_python")
     ]),
     "ARGUS_TEST_MODE": "1",
-    "ARGUS_LOG_LEVEL": "DEBUG"
 }
 
-for key, value in TEST_ENV.items():
-    os.environ[key] = value
+PROJECT_ROOT = project_root
 
-
-@pytest.fixture(scope="session")
 def test_data_dir():
     """Fixture for test data directory"""
     return PROJECT_ROOT / "tests" / "fixtures" / "data"
 
-
-@pytest.fixture(scope="session")
 def golden_data_dir():
     """Fixture for golden reference data directory"""
     return PROJECT_ROOT / "tests" / "golden"
 
-
-@pytest.fixture(scope="session")
-def artifacts_dir():
+def test_artifacts_dir():
     """Fixture for test artifacts directory"""
     run_id = f"pytest-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
     artifacts_path = PROJECT_ROOT / ".artifacts" / run_id
@@ -188,3 +186,6 @@ def pytest_runtest_makereport(item, call):
 
             with open(artifacts_dir / f"failure-{item.name}.json", 'w') as f:
                 json.dump(failure_report, f, indent=2)
+
+# Export pandas for tests that need it
+pd = pd if HAS_PANDAS else None

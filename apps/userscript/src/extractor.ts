@@ -5,8 +5,8 @@ import { toRawReview, RawReview } from './normalize';
 import { Transport } from './transport';
 import { Scheduler } from './scheduler';
 import { Logger, LogLevel } from './log';
-import { reviewId } from '../../../libs/js-core/dist/id/review_id.js';
-import { maybeRedact } from '../../../libs/js-core/dist/sanitize/pii.js';
+import { reviewId } from '@argus/js-core/id/review_id';
+import { maybeRedact } from '@argus/js-core/sanitize/pii';
 import { authorHash as mkAuthorHash } from './pseudo.js';
 
 // Local copy of ReviewSchema for validation

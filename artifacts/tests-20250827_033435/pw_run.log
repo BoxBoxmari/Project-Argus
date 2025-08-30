@@ -1,9 +1,0 @@
-
-> @argus/scraper-playwright@0.1.0 prestart C:\Users\Admin\Downloads\argus_skeleton\argus\apps\scraper-playwright
-> pnpm exec playwright install chromium || true && pnpm run deps:install || true
-
-
-> @argus/scraper-playwright@0.1.0 start C:\Users\Admin\Downloads\argus_skeleton\argus\apps\scraper-playwright
-> node dist/index.js
-
-[argus] profile=insecure attempt=1 opened: Error 400 (Bad Request)!!1

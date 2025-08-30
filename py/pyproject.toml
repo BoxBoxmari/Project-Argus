@@ -1,42 +1,36 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "processor-python"
-version = "0.1.0"
+version = "0.0.1"
 requires-python = ">=3.10"
-dependencies = ["pandas>=2.0", "pydantic>=2", "pandera>=0.18"]
+dependencies = ["pandas>=2.0", "pydantic>=2.0"]
 
 [project.optional-dependencies]
-dev = ["ruff", "mypy", "pytest", "black", "isort"]
-test = [
-    "pytest>=7.0",
-    "pandas>=2.2; python_version>='3.9'",
-    "pandas>=1.5; python_version<'3.9'"
-]
+dev = ["basedpyright>=1.30.0", "pytest", "pandas-stubs>=2.0", "pydantic>=2.0"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.basedpyright]
+typeCheckingMode = "strict"
+reportExplicitAny = "warning"
+reportMissingTypeStubs = "warning"
+reportUnknownMemberType = "warning"
+reportUnknownArgumentType = "warning"
+reportUnknownVariableType = "warning"
+reportMissingParameterType = "error"
+reportUnusedCallResult = "warning"
+reportDeprecated = "warning"
 
 [tool.ruff]
 line-length = 100
-fix = true
-
-[tool.ruff.lint]
-extend-select = ["E", "F", "I"]
-ignore = ["E501"]
-
-[tool.basedpyright]
-typeCheckingMode = "basic"
-reportMissingImports = "warning"
-reportMissingTypeStubs = "warning"
-# Point to venv if using .venv local
-venvPath = "."
-venv = ".venv"
-extraPaths = ["src", "ingest/src"]
-
+target-version = "py311"
 [tool.mypy]
-python_version = "3.10"
-strict = false
+python_version = "3.11"
 ignore_missing_imports = true
-namespace_packages = true
-mypy_path = ["ingest/src"]
-exclude = ["build/", "dist/", "venv/", ".venv/"]
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-pythonpath = ["src", "ingest/src"]

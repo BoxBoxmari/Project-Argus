@@ -7,7 +7,11 @@
     "declarationMap": true,
     "sourceMap": true,
     "composite": true,
-    "types": ["tampermonkey", "node"]
+    "types": ["tampermonkey", "node"],
+    "baseUrl": ".",
+    "paths": {
+      "@argus/js-core/*": ["../../libs/js-core/dist/*"]
+    }
   },
   "include": [
     "src/**/*"

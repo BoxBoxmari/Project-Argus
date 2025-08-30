@@ -1,4 +1,4 @@
-import crypto from 'node:crypto';
+import * as crypto from 'node:crypto';
 import type { Review } from '../schema/review';
 
 export function reviewId(r: Review): string {

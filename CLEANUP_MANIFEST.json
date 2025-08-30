@@ -1,0 +1,17 @@
+{
+  "moved": [
+    [
+      "python\\src\\processor_python",
+      "py\\src\\processor_python"
+    ],
+    [
+      "python\\src\\processor_python.egg-info",
+      "py\\src\\processor_python.egg-info"
+    ]
+  ],
+  "purged": [
+    "python/"
+  ],
+  "removedEmpty": [],
+  "ts": "2025-08-30T19:49:06.595Z"
+}
