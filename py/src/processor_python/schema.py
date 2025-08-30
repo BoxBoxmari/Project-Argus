@@ -2,8 +2,9 @@
 Schema definitions for review data using Pydantic
 """
 
-from typing import Optional, Dict, Any, List
 from datetime import datetime
+from typing import Optional
+
 from pydantic import BaseModel, Field
 
 

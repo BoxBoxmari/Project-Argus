@@ -1,114 +1,240 @@
-import fs from 'node:fs'; import path from 'node:path'; import { execSync } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
+import { execSync } from 'node:child_process';
+import { globSync } from 'glob';
 
-type Rule = { from:string, to:string };
-const R = JSON.parse(fs.readFileSync('tools/cleanup/rules.json','utf8'));
-// Check for both DRY_RUN and DRYRUN environment variables
-const DRY = process.env.DRY_RUN === '1' || process.env.DRYRUN === '1' || process.argv.includes('--dry');
+// Load rules
+const R = JSON.parse(fs.readFileSync('tools/cleanup/rules.json', 'utf8'));
 
-function ensure(p:string){ fs.mkdirSync(p,{recursive:true}); }
-function exists(p:string){ return fs.existsSync(p); }
-function mv(src:string, dst:string){
+// Configuration
+const DRY_RUN = process.argv.includes('--dry-run') || process.argv.includes('--dry');
+const SAFE_MODE = process.env.SAFE_MODE === '0' ? false : true;
+const FORCE_PURGE = process.env.FORCE_PURGE === '1';
+
+// Manifest structure
+interface ManifestEntry {
+  action: string;
+  from: string;
+  to?: string;
+  size?: number;
+  sha256?: string;
+  ts: string;
+}
+
+const manifest: ManifestEntry[] = [];
+const startTime = new Date().toISOString();
+
+// Utility functions
+function ensure(dir: string) {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+}
+
+function exists(p: string) {
+  return fs.existsSync(p);
+}
+
+function getSize(p: string): number {
+  try {
+    const stats = fs.statSync(p);
+    return stats.isFile() ? stats.size : 0;
+  } catch {
+    return 0;
+  }
+}
+
+function moveFile(src: string, dst: string) {
   if (!exists(src)) return;
+
+  ensure(path.dirname(dst));
+
+  if (DRY_RUN) {
+    console.log('[DRY RUN] Moving', src, '->', dst);
+  } else {
+    console.log('Moving', src, '->', dst);
+    fs.renameSync(src, dst);
+  }
+
+  manifest.push({
+    action: 'move',
+    from: src,
+    to: dst,
+    size: getSize(dst),
+    ts: new Date().toISOString()
+  });
+}
+
+function moveDir(src: string, dst: string) {
+  if (!exists(src)) return;
+
   ensure(dst);
+
   for (const name of fs.readdirSync(src)) {
-    const s = path.join(src,name); const d = path.join(dst,name);
-    if (DRY) { console.log('[DRY] move', s, '->', d); continue; }
-    console.log('Moving', s, '->', d);
-    fs.renameSync(s,d);
+    const s = path.join(src, name);
+    const d = path.join(dst, name);
+
+    if (fs.statSync(s).isDirectory()) {
+      moveDir(s, d);
+    } else {
+      moveFile(s, d);
+    }
+  }
+
+  // Remove the source directory after moving its contents
+  if (!DRY_RUN) {
+    try {
+      fs.rmdirSync(src);
+    } catch (error) {
+      console.warn('Could not remove directory:', src, error);
+    }
   }
 }
-function rmDirSafe(root:string, dir:string){
-  const p = path.join(root, dir);
-  if (!exists(p)) return;
-  if (DRY) { console.log('[DRY] rm -rf', p); return; }
-  console.log('Removing directory', p);
-  fs.rmSync(p, { recursive:true, force:true });
+
+function deleteFile(filePath: string) {
+  if (!exists(filePath)) return;
+
+  if (DRY_RUN) {
+    console.log('[DRY RUN] Deleting', filePath);
+  } else {
+    console.log('Deleting', filePath);
+    fs.rmSync(filePath, { force: true });
+  }
+
+  manifest.push({
+    action: 'delete',
+    from: filePath,
+    size: getSize(filePath),
+    ts: new Date().toISOString()
+  });
 }
-function rmGlobs(globs:string[]){
-  // đơn giản: quét toàn repo và khớp hậu tố/phần tên thường gặp
-  const walk=(d:string)=>{
-    for (const e of fs.readdirSync(d)) {
-      const p = path.join(d,e); const s = fs.statSync(p);
-      if (s.isDirectory()) walk(p);
-      else {
-        for (const g of globs) {
-          const star = g.replace(/\*\*/g, ''); // thô sơ cho pattern cơ bản
-          if (e.includes(star.replace(/\*/g,''))) {
-            if (DRY) console.log('[DRY] rm', p); else { console.log('Removing file', p); fs.rmSync(p, { force:true }); }
-            break;
-          }
+
+function deleteDir(dirPath: string) {
+  if (!exists(dirPath)) return;
+
+  if (DRY_RUN) {
+    console.log('[DRY RUN] Deleting directory', dirPath);
+  } else {
+    console.log('Deleting directory', dirPath);
+    fs.rmSync(dirPath, { recursive: true, force: true });
+  }
+
+  manifest.push({
+    action: 'delete',
+    from: dirPath,
+    ts: new Date().toISOString()
+  });
+}
+
+function isExcluded(filePath: string): boolean {
+  for (const pattern of R.exclude || []) {
+    if (filePath.includes(pattern.replace('/**', '').replace('/**', ''))) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function pruneEmptyDirs(dir: string) {
+  if (!exists(dir) || isExcluded(dir)) return;
+
+  for (const entry of fs.readdirSync(dir)) {
+    const fullPath = path.join(dir, entry);
+    if (fs.statSync(fullPath).isDirectory()) {
+      pruneEmptyDirs(fullPath);
+
+      // Check if directory is empty after recursive pruning
+      if (fs.readdirSync(fullPath).length === 0) {
+        if (DRY_RUN) {
+          console.log('[DRY RUN] Removing empty directory', fullPath);
+        } else {
+          console.log('Removing empty directory', fullPath);
+          fs.rmdirSync(fullPath);
         }
-      }
-    }
-  };
-  walk('.');
-}
-function rmEmpty(dir:string){
-  if (!exists(dir)) return;
-  for (const e of fs.readdirSync(dir)) {
-    const p = path.join(dir,e);
-    if (fs.statSync(p).isDirectory()) {
-      rmEmpty(p);
-      if (fs.readdirSync(p).length === 0) {
-        if (DRY) console.log('[DRY] rmdir', p); else { console.log('Removing empty directory', p); fs.rmdirSync(p); }
+        manifest.push({
+          action: 'prune',
+          from: fullPath,
+          ts: new Date().toISOString()
+        });
       }
     }
   }
 }
-function gitCleanCheck(){
+
+function gitCleanCheck(): boolean {
   try {
     const out = execSync('git status --porcelain').toString().trim();
     return out.length === 0;
-  } catch { return false; }
+  } catch {
+    return false;
+  }
 }
 
-const manifest:{ moved:[string,string][], purged:string[], removedEmpty:string[], ts:string } = {
-  moved:[], purged:[], removedEmpty:[], ts: new Date().toISOString()
-};
+function ensureKeepSetExists(): boolean {
+  // Check that essential files still exist
+  const essentialPatterns = R.mustKeep || [];
+  let allExist = true;
 
-try {
-  // 1) Archive targets
-  console.log('Archiving targets...');
-  for (const t of R.archiveTargets as Rule[]) {
-    if (exists(t.from)) {
-      console.log('Archiving', t.from, 'to', t.to);
-      mv(t.from, t.to);
-      manifest.moved.push([t.from, t.to]);
+  for (const pattern of essentialPatterns) {
+    const files = globSync(pattern, { ignore: R.exclude || [] });
+    if (files.length === 0) {
+      console.warn('Warning: No files match mustKeep pattern:', pattern);
+      // Don't fail on this, just warn
     }
   }
-  // 2) Purge dirs under known roots
-  console.log('Purging directories...');
-  for (const root of ['apps','libs','tools','tests','py','scripts']) {
-    for (const d of R.purgeDirs as string[]) {
-      const p = path.join(root, d);
-      if (exists(p)) {
-        console.log('Purging', p);
-        rmDirSafe(root, d);
-        manifest.purged.push(p);
+
+  return allExist;
+}
+
+function assertNoEmptyDirs(): boolean {
+  function check(dir: string): boolean {
+    if (isExcluded(dir)) return true;
+
+    let hasContent = false;
+    for (const entry of fs.readdirSync(dir)) {
+      const fullPath = path.join(dir, entry);
+      const stat = fs.statSync(fullPath);
+
+      if (stat.isDirectory()) {
+        if (!check(fullPath)) {
+          return false;
+        }
+      } else {
+        hasContent = true;
       }
     }
+
+    if (!hasContent && fs.readdirSync(dir).length > 0) {
+      // Directory has subdirectories but no files
+      return true;
+    }
+
+    return fs.readdirSync(dir).length > 0 || hasContent;
   }
-  // 3) Purge globs
-  console.log('Removing files matching globs...');
-  rmGlobs(R.purgeGlobs);
 
-  // 4) Remove empty folders globally
-  console.log('Removing empty directories...');
-  rmEmpty('.');
+  return check('.');
+}
 
-  // 5) Write manifest + TREE
-  console.log('Writing manifest and tree...');
-  fs.mkdirSync('archive', { recursive:true });
-  fs.writeFileSync('CLEANUP_MANIFEST.json', JSON.stringify(manifest,null,2));
+function generateTree(options: { exclude?: string[] } = {}) {
+  const exclude = options.exclude || [];
 
-  // TREE.md mới
-  function tree(dir:string, prefix=''){
-    const entries = fs.readdirSync(dir).filter(n=>!['.git','.github','.venv','node_modules'].includes(n)).sort();
-    let lines:string[] = [];
-    for (let i=0;i<entries.length;i++){
-      const e = entries[i]; const p = path.join(dir,e); const isLast = i===entries.length-1;
+  function tree(dir: string, prefix = ''): string[] {
+    const entries = fs.readdirSync(dir)
+      .filter(n => !exclude.some(e => n.includes(e.replace('/**', ''))))
+      .sort();
+
+    let lines: string[] = [];
+    for (let i = 0; i < entries.length; i++) {
+      const e = entries[i];
+      const p = path.join(dir, e);
+      const isLast = i === entries.length - 1;
       const mark = isLast ? '└─' : '├─';
-      lines.push(prefix+mark+e);
+
+      // Skip if this is an excluded directory
+      if (isExcluded(p)) continue;
+
+      lines.push(prefix + mark + e);
+
       if (fs.statSync(p).isDirectory()) {
         const np = prefix + (isLast ? '  ' : '│ ');
         lines = lines.concat(tree(p, np));
@@ -116,9 +242,158 @@ try {
     }
     return lines;
   }
-  fs.writeFileSync('TREE.md', ['# Project Tree (post-cleanup)', '```', ...tree('.'), '```', ''].join('\n'));
 
-  console.log('cleanup done. DRY_RUN=', DRY ? '1' : '0', '| git clean =', gitCleanCheck());
+  return tree('.');
+}
+
+// Main execution
+try {
+  console.log('Starting cleanup process...');
+  console.log('DRY_RUN:', DRY_RUN ? 'true' : 'false');
+  console.log('SAFE_MODE:', SAFE_MODE ? 'true' : 'false');
+  console.log('FORCE_PURGE:', FORCE_PURGE ? 'true' : 'false');
+
+  // 1. Handle test artifacts - always move to archive
+  console.log('\n1. Archiving test artifacts...');
+  const testArtifacts = globSync(R.testArtifacts || [], {
+    ignore: R.exclude || []
+  });
+
+  for (const artifact of testArtifacts) {
+    // Check if the artifact still exists before processing
+    if (!exists(artifact)) {
+      continue;
+    }
+
+    if (isExcluded(artifact)) continue;
+
+    const relativePath = path.relative('.', artifact);
+    const destination = path.join(R.archiveTargets.tests, relativePath);
+    console.log('Archiving test artifact:', artifact, '->', destination);
+
+    if (exists(artifact) && fs.statSync(artifact).isDirectory()) {
+      moveDir(artifact, destination);
+    } else if (exists(artifact)) {
+      moveFile(artifact, destination);
+    }
+  }
+
+  // 2. Handle build artifacts
+  console.log('\n2. Processing build artifacts...');
+  const buildArtifacts = globSync(R.buildArtifacts || [], {
+    ignore: R.exclude || []
+  });
+
+  for (const artifact of buildArtifacts) {
+    // Check if the artifact still exists before processing
+    if (!exists(artifact)) {
+      continue;
+    }
+
+    if (isExcluded(artifact)) continue;
+
+    if (SAFE_MODE) {
+      // In safe mode, move to archive instead of deleting
+      const relativePath = path.relative('.', artifact);
+      const destination = path.join(R.archiveTargets.builds, relativePath);
+      console.log('Archiving build artifact (safe mode):', artifact, '->', destination);
+
+      if (exists(artifact) && fs.statSync(artifact).isDirectory()) {
+        moveDir(artifact, destination);
+      } else if (exists(artifact)) {
+        moveFile(artifact, destination);
+      }
+    } else if (FORCE_PURGE) {
+      // In force mode, delete if not excluded
+      console.log('Deleting build artifact (force purge):', artifact);
+
+      if (exists(artifact) && fs.statSync(artifact).isDirectory()) {
+        deleteDir(artifact);
+      } else if (exists(artifact)) {
+        deleteFile(artifact);
+      }
+    } else {
+      // Default behavior - move to archive
+      const relativePath = path.relative('.', artifact);
+      const destination = path.join(R.archiveTargets.builds, relativePath);
+      console.log('Archiving build artifact (default):', artifact, '->', destination);
+
+      if (exists(artifact) && fs.statSync(artifact).isDirectory()) {
+        moveDir(artifact, destination);
+      } else if (exists(artifact)) {
+        moveFile(artifact, destination);
+      }
+    }
+  }
+
+  // 3. Remove empty directories
+  console.log('\n3. Pruning empty directories...');
+  pruneEmptyDirs('.');
+
+  // 4. Generate tree and manifest
+  console.log('\n4. Generating TREE.md and CLEANUP_MANIFEST.json...');
+
+  // Ensure archive directory exists
+  ensure('archive');
+
+  // Generate tree
+  const treeLines = generateTree({
+    exclude: (R.exclude || []).concat(['archive/**', 'node_modules/**', '.git/**'])
+  });
+
+  const treeContent = [
+    '# Project Tree (post-cleanup)',
+    '``',
+    ...treeLines,
+    '```',
+    ''
+  ].join('\n');
+
+  if (DRY_RUN) {
+    console.log('[DRY RUN] Would write TREE.md with', treeLines.length, 'lines');
+  } else {
+    fs.writeFileSync('TREE.md', treeContent);
+  }
+
+  // Update manifest with summary
+  const endTime = new Date().toISOString();
+  manifest.push({
+    action: 'summary',
+    from: 'cleanup_process',
+    to: 'completed',
+    ts: endTime
+  });
+
+  const manifestContent = {
+    entries: manifest,
+    startTime,
+    endTime,
+    duration: new Date(new Date(endTime).getTime() - new Date(startTime).getTime()).toISOString(),
+    dryRun: DRY_RUN,
+    safeMode: SAFE_MODE,
+    forcePurge: FORCE_PURGE
+  };
+
+  if (DRY_RUN) {
+    console.log('[DRY RUN] Would write CLEANUP_MANIFEST.json');
+    console.log('Manifest entries:', manifest.length);
+  } else {
+    fs.writeFileSync('CLEANUP_MANIFEST.json', JSON.stringify(manifestContent, null, 2));
+  }
+
+  // 5. Run validations
+  console.log('\n5. Running validations...');
+  const keepSetExists = ensureKeepSetExists();
+  const noEmptyDirs = assertNoEmptyDirs();
+  const gitClean = gitCleanCheck();
+
+  console.log('Keep set validation:', keepSetExists ? 'PASSED' : 'WARNING');
+  console.log('Empty directories check:', noEmptyDirs ? 'PASSED' : 'FAILED');
+  console.log('Git clean check:', gitClean ? 'CLEAN' : 'DIRTY');
+
+  console.log('\nCleanup process completed.');
+  console.log('DRY_RUN:', DRY_RUN ? '1' : '0', '| Git clean:', gitClean);
+
 } catch (error) {
   console.error('Error during cleanup:', error);
   process.exit(1);

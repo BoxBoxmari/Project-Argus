@@ -3,7 +3,7 @@
  */
 
 import { ReviewElement, extractText, extractRating, extractPlaceId } from './dom';
-import { maybeRedact } from '../../../libs/js-core/dist/sanitize/pii.js';
+import { maybeRedact } from '@argus/js-core/sanitize/pii';
 import { gm } from './polyfills/gm.js';
 
 export interface RawReview {

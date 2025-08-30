@@ -163,6 +163,17 @@ out/
 
 # Cleanup & archives
 archive/
+!archive/README.md
+!archive/index.md
+**/dist/**
+**/build/**
+**/coverage/**
+**/.pytest_cache/**
+**/.mypy_cache/**
+**/.ruff_cache/**
+**/playwright-report/**
+**/.playwright/**
+**/.cache/**
 CLEANUP_MANIFEST.json
 TREE.md
 

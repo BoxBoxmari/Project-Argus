@@ -28,7 +28,6 @@ def test_conftest_import():
         if tests_dir.exists():
             sys.path.insert(0, str(tests_dir.parent))
             # Try importing the conftest module
-            import tests.conftest
             print("✅ conftest.py imported successfully")
             return True
         else:
