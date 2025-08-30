@@ -3,26 +3,34 @@ requires = ["setuptools>=69", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "argus-workspace"
-version = "0.1.0"
+name = "processor-python"
+version = "0.0.1"
 requires-python = ">=3.10"
-dependencies = ["pandas>=2.0", "pydantic>=2"]
+dependencies = ["pandas>=2.0", "pydantic>=2.0"]
 
 [project.optional-dependencies]
-dev = ["basedpyright>=1.30.0", "pytest", "pandas-stubs"]
+dev = ["basedpyright>=1.30.0", "pytest", "pandas-stubs>=2.0", "pydantic>=2.0"]
 
 [tool.setuptools]
-package-dir = {"" = "python/src"}
+package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
-where = ["python/src"]
+where = ["src"]
 
 [tool.basedpyright]
-venvPath = "."
-venv = ".venv"
-reportMissingImports = "error"
+typeCheckingMode = "strict"
+reportExplicitAny = "warning"
 reportMissingTypeStubs = "warning"
-executionEnvironments = [
-  {root = "./python", extraPaths = ["./python/src"]},
-  {root = ".", extraPaths = ["./python/src"]}
-]
+reportUnknownMemberType = "warning"
+reportUnknownArgumentType = "warning"
+reportUnknownVariableType = "warning"
+reportMissingParameterType = "error"
+reportUnusedCallResult = "warning"
+reportDeprecated = "warning"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true

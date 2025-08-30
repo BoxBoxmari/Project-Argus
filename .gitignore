@@ -181,3 +181,10 @@ archive/
 # Generated during CI/tools
 results/
 .playwright-cache/
+
+docs/reports/
+docs/contracts/
+docs/history/
+docs/release/
+docs/tooling/
+docs/inventory/

@@ -69,50 +69,43 @@ for (const t of R.archiveTargets as any[]) {
 }
 
 // 1.1) Move single files at repo root by pattern
-type MapRule={pattern:RegExp,to:string,mode?:'archive'|'relocate'};
-const rootMap:MapRule[] = [
-  // Báo cáo & tổng kết → docs/reports
-  { pattern: /^.*_SUMMARY\.md$/i, to: 'docs/reports', mode:'archive' },
-  { pattern: /^.*_REPORT\.md$/i,  to: 'docs/reports', mode:'archive' },
-  { pattern: /^(OPS_REPORT|RETENTION_REPORT|FINAL_VERIFICATION_SUMMARY|GA_LAUNCH_SUMMARY)\.md$/i, to:'docs/reports', mode:'archive' },
-  // Hợp đồng & chuẩn → docs/contracts
-  { pattern: /^DATA_CONTRACT\.md$/i, to:'docs/contracts' },
-  // Lịch sử/ghi chú refactor → docs/history
-  { pattern: /^REFACTORING_CHANGELOG\.md$/i, to:'docs/history' },
-  // Tài liệu release → docs/release
-  { pattern: /^(RELEASE_NOTES|RELEASE_PROCESS|RELEASE_COMPLETION_SUMMARY|PATCH_NOTES)\.md$/i, to:'docs/release' },
-  // Tồn kho → docs/inventory
-  { pattern: /^(INVENTORY\.md|WORKSPACE_INVENTORY\.json)$/i, to:'docs/inventory' },
-  // Báo cáo máy sinh ra (giữ dưới archive)
-  { pattern: /^(PROVENANCE\.json|problems-report\.json|DEADCODE_REPORT\.json)$/i, to:'archive/reports', mode:'archive' },
-  // File tạm/nháp → delete
-];
-
 function moveRootByMap() {
   const root = '.';
+  const rootMap = [
+    // Reports & summaries
+    [/^.*_SUMMARY\.md$/i, 'docs/reports'],
+    [/^.*_REPORT\.md$/i,  'docs/reports'],
+    [/^(OPS_REPORT|RETENTION_REPORT|FINAL_VERIFICATION_SUMMARY|GA_LAUNCH_SUMMARY)\.md$/i, 'docs/reports'],
+    // CSpell docs
+    [/^CSPELL_.*\.md$/i, 'docs/tooling/cspell'],
+    // Release docs
+    [/^(RELEASE_NOTES|RELEASE_PROCESS|RELEASE_COMPLETION_SUMMARY|PATCH_NOTES)\.md$/i, 'docs/release'],
+    // Contracts/history/inventory
+    [/^DATA_CONTRACT\.md$/i, 'docs/contracts'],
+    [/^REFACTORING_CHANGELOG\.md$/i, 'docs/history'],
+    [/^(INVENTORY\.md|WORKSPACE_INVENTORY\.json)$/i, 'docs/inventory'],
+    // Trees
+    [/^TREE\.before\.md$/i, 'docs/history'],
+  ];
   for (const name of fs.readdirSync(root)) {
     const p = path.join(root,name);
     if (!fs.statSync(p).isFile()) continue;
-    if ((R.keepFiles as string[]).includes(name)) continue;
-    let matched = false;
-    for (const r of rootMap) {
-      if (r.pattern.test(name)) {
-        ensure(r.to);
-        if (DRY) console.log('[DRY] move', name, '->', r.to); else fs.renameSync(p, path.join(r.to, name));
-        manifest.moved.push([name, r.to]);
-        matched = true; break;
+    if ((R.keepFiles || []).includes(name)) continue;
+    let moved = false;
+    for (const [re, dst] of rootMap) {
+      if ((re as RegExp).test(name)) {
+        ensure(dst as string);
+        if (DRY) console.log('[DRY] move', name, '->', dst); else fs.renameSync(p, path.join(dst as string, name));
+        manifest.moved.push([name, dst as string]); moved = true; break;
       }
     }
-    if (!matched) {
-      // ứng viên rác: debug-output, test-report, test.txt, generate-report.js bản tạm, bản JS build của *.ts
-      if (/^(debug-output\.txt|test-report\.md|test\.txt)$/i.test(name) || /^(generate-report\.js)$/i.test(name)) {
-        if (DRY) console.log('[DRY] rm', p); else fs.rmSync(p,{force:true});
-        manifest.purged.push(p);
-      }
-      if (name.endsWith('.js') && fs.existsSync(name.replace(/\.js$/,'.ts'))) {
-        if (DRY) console.log('[DRY] rm build JS from TS', p); else fs.rmSync(p,{force:true});
-        manifest.purged.push(p);
-      }
+    if (moved) continue;
+    // trash: debug & tmp & js-build-from-ts
+    if (/^(debug-output\.txt|test-report\.md|test\.txt)$/i.test(name)) {
+      if (DRY) console.log('[DRY] rm', p); else fs.rmSync(p,{force:true}); manifest.purged.push(p); continue;
+    }
+    if (name.endsWith('.js') && fs.existsSync(name.replace(/\.js$/,'.ts'))) {
+      if (DRY) console.log('[DRY] rm build JS from TS', p); else fs.rmSync(p,{force:true}); manifest.purged.push(p);
     }
   }
 }
@@ -127,14 +120,17 @@ if (exists('cspell.json') && exists('.cspell.json')) {
 
 // 2) Purge dirs under known roots
 for (const root of ['apps','libs','tools','tests','py','scripts']) {
-  for (const d of R.purgeDirs as string[]) {
+  for (const d of (R.purgeDirs || [])) {
     const p = path.join(root, d);
-    if (exists(p)) {
-      rmDirSafe(root, d);
-      manifest.purged.push(p);
-    }
+    if (exists(p)) { rmDirSafe(root, d); manifest.purged.push(p); }
   }
 }
+// 2.1) Purge root-level dirs
+for (const d of (R.purgeDirsRoot || [])) {
+  const p = path.join('.', d);
+  if (exists(p)) { if (DRY) console.log('[DRY] rm -rf', p); else fs.rmSync(p,{recursive:true,force:true}); manifest.purged.push(p); }
+}
+
 // 3) Purge globs
 rmGlobs(R.purgeGlobs);
 
@@ -152,6 +148,55 @@ const reloc = [
 ];
 for (const {src,dst} of reloc) {
   if (exists(src)) { ensure(path.dirname(dst)); if (DRY) console.log('[DRY] move',src,'->',dst); else fs.renameSync(src,dst); manifest.moved.push([src,dst]); }
+}
+// 3.6) Merge 'python/' → 'py/' if exists
+if (exists('python') && exists('py')) {
+  // If both directories exist, we need to merge their contents
+  for (const f of fs.readdirSync('python')) {
+    const s = path.join('python', f);
+    const d = path.join('py', f);
+
+    // Check if destination already exists
+    if (exists(d)) {
+      // If it's a directory, merge contents
+      if (fs.statSync(s).isDirectory() && fs.statSync(d).isDirectory()) {
+        for (const subFile of fs.readdirSync(s)) {
+          const subSrc = path.join(s, subFile);
+          const subDst = path.join(d, subFile);
+          if (DRY) console.log('[DRY] move', subSrc, '->', subDst);
+          else {
+            // Only move if destination doesn't exist to avoid overwriting
+            if (!exists(subDst)) {
+              fs.renameSync(subSrc, subDst);
+            }
+          }
+          manifest.moved.push([subSrc, subDst]);
+        }
+      } else {
+        // For files, only move if destination doesn't exist
+        if (!exists(d)) {
+          if (DRY) console.log('[DRY] move', s, '->', d);
+          else fs.renameSync(s, d);
+          manifest.moved.push([s, d]);
+        }
+      }
+    } else {
+      // Destination doesn't exist, safe to move
+      if (DRY) console.log('[DRY] move', s, '->', d);
+      else fs.renameSync(s, d);
+      manifest.moved.push([s, d]);
+    }
+  }
+  // Remove the python directory and its contents
+  if (!DRY) {
+    fs.rmSync('python', { recursive: true, force: true });
+    manifest.purged.push('python/');
+  }
+} else if (exists('python') && !exists('py')) {
+  // If only python exists, rename it to py
+  if (DRY) console.log('[DRY] rename python/ -> py/');
+  else fs.renameSync('python', 'py');
+  manifest.moved.push(['python', 'py']);
 }
 
 // 5) Write manifest + TREE
