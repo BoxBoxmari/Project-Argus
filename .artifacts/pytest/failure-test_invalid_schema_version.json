@@ -1,5 +1,0 @@
-{
-  "test_name": "tests/unit/test_schema_validation_python.py::TestReviewV1Schema::test_invalid_schema_version",
-  "failure_reason": "assert '2.0' == '1.0'\n  \n  - 1.0\n  + 2.0",
-  "timestamp": "2025-08-28T13:02:46.280309"
-}

@@ -501,6 +501,32 @@ All new commands are working correctly:
 - `pnpm run cleanup:final` → Executes final cleanup and archiving
 - `pnpm run data:quality` → Runs data quality checks
 
+## Closeout & Maintenance
+
+### Performance Locking
+- Winner configuration locked to MCP Chrome with PERF_MODE=1 (resource blocking enabled)
+- Performance budgets established:
+  - SIM environment: p95_open_ms ≤ 3500ms, p95_pane_ms ≤ 3500ms
+  - REAL environment: p95_open_ms ≤ 2000ms, p95_pane_ms ≤ 15000ms (with timeout guard)
+- A/B testing framework implemented with automated performance baseline creation
+- Regression detection gate with 10% tolerance for p95 metrics
+- CI/CD integration for automated performance checking
+
+### Maintenance Mode
+- Repository cleaned and transitioned to maintenance mode
+- Weekly operations: ops tasks, gitleaks scanning, data retention
+- Nightly operations: test triage, KPI monitoring (unchanged from GA operations)
+- Drift handling: Selector adjustments without API/schema changes
+- Security scanning: Weekly gitleaks runs via CI/CD
+- Dependency updates: Automated via Dependabot
+
+### Assumptions
+- MCP Chrome backend provides optimal performance for Google Maps scraping
+- Performance budgets are sufficient for real-world usage scenarios
+- Resource blocking (PERF_MODE=1) does not significantly impact data quality
+- 10% regression tolerance provides adequate protection without false positives
+- Existing test infrastructure is sufficient for ongoing maintenance
+
 # Diagnosis Log
 
 ## Supply chain lockdown

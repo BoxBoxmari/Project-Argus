@@ -18,13 +18,34 @@ Based on initial testing, the MCP Chrome backend has been selected as the winner
 - Superior performance for interactive elements
 
 **Performance Metrics (MCP Chrome):**
-- Page load time: 1353ms
-- Pane loading time: 15006ms (with 15s timeout)
+- Page load time: 2769ms
+- Pane loading time: 15003ms (with 15s timeout)
 
-The hybrid runner is configured with the following defaults in `libs/runner-hybrid/config/defaults.ts`:
+The hybrid runner is configured with the following defaults in `libs/runner-hybrid/src/config/defaults.ts`:
 - `ARGUS_BACKEND=mcp` (default backend)
 - `ARGUS_BLOCK_RESOURCES=1` (block heavy resources by default)
 - `ARGUS_LOCALE=en-US` (default locale)
+- `PERF_MODE=1` (performance mode enabled by default)
+
+## Performance Baseline and Regression Checking
+
+### Performance Budgets
+Performance budgets have been established to ensure consistent performance:
+- **SIM Environment**: p95_open_ms ≤ 3500ms, p95_pane_ms ≤ 3500ms
+- **REAL Environment**: p95_open_ms ≤ 2000ms, p95_pane_ms ≤ 15000ms (with timeout guard)
+
+### Baseline Establishment
+A performance baseline has been established using the A/B testing results:
+- Baseline metrics are stored in `metrics/perf.baseline.json`
+- Baseline creation script: `pnpm run perf:baseline`
+- Baseline includes p50 and p95 percentiles for each backend
+
+### Regression Detection
+A regression detection gate has been implemented to prevent performance degradation:
+- 10% tolerance threshold for p95 metrics
+- Automated checking script: `pnpm run perf:check`
+- CI/CD integration for automated performance gating
+- Failure exit code (2) when regression detected
 
 ## Implemented Features
 
@@ -104,8 +125,12 @@ The hybrid runner is configured with the following defaults in `libs/runner-hybr
 - `ARGUS_ROBOTS_RESPECT` - Respect robots.txt (default: 1)
 - `ARGUS_OVERRIDE` - Override robots.txt disallow (default: 0)
 
-### Other Configuration
+### Performance Configuration
+- `PERF_MODE` - Enable performance mode with resource blocking (default: 1)
 - `ARGUS_BLOCK_RESOURCES` - Block heavy resources (default: 1)
+- `ARGUS_PANE_TIMEOUT_MS` - Pane loading timeout (default: 15000)
+
+### Other Configuration
 - `ARGUS_LOCALE` - Locale for selector mapping (default: en-US)
 
 ## Verification
@@ -117,34 +142,12 @@ All features have been implemented and verified:
 - ✅ MCP UI drift detection playbook created
 - ✅ Load tests with duplication rate checking implemented
 - ✅ CI gates for performance and duplication budgets added
+- ✅ Performance baseline established and regression detection implemented
 - ✅ Documentation updated with all environment variables and features
-
-## A/B Testing Results
-
-### Performance A/B Testing Framework
-A comprehensive A/B testing framework has been implemented to compare the performance of different backends:
-- **MCP Chrome**: Real Chrome browser controlled via MCP server (closest to real-world conditions)
-- **Crawlee**: Headless browser automation for batch processing
-- **Userscript**: Lightweight injection-based extraction
-
-### Winner Configuration
-Based on initial testing, the MCP Chrome backend has been selected as the winner configuration due to:
-- More realistic browser environment
-- Better handling of dynamic content
-- Superior performance for interactive elements
-
-**Performance Metrics (MCP Chrome):**
-- Page load time: 2769ms
-- Pane loading time: 15003ms (with 15s timeout)
-
-The hybrid runner is configured with the following defaults in `libs/runner-hybrid/src/config/defaults.ts`:
-- `ARGUS_BACKEND=mcp` (default backend)
-- `ARGUS_BLOCK_RESOURCES=1` (block heavy resources by default)
-- `ARGUS_LOCALE=en-US` (default locale)
-- `PERF_MODE=1` (performance mode enabled by default)
 
 ## Next Steps
 - Monitor production performance and adjust parameters as needed
 - Expand test coverage for edge cases
 - Continuously update selector mappings for UI changes
 - Monitor robots.txt compliance and adjust as needed
+- Regular performance baseline updates as UI evolves

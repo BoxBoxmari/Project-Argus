@@ -1,0 +1,137 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "version": 1,
+  "components": [
+    {
+      "type": "library",
+      "name": "playwright",
+      "version": "1.55.0",
+      "bom-ref": "playwright@1.55.0",
+      "author": "Microsoft Corporation",
+      "description": "A high-level API to automate web browsers",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/playwright@1.55.0?vcs_url=git%2Bhttps%3A%2F%2Fgithub.com%2Fmicrosoft%2Fplaywright.git",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/microsoft/playwright.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://playwright.dev",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/microsoft/playwright/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "../../node_modules/.pnpm/@playwright+test@1.55.0/node_modules/playwright"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "playwright-core",
+      "version": "1.55.0",
+      "bom-ref": "playwright-core@1.55.0",
+      "author": "Microsoft Corporation",
+      "description": "A high-level API to automate web browsers",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/playwright-core@1.55.0?vcs_url=git%2Bhttps%3A%2F%2Fgithub.com%2Fmicrosoft%2Fplaywright.git",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/microsoft/playwright.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://playwright.dev",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/microsoft/playwright/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "../../node_modules/.pnpm/playwright@1.55.0/node_modules/playwright-core"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "test",
+      "group": "@playwright",
+      "version": "1.55.0",
+      "bom-ref": "@argus/e2e|@playwright/test@1.55.0",
+      "author": "Microsoft Corporation",
+      "description": "A high-level API to automate web browsers",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/%40playwright/test@1.55.0?vcs_url=git%2Bhttps%3A%2F%2Fgithub.com%2Fmicrosoft%2Fplaywright.git",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/microsoft/playwright.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://playwright.dev",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/microsoft/playwright/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/@playwright/test"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "tools": [
+      {
+        "vendor": "argus",
+        "name": "sbom-merge",
+        "version": "1.0.0"
+      }
+    ]
+  }
+}

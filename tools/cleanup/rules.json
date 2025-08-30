@@ -1,0 +1,28 @@
+{
+  "archiveTargets": [
+    { "from": "apps/e2e/fixtures", "to": "archive/tests/fixtures" },
+    { "from": "apps/e2e/reports",  "to": "archive/tests/reports" },
+    { "from": "apps/e2e/metrics",  "to": "archive/tests/metrics" },
+    { "from": "results/ab",        "to": "archive/tests/results/ab" },
+    { "from": "results/hybrid",    "to": "archive/tests/results/hybrid" },
+    { "from": "artifacts",         "to": "archive/artifacts" },
+    { "from": ".artifacts",        "to": "archive/artifacts/_dot" }
+  ],
+  "purgeDirs": [
+    "dist", "coverage", "playwright", "playwright-report",
+    ".cache", ".tmp", "tmp", ".pytest_cache"
+  ],
+  "purgeGlobs": [
+    "**/*.log", "**/*.tmp", "**/*.swp", "**/*.DS_Store"
+  ],
+  "keepRoots": [
+    "apps", "libs", "tools", "tests", "py", "scripts",
+    ".github", "docs", "schemas", "archive", "export"
+  ],
+  "keepFiles": [
+    "README.md", "CHANGELOG.md", "HOWTO-RUN.md", "MAINTENANCE.md",
+    "PRODUCTION_HARDENING_SUMMARY.md", "DIAGNOSIS.md",
+    ".editorconfig", ".eslintrc.json", ".prettierrc", ".gitignore",
+    "pnpm-workspace.yaml", "pnpm-lock.yaml", "package.json"
+  ]
+}

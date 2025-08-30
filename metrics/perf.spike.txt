@@ -1,0 +1,1 @@
+target=p95_open_ms base=3284 current=2769 need<=2955.60 improve_min=10% ok=true

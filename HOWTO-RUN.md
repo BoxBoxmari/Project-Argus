@@ -183,3 +183,22 @@ The tool implements configurable rate limiting to avoid overwhelming servers. Ad
 - Chạy Userscript harness: `ARGUS_BACKEND=userscript pnpm run hybrid:start`
 - A/B matrix: `pnpm run perf:ab` (điều khiển backends qua `AB_BACKENDS=mcp,crawlee,userscript`)
 - Performance mode: Set `PERF_MODE=1` to enable resource blocking for better performance
+
+## Performance lock
+- A/B: `pnpm run perf:ab`
+- Tạo baseline lần đầu: `pnpm run perf:baseline`
+- Kiểm tra hồi quy so với baseline: `pnpm run perf:check` (CI tự chạy).
+
+## Performance Spikes
+The project includes a framework for implementing and testing performance improvements:
+- Directory: `perf-spikes/`
+- Template: `perf-spikes/TEMPLATE.md`
+- Implementation: Follow the experiment process in `perf-spikes/README.md`
+- Testing: Use existing A/B testing framework (`pnpm run perf:ab` and `pnpm run perf:check`)
+
+## Merge SPIKE (yêu cầu cải thiện)
+1) Chạy A/B sau khi áp dụng spike: `pnpm run perf:ab`
+2) Cập nhật baseline chi tiết: `pnpm run perf:baseline:detail`
+3) Gate cải thiện ≥10% (open_ms mặc định): `pnpm run perf:gate:improve`
+   - Đổi mục tiêu: `SPIKE_TARGET=pane_ms`
+4) Lưu hồ sơ spike: `SPIKE_ID=SPIKE-00X pnpm run perf:spike:close`

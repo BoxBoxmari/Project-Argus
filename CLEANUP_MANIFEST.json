@@ -1,24 +1,6 @@
 {
-  "moved": [
-    [
-      "apps/e2e/fixtures",
-      "archive/tests/fixtures"
-    ],
-    [
-      "apps/e2e/reports",
-      "archive/tests/reports"
-    ],
-    [
-      "apps/e2e/metrics",
-      "archive/tests/metrics"
-    ]
-  ],
-  "purged": [
-    "dist",
-    "coverage",
-    "playwright-report",
-    ".cache",
-    "playwright"
-  ],
-  "ts": "2025-08-29T10:09:53.704Z"
+  "moved": [],
+  "purged": [],
+  "removedEmpty": [],
+  "ts": "2025-08-30T16:24:28.795Z"
 }

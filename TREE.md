@@ -1,1026 +1,699 @@
-.artifacts/pytest/failure-test_from_raw_valid_complete_review.json
-.artifacts/pytest/failure-test_invalid_schema_version.json
-.artifacts/pytest/failure-test_schema_compliance_missing_fields.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Browser-Automation-Performance-should-handle-resource-blocking-efficiently.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Browser-Automation-Performance-should-simulate-scrolling-performance.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Concurrent-Processing-should-handle-multiple-concurrent-extractions.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Concurrent-Processing-should-limit-concurrent-browser-contexts.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Large-Dataset-Processing-should-efficiently-deduplicate-large-datasets.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Large-Dataset-Processing-should-handle-100k-reviews-with-memory-limit.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Large-Dataset-Processing-should-process-10k-reviews-within-30-seconds.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Memory-Management-should-handle-extremely-large-single-reviews.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Memory-Management-should-not-leak-memory-during-repeated-operations.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Parsing-Performance-should-handle-malformed-HTML-gracefully.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Parsing-Performance-should-parse-complex-HTML-fixtures-efficiently.json
-.cspell.json
-.editorconfig
-.eslintignore
-.eslintrc.json
-.gitattributes
-.github/workflows/ci.yml
-.github/workflows/comprehensive-testing.yml
-.gitignore
-.hintrc
-.prettierrc
-.qoder/rules/00-readthis-first.md
-.qoder/rules/Bmad-Fullstack-App.md
-.qoder/rules/Extensions.md
-.vscode/settings.json
-CHANGELOG.md
-CRAWLEE_MCP_INTEGRATION_SUMMARY.md
-CSPELL_DICTIONARY_FIX.md
-CSPELL_IMPLEMENTATION.md
-DATA_CONTRACT.md
-DIAGNOSIS.md
-FINAL_VERIFICATION_SUMMARY.md
-HOWTO-RUN.md
-INVENTORY.md
-PATCH_NOTES.md
-PRODUCTION_HARDENING_SUMMARY.md
-README.md
-REFACTORING_CHANGELOG.md
-RELEASE_COMPLETION_SUMMARY.md
-RELEASE_NOTES.md
-RELEASE_PROCESS.md
-TASKS.md
-WORKSPACE_INVENTORY.json
-apps/e2e/DIAGNOSIS.md
-apps/e2e/HOWTO-RUN.md
-apps/e2e/fixtures/gmaps_sample.html
-apps/e2e/package.json
-apps/e2e/playwright.config.ts
-apps/e2e/test-results/.last-run.json
-apps/e2e/test-results/tests-gmaps.real-REAL-perf-budget-chromium/test-failed-1.png
-apps/e2e/test-results/tests-gmaps.real-REAL-perf-budget-chromium/video.webm
-apps/e2e/test-results/tests-gmaps.real-REAL-perf-budget-msedge/test-failed-1.png
-apps/e2e/test-results/tests-gmaps.real-REAL-perf-budget-msedge/video.webm
-apps/e2e/test-results/tests-gmaps.sim-SIM-userscript-extracts-from-fixture-DOM-chromium/test-failed-1.png
-apps/e2e/test-results/tests-gmaps.sim-SIM-userscript-extracts-from-fixture-DOM-chromium/video.webm
-apps/e2e/test-results/tests-gmaps.sim-SIM-userscript-extracts-from-fixture-DOM-msedge/test-failed-1.png
-apps/e2e/test-results/tests-gmaps.sim-SIM-userscript-extracts-from-fixture-DOM-msedge/video.webm
-apps/e2e/tests/_metrics.ts
-apps/e2e/tests/_setup.routes.ts
-apps/e2e/tests/crawlee.smoke.spec.ts
-apps/e2e/tests/gmaps.real.spec.ts
-apps/e2e/tests/gmaps.sim.spec.ts
-apps/e2e/tests/load.real.spec.ts
-apps/e2e/tests/routes.har.README.md
-apps/scraper-playwright/.env.example
-apps/scraper-playwright/.eslintrc.cjs
-apps/scraper-playwright/README.md
-apps/scraper-playwright/datasets/reviews.ndjson
-apps/scraper-playwright/datasets/scraper-output.ndjson
-apps/scraper-playwright/datasets/test-reviews.ndjson
-apps/scraper-playwright/package.json
-apps/scraper-playwright/scripts/install-deps.mjs
-apps/scraper-playwright/src/cli.ts
-apps/scraper-playwright/src/config/env.ts
-apps/scraper-playwright/src/core/browser.ts
-apps/scraper-playwright/src/crawler.ts
-apps/scraper-playwright/src/index.ts
-apps/scraper-playwright/src/main.ts
-apps/scraper-playwright/src/playwright.ts
-apps/scraper-playwright/src/test-google-maps.ts
-apps/scraper-playwright/src/tests/tls-smoke.ts
-apps/scraper-playwright/test-results.json
-apps/scraper-playwright/tsconfig.json
-apps/scraper-playwright/tsconfig.tsbuildinfo
-apps/userscript/.eslintrc.cjs
-apps/userscript/DIAGNOSIS.md
-apps/userscript/package.json
-apps/userscript/selector_map.json
-apps/userscript/src/dom.ts
-apps/userscript/src/extractor.ts
-apps/userscript/src/globals.d.ts
-apps/userscript/src/index.ts
-apps/userscript/src/locators.ts
-apps/userscript/src/log.ts
-apps/userscript/src/logging.ts
-apps/userscript/src/normalize.ts
-apps/userscript/src/page-extractor.ts
-apps/userscript/src/polyfills/gm.ts
-apps/userscript/src/progress.ts
-apps/userscript/src/scheduler.ts
-apps/userscript/src/storage.ts
-apps/userscript/src/transport.ts
-apps/userscript/tools/mcp-selector-audit.md
-apps/userscript/tools/mcp-ui-drift.yaml
-apps/userscript/tsconfig.json
-apps/userscript/tsconfig.tsbuildinfo
-artifacts/tests-20250827_030427/node_build.log
-artifacts/tests-20250827_030427/node_env.log
-artifacts/tests-20250827_030427/node_lint.log
-artifacts/tests-20250827_030427/node_test.log
-artifacts/tests-20250827_030427/node_typecheck.log
-artifacts/tests-20250827_033030/node_build.log
-artifacts/tests-20250827_033030/node_env.log
-artifacts/tests-20250827_033030/node_lint.log
-artifacts/tests-20250827_033030/node_test.log
-artifacts/tests-20250827_033030/node_typecheck.log
-artifacts/tests-20250827_033435/go_env.log
-artifacts/tests-20250827_033435/go_test.log
-artifacts/tests-20250827_033435/node_build.log
-artifacts/tests-20250827_033435/node_env.log
-artifacts/tests-20250827_033435/node_lint.log
-artifacts/tests-20250827_033435/node_test.log
-artifacts/tests-20250827_033435/node_typecheck.log
-artifacts/tests-20250827_033435/pw_build.log
-artifacts/tests-20250827_033435/pw_run.log
-artifacts/tests-20250827_033435/python_env.log
-artifacts/tests-20250827_033435/python_mypy.log
-artifacts/tests-20250827_033435/python_pytest.log
-artifacts/tests-20250827_033435/python_ruff.log
-artifacts/tests-20250827_033810/node_build.log
-artifacts/tests-20250827_033810/node_env.log
-artifacts/tests-20250827_033810/node_lint.log
-artifacts/tests-20250827_033810/node_test.log
-artifacts/tests-20250827_033810/node_typecheck.log
-artifacts/tests-20250827_034025/go_env.log
-artifacts/tests-20250827_034025/go_test.log
-artifacts/tests-20250827_034025/node_build.log
-artifacts/tests-20250827_034025/node_env.log
-artifacts/tests-20250827_034025/node_lint.log
-artifacts/tests-20250827_034025/node_test.log
-artifacts/tests-20250827_034025/node_typecheck.log
-artifacts/tests-20250827_034025/pw_build.log
-artifacts/tests-20250827_034025/pw_run.log
-artifacts/tests-20250827_034025/python_env.log
-artifacts/tests-20250827_034025/python_mypy.log
-artifacts/tests-20250827_034025/python_pytest.log
-artifacts/tests-20250827_034025/python_ruff.log
-artifacts/tests-20250827_034146/go_env.log
-artifacts/tests-20250827_034146/go_test.log
-artifacts/tests-20250827_034146/node_build.log
-artifacts/tests-20250827_034146/node_env.log
-artifacts/tests-20250827_034146/node_lint.log
-artifacts/tests-20250827_034146/node_test.log
-artifacts/tests-20250827_034146/node_typecheck.log
-artifacts/tests-20250827_034146/pw_build.log
-artifacts/tests-20250827_034146/pw_run.log
-artifacts/tests-20250827_034146/python_env.log
-artifacts/tests-20250827_034146/python_mypy.log
-artifacts/tests-20250827_034146/python_pytest.log
-artifacts/tests-20250827_034146/python_ruff.log
-clean-build-run.ps1
-config/cspell-words.txt
-cspell.json
-data/raw/seed_urls.txt
-datasets/reviews.ndjson
-docs/CLEANUP.md
-docs/REPORT.md
-docs/WORKSPACE.md
-docs/architecture.md
-docs/migration-guide.md
-docs/retry-example.md
-jest.config.ts
-libs/js-core/.eslintignore
-libs/js-core/.eslintrc.cjs
-libs/js-core/README.md
-libs/js-core/package.json
-libs/js-core/src/__tests__/domain-utils.test.ts
-libs/js-core/src/__tests__/request-queue.test.ts
-libs/js-core/src/__tests__/retry.test.ts
-libs/js-core/src/__tests__/session.test.ts
-libs/js-core/src/autoscale.ts
-libs/js-core/src/contracts/mcp.ts
-libs/js-core/src/dataset.ts
-libs/js-core/src/domain-utils.ts
-libs/js-core/src/errors.ts
-libs/js-core/src/example-usage.ts
-libs/js-core/src/extractors/gmaps.ts
-libs/js-core/src/gmaps/progress.ts
-libs/js-core/src/gmaps/schema.ts
-libs/js-core/src/gmaps/scroll.ts
-libs/js-core/src/gmaps/selectors.ts
-libs/js-core/src/id/review_id.ts
-libs/js-core/src/id/review_id_node.ts
-libs/js-core/src/index.ts
-libs/js-core/src/net/blocklist.ts
-libs/js-core/src/obs/events.ts
-libs/js-core/src/persist.ts
-libs/js-core/src/plugin.ts
-libs/js-core/src/queue.ts
-libs/js-core/src/queue/memoryQueue.ts
-libs/js-core/src/rate-limit.ts
-libs/js-core/src/request-queue.ts
-libs/js-core/src/retry.ts
-libs/js-core/src/schema/review.schema.json
-libs/js-core/src/schema/review.ts
-libs/js-core/src/scraper-orchestrator.ts
-libs/js-core/src/session.ts
-libs/js-core/src/session/sessionPool.ts
-libs/js-core/src/session/uas.cjs
-libs/js-core/src/session/uasLoader.ts
-libs/js-core/src/types.ts
-libs/js-core/src/util/retry.ts
-libs/js-core/src/util/text.ts
-libs/js-core/src/utils.ts
-libs/js-core/src/utils/jsonLoader.ts
-libs/js-core/test-runner.js
-libs/js-core/tsconfig.json
-libs/js-core/tsconfig.test.json
-libs/js-core/tsconfig.tsbuildinfo
-libs/js-core/uas.json
-libs/runner-crawlee/--generateTrace
-libs/runner-crawlee/package.json
-libs/runner-crawlee/src/extractor.ts
-libs/runner-crawlee/src/index.ts
-libs/runner-crawlee/src/middleware/rate.ts
-libs/runner-crawlee/src/middleware/robots.ts
-libs/runner-crawlee/src/schema/review.ts
-libs/runner-crawlee/src/test-extractor.ts
-libs/runner-crawlee/src/types/robots-txt-parse.d.ts
-libs/runner-crawlee/storage/key_value_stores/default/SDK_CRAWLER_STATISTICS_0.json
-libs/runner-crawlee/storage/key_value_stores/default/SDK_SESSION_POOL_STATE.json
-libs/runner-crawlee/storage/request_queues/default/GyBryNqOTsT7drB.json
-libs/runner-crawlee/tsconfig.json
-package.json
-pnpm-lock.yaml
-pnpm-workspace.yaml
-problems-report.json
-py/README.md
-py/analysis/requirements.txt
-py/analysis/src/__init__.py
-py/ingest/process_ndjson.py
-py/ingest/processor_python/__init__.py
-py/ingest/processor_python/api_client.py
-py/ingest/processor_python/cli.py
-py/ingest/processor_python/cx_map.py
-py/ingest/processor_python/etl.py
-py/ingest/processor_python/modules/__init__.py
-py/ingest/processor_python/modules/link_extractor.py
-py/ingest/processor_python/schema.py
-py/ingest/requirements.txt
-py/ingest/run_ingest.ps1
-py/ingest/src/__init__.py
-py/ingest/src/dedup.py
-py/ingest/src/processor.py
-py/ingest/src/schema.py
-py/pyproject.toml
-py/pytest.ini
-py/schema.py
-py/src/processor_python.egg-info/PKG-INFO
-py/src/processor_python.egg-info/SOURCES.txt
-py/src/processor_python.egg-info/dependency_links.txt
-py/src/processor_python.egg-info/requires.txt
-py/src/processor_python.egg-info/top_level.txt
-py/src/processor_python/__init__.py
-py/src/processor_python/etl.py
-py/src/processor_python/schema.py
-py/tests/test_link_extractor.py
-pyproject.toml
-pyrightconfig.json
-python-dev-requirements.txt
-python/pyproject.toml
-python/src/argus_workspace.egg-info/PKG-INFO
-python/src/argus_workspace.egg-info/SOURCES.txt
-python/src/argus_workspace.egg-info/dependency_links.txt
-python/src/argus_workspace.egg-info/requires.txt
-python/src/argus_workspace.egg-info/top_level.txt
-python/src/processor_python.egg-info/PKG-INFO
-python/src/processor_python.egg-info/SOURCES.txt
-python/src/processor_python.egg-info/dependency_links.txt
-python/src/processor_python.egg-info/requires.txt
-python/src/processor_python.egg-info/top_level.txt
-python/src/processor_python/__init__.py
-python/src/processor_python/etl.py
-python/src/processor_python/quality/__init__.py
-python/src/processor_python/quality/gates.py
-python/src/processor_python/quality/types.py
-python/src/processor_python/schema.py
-ref/Project Argus Master Scraper.js
-scripts/clean-build-run.ps1
-scripts/manual-test-suite.ps1
-scripts/ps/cleanup.ps1
-scripts/ps/repo-hardening.ps1
-scripts/ps/run.ps1
-scripts/ps/setup.ps1
-scripts/python-check.ps1
-scripts/release.ps1
-scripts/rollback.ps1
-scripts/setup-python-tools.ps1
-scripts/test-runner.ps1
-scripts/test-suite.ps1
-scripts/verify-release.ps1
-services/orchestrator-go/go.mod
-services/orchestrator-go/main.go
-test-implementation.ts
-tests/.artifacts/integration-tests/minimal-fixture-results.json
-tests/conftest.py
-tests/e2e/README.md
-tests/e2e/cli-pipeline.test.ts
-tests/e2e/data-quality.test.ts
-tests/e2e/run-e2e-tests.ts
-tests/e2e/test-utilities.ts
-tests/fixtures/maps/case_complex.html
-tests/fixtures/maps/case_complex/index.html
-tests/fixtures/maps/case_dom_shift/index.html
-tests/fixtures/maps/case_i18n_mixed/index.html
-tests/fixtures/maps/case_minimal.html
-tests/fixtures/maps/case_minimal/index.html
-tests/golden/case_complex.json
-tests/golden/case_i18n_mixed.json
-tests/golden/case_minimal.json
-tests/integration/pipeline.test.ts
-tests/jest.config.test.js
-tests/negative/error-conditions.test.ts
-tests/performance/large-dataset.test.ts
-tests/setup.ts
-tests/unit/deduplication.test.ts
-tests/unit/parser.extraction.test.ts
-tests/unit/schema.validation.test.ts
-tests/unit/test_schema_validation_python.py
-tests/utils/dom-guards.ts
-tools/doctor.mjs
-tools/inventory.js
-tools/monitor/post_release.js
-tools/release/rc.js
-tools/release/rollback.js
-tsconfig.base.json
-tsconfig.json
-tsconfig.test.json
-validate-python-tooling.py
-.artifacts/pytest/failure-test_from_raw_valid_complete_review.json
-.artifacts/pytest/failure-test_invalid_schema_version.json
-.artifacts/pytest/failure-test_schema_compliance_missing_fields.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Browser-Automation-Performance-should-handle-resource-blocking-efficiently.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Browser-Automation-Performance-should-simulate-scrolling-performance.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Concurrent-Processing-should-handle-multiple-concurrent-extractions.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Concurrent-Processing-should-limit-concurrent-browser-contexts.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Large-Dataset-Processing-should-efficiently-deduplicate-large-datasets.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Large-Dataset-Processing-should-handle-100k-reviews-with-memory-limit.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Large-Dataset-Processing-should-process-10k-reviews-within-30-seconds.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Memory-Management-should-handle-extremely-large-single-reviews.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Memory-Management-should-not-leak-memory-during-repeated-operations.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Parsing-Performance-should-handle-malformed-HTML-gracefully.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Parsing-Performance-should-parse-complex-HTML-fixtures-efficiently.json
-.cspell.json
-.editorconfig
-.eslintignore
-.eslintrc.json
-.gitattributes
-.github/workflows/ci.yml
-.github/workflows/comprehensive-testing.yml
-.gitignore
-.hintrc
-.prettierrc
-.qoder/rules/00-readthis-first.md
-.qoder/rules/Bmad-Fullstack-App.md
-.qoder/rules/Extensions.md
-.vscode/settings.json
-CHANGELOG.md
-CRAWLEE_MCP_INTEGRATION_SUMMARY.md
-CSPELL_DICTIONARY_FIX.md
-CSPELL_IMPLEMENTATION.md
-DATA_CONTRACT.md
-DIAGNOSIS.md
-FINAL_VERIFICATION_SUMMARY.md
-HOWTO-RUN.md
-INVENTORY.md
-PATCH_NOTES.md
-PRODUCTION_HARDENING_SUMMARY.md
-README.md
-REFACTORING_CHANGELOG.md
-RELEASE_COMPLETION_SUMMARY.md
-RELEASE_NOTES.md
-RELEASE_PROCESS.md
-TASKS.md
-WORKSPACE_INVENTORY.json
-apps/e2e/DIAGNOSIS.md
-apps/e2e/HOWTO-RUN.md
-apps/e2e/fixtures/gmaps_sample.html
-apps/e2e/package.json
-apps/e2e/playwright.config.ts
-apps/e2e/test-results/.last-run.json
-apps/e2e/test-results/tests-gmaps.real-REAL-perf-budget-chromium/test-failed-1.png
-apps/e2e/test-results/tests-gmaps.real-REAL-perf-budget-chromium/video.webm
-apps/e2e/test-results/tests-gmaps.real-REAL-perf-budget-msedge/test-failed-1.png
-apps/e2e/test-results/tests-gmaps.real-REAL-perf-budget-msedge/video.webm
-apps/e2e/test-results/tests-gmaps.sim-SIM-userscript-extracts-from-fixture-DOM-chromium/test-failed-1.png
-apps/e2e/test-results/tests-gmaps.sim-SIM-userscript-extracts-from-fixture-DOM-chromium/video.webm
-apps/e2e/test-results/tests-gmaps.sim-SIM-userscript-extracts-from-fixture-DOM-msedge/test-failed-1.png
-apps/e2e/test-results/tests-gmaps.sim-SIM-userscript-extracts-from-fixture-DOM-msedge/video.webm
-apps/e2e/tests/_metrics.ts
-apps/e2e/tests/_setup.routes.ts
-apps/e2e/tests/crawlee.smoke.spec.ts
-apps/e2e/tests/gmaps.real.spec.ts
-apps/e2e/tests/gmaps.sim.spec.ts
-apps/e2e/tests/load.real.spec.ts
-apps/e2e/tests/routes.har.README.md
-apps/scraper-playwright/.env.example
-apps/scraper-playwright/.eslintrc.cjs
-apps/scraper-playwright/README.md
-apps/scraper-playwright/datasets/reviews.ndjson
-apps/scraper-playwright/datasets/scraper-output.ndjson
-apps/scraper-playwright/datasets/test-reviews.ndjson
-apps/scraper-playwright/package.json
-apps/scraper-playwright/scripts/install-deps.mjs
-apps/scraper-playwright/src/cli.ts
-apps/scraper-playwright/src/config/env.ts
-apps/scraper-playwright/src/core/browser.ts
-apps/scraper-playwright/src/crawler.ts
-apps/scraper-playwright/src/index.ts
-apps/scraper-playwright/src/main.ts
-apps/scraper-playwright/src/playwright.ts
-apps/scraper-playwright/src/test-google-maps.ts
-apps/scraper-playwright/src/tests/tls-smoke.ts
-apps/scraper-playwright/test-results.json
-apps/scraper-playwright/tsconfig.json
-apps/scraper-playwright/tsconfig.tsbuildinfo
-apps/userscript/.eslintrc.cjs
-apps/userscript/DIAGNOSIS.md
-apps/userscript/package.json
-apps/userscript/selector_map.json
-apps/userscript/src/dom.ts
-apps/userscript/src/extractor.ts
-apps/userscript/src/globals.d.ts
-apps/userscript/src/index.ts
-apps/userscript/src/locators.ts
-apps/userscript/src/log.ts
-apps/userscript/src/logging.ts
-apps/userscript/src/normalize.ts
-apps/userscript/src/page-extractor.ts
-apps/userscript/src/polyfills/gm.ts
-apps/userscript/src/progress.ts
-apps/userscript/src/scheduler.ts
-apps/userscript/src/storage.ts
-apps/userscript/src/transport.ts
-apps/userscript/tools/mcp-selector-audit.md
-apps/userscript/tools/mcp-ui-drift.yaml
-apps/userscript/tsconfig.json
-apps/userscript/tsconfig.tsbuildinfo
-artifacts/tests-20250827_030427/node_build.log
-artifacts/tests-20250827_030427/node_env.log
-artifacts/tests-20250827_030427/node_lint.log
-artifacts/tests-20250827_030427/node_test.log
-artifacts/tests-20250827_030427/node_typecheck.log
-artifacts/tests-20250827_033030/node_build.log
-artifacts/tests-20250827_033030/node_env.log
-artifacts/tests-20250827_033030/node_lint.log
-artifacts/tests-20250827_033030/node_test.log
-artifacts/tests-20250827_033030/node_typecheck.log
-artifacts/tests-20250827_033435/go_env.log
-artifacts/tests-20250827_033435/go_test.log
-artifacts/tests-20250827_033435/node_build.log
-artifacts/tests-20250827_033435/node_env.log
-artifacts/tests-20250827_033435/node_lint.log
-artifacts/tests-20250827_033435/node_test.log
-artifacts/tests-20250827_033435/node_typecheck.log
-artifacts/tests-20250827_033435/pw_build.log
-artifacts/tests-20250827_033435/pw_run.log
-artifacts/tests-20250827_033435/python_env.log
-artifacts/tests-20250827_033435/python_mypy.log
-artifacts/tests-20250827_033435/python_pytest.log
-artifacts/tests-20250827_033435/python_ruff.log
-artifacts/tests-20250827_033810/node_build.log
-artifacts/tests-20250827_033810/node_env.log
-artifacts/tests-20250827_033810/node_lint.log
-artifacts/tests-20250827_033810/node_test.log
-artifacts/tests-20250827_033810/node_typecheck.log
-artifacts/tests-20250827_034025/go_env.log
-artifacts/tests-20250827_034025/go_test.log
-artifacts/tests-20250827_034025/node_build.log
-artifacts/tests-20250827_034025/node_env.log
-artifacts/tests-20250827_034025/node_lint.log
-artifacts/tests-20250827_034025/node_test.log
-artifacts/tests-20250827_034025/node_typecheck.log
-artifacts/tests-20250827_034025/pw_build.log
-artifacts/tests-20250827_034025/pw_run.log
-artifacts/tests-20250827_034025/python_env.log
-artifacts/tests-20250827_034025/python_mypy.log
-artifacts/tests-20250827_034025/python_pytest.log
-artifacts/tests-20250827_034025/python_ruff.log
-artifacts/tests-20250827_034146/go_env.log
-artifacts/tests-20250827_034146/go_test.log
-artifacts/tests-20250827_034146/node_build.log
-artifacts/tests-20250827_034146/node_env.log
-artifacts/tests-20250827_034146/node_lint.log
-artifacts/tests-20250827_034146/node_test.log
-artifacts/tests-20250827_034146/node_typecheck.log
-artifacts/tests-20250827_034146/pw_build.log
-artifacts/tests-20250827_034146/pw_run.log
-artifacts/tests-20250827_034146/python_env.log
-artifacts/tests-20250827_034146/python_mypy.log
-artifacts/tests-20250827_034146/python_pytest.log
-artifacts/tests-20250827_034146/python_ruff.log
-clean-build-run.ps1
-config/cspell-words.txt
-cspell.json
-data/raw/seed_urls.txt
-datasets/reviews.ndjson
-docs/CLEANUP.md
-docs/REPORT.md
-docs/WORKSPACE.md
-docs/architecture.md
-docs/migration-guide.md
-docs/retry-example.md
-jest.config.ts
-libs/js-core/.eslintignore
-libs/js-core/.eslintrc.cjs
-libs/js-core/README.md
-libs/js-core/package.json
-libs/js-core/src/__tests__/domain-utils.test.ts
-libs/js-core/src/__tests__/request-queue.test.ts
-libs/js-core/src/__tests__/retry.test.ts
-libs/js-core/src/__tests__/session.test.ts
-libs/js-core/src/autoscale.ts
-libs/js-core/src/contracts/mcp.ts
-libs/js-core/src/dataset.ts
-libs/js-core/src/domain-utils.ts
-libs/js-core/src/errors.ts
-libs/js-core/src/example-usage.ts
-libs/js-core/src/extractors/gmaps.ts
-libs/js-core/src/gmaps/progress.ts
-libs/js-core/src/gmaps/schema.ts
-libs/js-core/src/gmaps/scroll.ts
-libs/js-core/src/gmaps/selectors.ts
-libs/js-core/src/id/review_id.ts
-libs/js-core/src/id/review_id_node.ts
-libs/js-core/src/index.ts
-libs/js-core/src/net/blocklist.ts
-libs/js-core/src/obs/events.ts
-libs/js-core/src/persist.ts
-libs/js-core/src/plugin.ts
-libs/js-core/src/queue.ts
-libs/js-core/src/queue/memoryQueue.ts
-libs/js-core/src/rate-limit.ts
-libs/js-core/src/request-queue.ts
-libs/js-core/src/retry.ts
-libs/js-core/src/schema/review.schema.json
-libs/js-core/src/schema/review.ts
-libs/js-core/src/scraper-orchestrator.ts
-libs/js-core/src/session.ts
-libs/js-core/src/session/sessionPool.ts
-libs/js-core/src/session/uas.cjs
-libs/js-core/src/session/uasLoader.ts
-libs/js-core/src/types.ts
-libs/js-core/src/util/retry.ts
-libs/js-core/src/util/text.ts
-libs/js-core/src/utils.ts
-libs/js-core/src/utils/jsonLoader.ts
-libs/js-core/test-runner.js
-libs/js-core/tsconfig.json
-libs/js-core/tsconfig.test.json
-libs/js-core/tsconfig.tsbuildinfo
-libs/js-core/uas.json
-libs/runner-crawlee/--generateTrace
-libs/runner-crawlee/package.json
-libs/runner-crawlee/src/extractor.ts
-libs/runner-crawlee/src/index.ts
-libs/runner-crawlee/src/middleware/rate.ts
-libs/runner-crawlee/src/middleware/robots.ts
-libs/runner-crawlee/src/schema/review.ts
-libs/runner-crawlee/src/test-extractor.ts
-libs/runner-crawlee/src/types/robots-txt-parse.d.ts
-libs/runner-crawlee/storage/key_value_stores/default/SDK_CRAWLER_STATISTICS_0.json
-libs/runner-crawlee/storage/key_value_stores/default/SDK_SESSION_POOL_STATE.json
-libs/runner-crawlee/storage/request_queues/default/GyBryNqOTsT7drB.json
-libs/runner-crawlee/tsconfig.json
-package.json
-pnpm-lock.yaml
-pnpm-workspace.yaml
-problems-report.json
-py/README.md
-py/analysis/requirements.txt
-py/analysis/src/__init__.py
-py/ingest/process_ndjson.py
-py/ingest/processor_python/__init__.py
-py/ingest/processor_python/api_client.py
-py/ingest/processor_python/cli.py
-py/ingest/processor_python/cx_map.py
-py/ingest/processor_python/etl.py
-py/ingest/processor_python/modules/__init__.py
-py/ingest/processor_python/modules/link_extractor.py
-py/ingest/processor_python/schema.py
-py/ingest/requirements.txt
-py/ingest/run_ingest.ps1
-py/ingest/src/__init__.py
-py/ingest/src/dedup.py
-py/ingest/src/processor.py
-py/ingest/src/schema.py
-py/pyproject.toml
-py/pytest.ini
-py/schema.py
-py/src/processor_python.egg-info/PKG-INFO
-py/src/processor_python.egg-info/SOURCES.txt
-py/src/processor_python.egg-info/dependency_links.txt
-py/src/processor_python.egg-info/requires.txt
-py/src/processor_python.egg-info/top_level.txt
-py/src/processor_python/__init__.py
-py/src/processor_python/etl.py
-py/src/processor_python/schema.py
-py/tests/test_link_extractor.py
-pyproject.toml
-pyrightconfig.json
-python-dev-requirements.txt
-python/pyproject.toml
-python/src/argus_workspace.egg-info/PKG-INFO
-python/src/argus_workspace.egg-info/SOURCES.txt
-python/src/argus_workspace.egg-info/dependency_links.txt
-python/src/argus_workspace.egg-info/requires.txt
-python/src/argus_workspace.egg-info/top_level.txt
-python/src/processor_python.egg-info/PKG-INFO
-python/src/processor_python.egg-info/SOURCES.txt
-python/src/processor_python.egg-info/dependency_links.txt
-python/src/processor_python.egg-info/requires.txt
-python/src/processor_python.egg-info/top_level.txt
-python/src/processor_python/__init__.py
-python/src/processor_python/etl.py
-python/src/processor_python/quality/__init__.py
-python/src/processor_python/quality/gates.py
-python/src/processor_python/quality/types.py
-python/src/processor_python/schema.py
-ref/Project Argus Master Scraper.js
-scripts/clean-build-run.ps1
-scripts/manual-test-suite.ps1
-scripts/ps/cleanup.ps1
-scripts/ps/repo-hardening.ps1
-scripts/ps/run.ps1
-scripts/ps/setup.ps1
-scripts/python-check.ps1
-scripts/release.ps1
-scripts/rollback.ps1
-scripts/setup-python-tools.ps1
-scripts/test-runner.ps1
-scripts/test-suite.ps1
-scripts/verify-release.ps1
-services/orchestrator-go/go.mod
-services/orchestrator-go/main.go
-test-implementation.ts
-tests/.artifacts/integration-tests/minimal-fixture-results.json
-tests/conftest.py
-tests/e2e/README.md
-tests/e2e/cli-pipeline.test.ts
-tests/e2e/data-quality.test.ts
-tests/e2e/run-e2e-tests.ts
-tests/e2e/test-utilities.ts
-tests/fixtures/maps/case_complex.html
-tests/fixtures/maps/case_complex/index.html
-tests/fixtures/maps/case_dom_shift/index.html
-tests/fixtures/maps/case_i18n_mixed/index.html
-tests/fixtures/maps/case_minimal.html
-tests/fixtures/maps/case_minimal/index.html
-tests/golden/case_complex.json
-tests/golden/case_i18n_mixed.json
-tests/golden/case_minimal.json
-tests/integration/pipeline.test.ts
-tests/jest.config.test.js
-tests/negative/error-conditions.test.ts
-tests/performance/large-dataset.test.ts
-tests/setup.ts
-tests/unit/deduplication.test.ts
-tests/unit/parser.extraction.test.ts
-tests/unit/schema.validation.test.ts
-tests/unit/test_schema_validation_python.py
-tests/utils/dom-guards.ts
-tools/doctor.mjs
-tools/inventory.js
-tools/monitor/post_release.js
-tools/release/rc.js
-tools/release/rollback.js
-tsconfig.base.json
-tsconfig.json
-tsconfig.test.json
-validate-python-tooling.py
-.artifacts/pytest/failure-test_from_raw_valid_complete_review.json
-.artifacts/pytest/failure-test_invalid_schema_version.json
-.artifacts/pytest/failure-test_schema_compliance_missing_fields.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Browser-Automation-Performance-should-handle-resource-blocking-efficiently.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Browser-Automation-Performance-should-simulate-scrolling-performance.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Concurrent-Processing-should-handle-multiple-concurrent-extractions.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Concurrent-Processing-should-limit-concurrent-browser-contexts.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Large-Dataset-Processing-should-efficiently-deduplicate-large-datasets.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Large-Dataset-Processing-should-handle-100k-reviews-with-memory-limit.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Large-Dataset-Processing-should-process-10k-reviews-within-30-seconds.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Memory-Management-should-handle-extremely-large-single-reviews.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Memory-Management-should-not-leak-memory-during-repeated-operations.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Parsing-Performance-should-handle-malformed-HTML-gracefully.json
-.artifacts/test-2025-08-28T03-46-05-042Z-w37q4n/performance-Performance-Tests-Parsing-Performance-should-parse-complex-HTML-fixtures-efficiently.json
-.cspell.json
-.editorconfig
-.eslintignore
-.eslintrc.json
-.gitattributes
-.github/workflows/ci.yml
-.github/workflows/comprehensive-testing.yml
-.gitignore
-.hintrc
-.prettierrc
-.qoder/rules/00-readthis-first.md
-.qoder/rules/Bmad-Fullstack-App.md
-.qoder/rules/Extensions.md
-.vscode/settings.json
-CHANGELOG.md
-CRAWLEE_MCP_INTEGRATION_SUMMARY.md
-CSPELL_DICTIONARY_FIX.md
-CSPELL_IMPLEMENTATION.md
-DATA_CONTRACT.md
-DIAGNOSIS.md
-FINAL_VERIFICATION_SUMMARY.md
-HOWTO-RUN.md
-INVENTORY.md
-PATCH_NOTES.md
-PRODUCTION_HARDENING_SUMMARY.md
-README.md
-REFACTORING_CHANGELOG.md
-RELEASE_COMPLETION_SUMMARY.md
-RELEASE_NOTES.md
-RELEASE_PROCESS.md
-TASKS.md
-WORKSPACE_INVENTORY.json
-apps/e2e/DIAGNOSIS.md
-apps/e2e/HOWTO-RUN.md
-apps/e2e/fixtures/gmaps_sample.html
-apps/e2e/package.json
-apps/e2e/playwright.config.ts
-apps/e2e/test-results/.last-run.json
-apps/e2e/test-results/tests-gmaps.real-REAL-perf-budget-chromium/test-failed-1.png
-apps/e2e/test-results/tests-gmaps.real-REAL-perf-budget-chromium/video.webm
-apps/e2e/test-results/tests-gmaps.real-REAL-perf-budget-msedge/test-failed-1.png
-apps/e2e/test-results/tests-gmaps.real-REAL-perf-budget-msedge/video.webm
-apps/e2e/test-results/tests-gmaps.sim-SIM-userscript-extracts-from-fixture-DOM-chromium/test-failed-1.png
-apps/e2e/test-results/tests-gmaps.sim-SIM-userscript-extracts-from-fixture-DOM-chromium/video.webm
-apps/e2e/test-results/tests-gmaps.sim-SIM-userscript-extracts-from-fixture-DOM-msedge/test-failed-1.png
-apps/e2e/test-results/tests-gmaps.sim-SIM-userscript-extracts-from-fixture-DOM-msedge/video.webm
-apps/e2e/tests/_metrics.ts
-apps/e2e/tests/_setup.routes.ts
-apps/e2e/tests/crawlee.smoke.spec.ts
-apps/e2e/tests/gmaps.real.spec.ts
-apps/e2e/tests/gmaps.sim.spec.ts
-apps/e2e/tests/load.real.spec.ts
-apps/e2e/tests/routes.har.README.md
-apps/scraper-playwright/.env.example
-apps/scraper-playwright/.eslintrc.cjs
-apps/scraper-playwright/README.md
-apps/scraper-playwright/datasets/reviews.ndjson
-apps/scraper-playwright/datasets/scraper-output.ndjson
-apps/scraper-playwright/datasets/test-reviews.ndjson
-apps/scraper-playwright/package.json
-apps/scraper-playwright/scripts/install-deps.mjs
-apps/scraper-playwright/src/cli.ts
-apps/scraper-playwright/src/config/env.ts
-apps/scraper-playwright/src/core/browser.ts
-apps/scraper-playwright/src/crawler.ts
-apps/scraper-playwright/src/index.ts
-apps/scraper-playwright/src/main.ts
-apps/scraper-playwright/src/playwright.ts
-apps/scraper-playwright/src/test-google-maps.ts
-apps/scraper-playwright/src/tests/tls-smoke.ts
-apps/scraper-playwright/test-results.json
-apps/scraper-playwright/tsconfig.json
-apps/scraper-playwright/tsconfig.tsbuildinfo
-apps/userscript/.eslintrc.cjs
-apps/userscript/DIAGNOSIS.md
-apps/userscript/package.json
-apps/userscript/selector_map.json
-apps/userscript/src/dom.ts
-apps/userscript/src/extractor.ts
-apps/userscript/src/globals.d.ts
-apps/userscript/src/index.ts
-apps/userscript/src/locators.ts
-apps/userscript/src/log.ts
-apps/userscript/src/logging.ts
-apps/userscript/src/normalize.ts
-apps/userscript/src/page-extractor.ts
-apps/userscript/src/polyfills/gm.ts
-apps/userscript/src/progress.ts
-apps/userscript/src/scheduler.ts
-apps/userscript/src/storage.ts
-apps/userscript/src/transport.ts
-apps/userscript/tools/mcp-selector-audit.md
-apps/userscript/tools/mcp-ui-drift.yaml
-apps/userscript/tsconfig.json
-apps/userscript/tsconfig.tsbuildinfo
-artifacts/tests-20250827_030427/node_build.log
-artifacts/tests-20250827_030427/node_env.log
-artifacts/tests-20250827_030427/node_lint.log
-artifacts/tests-20250827_030427/node_test.log
-artifacts/tests-20250827_030427/node_typecheck.log
-artifacts/tests-20250827_033030/node_build.log
-artifacts/tests-20250827_033030/node_env.log
-artifacts/tests-20250827_033030/node_lint.log
-artifacts/tests-20250827_033030/node_test.log
-artifacts/tests-20250827_033030/node_typecheck.log
-artifacts/tests-20250827_033435/go_env.log
-artifacts/tests-20250827_033435/go_test.log
-artifacts/tests-20250827_033435/node_build.log
-artifacts/tests-20250827_033435/node_env.log
-artifacts/tests-20250827_033435/node_lint.log
-artifacts/tests-20250827_033435/node_test.log
-artifacts/tests-20250827_033435/node_typecheck.log
-artifacts/tests-20250827_033435/pw_build.log
-artifacts/tests-20250827_033435/pw_run.log
-artifacts/tests-20250827_033435/python_env.log
-artifacts/tests-20250827_033435/python_mypy.log
-artifacts/tests-20250827_033435/python_pytest.log
-artifacts/tests-20250827_033435/python_ruff.log
-artifacts/tests-20250827_033810/node_build.log
-artifacts/tests-20250827_033810/node_env.log
-artifacts/tests-20250827_033810/node_lint.log
-artifacts/tests-20250827_033810/node_test.log
-artifacts/tests-20250827_033810/node_typecheck.log
-artifacts/tests-20250827_034025/go_env.log
-artifacts/tests-20250827_034025/go_test.log
-artifacts/tests-20250827_034025/node_build.log
-artifacts/tests-20250827_034025/node_env.log
-artifacts/tests-20250827_034025/node_lint.log
-artifacts/tests-20250827_034025/node_test.log
-artifacts/tests-20250827_034025/node_typecheck.log
-artifacts/tests-20250827_034025/pw_build.log
-artifacts/tests-20250827_034025/pw_run.log
-artifacts/tests-20250827_034025/python_env.log
-artifacts/tests-20250827_034025/python_mypy.log
-artifacts/tests-20250827_034025/python_pytest.log
-artifacts/tests-20250827_034025/python_ruff.log
-artifacts/tests-20250827_034146/go_env.log
-artifacts/tests-20250827_034146/go_test.log
-artifacts/tests-20250827_034146/node_build.log
-artifacts/tests-20250827_034146/node_env.log
-artifacts/tests-20250827_034146/node_lint.log
-artifacts/tests-20250827_034146/node_test.log
-artifacts/tests-20250827_034146/node_typecheck.log
-artifacts/tests-20250827_034146/pw_build.log
-artifacts/tests-20250827_034146/pw_run.log
-artifacts/tests-20250827_034146/python_env.log
-artifacts/tests-20250827_034146/python_mypy.log
-artifacts/tests-20250827_034146/python_pytest.log
-artifacts/tests-20250827_034146/python_ruff.log
-clean-build-run.ps1
-config/cspell-words.txt
-cspell.json
-data/raw/seed_urls.txt
-datasets/reviews.ndjson
-docs/CLEANUP.md
-docs/REPORT.md
-docs/WORKSPACE.md
-docs/architecture.md
-docs/migration-guide.md
-docs/retry-example.md
-jest.config.ts
-libs/js-core/.eslintignore
-libs/js-core/.eslintrc.cjs
-libs/js-core/README.md
-libs/js-core/package.json
-libs/js-core/src/__tests__/domain-utils.test.ts
-libs/js-core/src/__tests__/request-queue.test.ts
-libs/js-core/src/__tests__/retry.test.ts
-libs/js-core/src/__tests__/session.test.ts
-libs/js-core/src/autoscale.ts
-libs/js-core/src/contracts/mcp.ts
-libs/js-core/src/dataset.ts
-libs/js-core/src/domain-utils.ts
-libs/js-core/src/errors.ts
-libs/js-core/src/example-usage.ts
-libs/js-core/src/extractors/gmaps.ts
-libs/js-core/src/gmaps/progress.ts
-libs/js-core/src/gmaps/schema.ts
-libs/js-core/src/gmaps/scroll.ts
-libs/js-core/src/gmaps/selectors.ts
-libs/js-core/src/id/review_id.ts
-libs/js-core/src/id/review_id_node.ts
-libs/js-core/src/index.ts
-libs/js-core/src/net/blocklist.ts
-libs/js-core/src/obs/events.ts
-libs/js-core/src/persist.ts
-libs/js-core/src/plugin.ts
-libs/js-core/src/queue.ts
-libs/js-core/src/queue/memoryQueue.ts
-libs/js-core/src/rate-limit.ts
-libs/js-core/src/request-queue.ts
-libs/js-core/src/retry.ts
-libs/js-core/src/schema/review.schema.json
-libs/js-core/src/schema/review.ts
-libs/js-core/src/scraper-orchestrator.ts
-libs/js-core/src/session.ts
-libs/js-core/src/session/sessionPool.ts
-libs/js-core/src/session/uas.cjs
-libs/js-core/src/session/uasLoader.ts
-libs/js-core/src/types.ts
-libs/js-core/src/util/retry.ts
-libs/js-core/src/util/text.ts
-libs/js-core/src/utils.ts
-libs/js-core/src/utils/jsonLoader.ts
-libs/js-core/test-runner.js
-libs/js-core/tsconfig.json
-libs/js-core/tsconfig.test.json
-libs/js-core/tsconfig.tsbuildinfo
-libs/js-core/uas.json
-libs/runner-crawlee/--generateTrace
-libs/runner-crawlee/package.json
-libs/runner-crawlee/src/extractor.ts
-libs/runner-crawlee/src/index.ts
-libs/runner-crawlee/src/middleware/rate.ts
-libs/runner-crawlee/src/middleware/robots.ts
-libs/runner-crawlee/src/schema/review.ts
-libs/runner-crawlee/src/test-extractor.ts
-libs/runner-crawlee/src/types/robots-txt-parse.d.ts
-libs/runner-crawlee/storage/key_value_stores/default/SDK_CRAWLER_STATISTICS_0.json
-libs/runner-crawlee/storage/key_value_stores/default/SDK_SESSION_POOL_STATE.json
-libs/runner-crawlee/storage/request_queues/default/GyBryNqOTsT7drB.json
-libs/runner-crawlee/tsconfig.json
-package.json
-pnpm-lock.yaml
-pnpm-workspace.yaml
-problems-report.json
-py/README.md
-py/analysis/requirements.txt
-py/analysis/src/__init__.py
-py/ingest/process_ndjson.py
-py/ingest/processor_python/__init__.py
-py/ingest/processor_python/api_client.py
-py/ingest/processor_python/cli.py
-py/ingest/processor_python/cx_map.py
-py/ingest/processor_python/etl.py
-py/ingest/processor_python/modules/__init__.py
-py/ingest/processor_python/modules/link_extractor.py
-py/ingest/processor_python/schema.py
-py/ingest/requirements.txt
-py/ingest/run_ingest.ps1
-py/ingest/src/__init__.py
-py/ingest/src/dedup.py
-py/ingest/src/processor.py
-py/ingest/src/schema.py
-py/pyproject.toml
-py/pytest.ini
-py/schema.py
-py/src/processor_python.egg-info/PKG-INFO
-py/src/processor_python.egg-info/SOURCES.txt
-py/src/processor_python.egg-info/dependency_links.txt
-py/src/processor_python.egg-info/requires.txt
-py/src/processor_python.egg-info/top_level.txt
-py/src/processor_python/__init__.py
-py/src/processor_python/etl.py
-py/src/processor_python/schema.py
-py/tests/test_link_extractor.py
-pyproject.toml
-pyrightconfig.json
-python-dev-requirements.txt
-python/pyproject.toml
-python/src/argus_workspace.egg-info/PKG-INFO
-python/src/argus_workspace.egg-info/SOURCES.txt
-python/src/argus_workspace.egg-info/dependency_links.txt
-python/src/argus_workspace.egg-info/requires.txt
-python/src/argus_workspace.egg-info/top_level.txt
-python/src/processor_python.egg-info/PKG-INFO
-python/src/processor_python.egg-info/SOURCES.txt
-python/src/processor_python.egg-info/dependency_links.txt
-python/src/processor_python.egg-info/requires.txt
-python/src/processor_python.egg-info/top_level.txt
-python/src/processor_python/__init__.py
-python/src/processor_python/etl.py
-python/src/processor_python/quality/__init__.py
-python/src/processor_python/quality/gates.py
-python/src/processor_python/quality/types.py
-python/src/processor_python/schema.py
-ref/Project Argus Master Scraper.js
-scripts/clean-build-run.ps1
-scripts/manual-test-suite.ps1
-scripts/ps/cleanup.ps1
-scripts/ps/repo-hardening.ps1
-scripts/ps/run.ps1
-scripts/ps/setup.ps1
-scripts/python-check.ps1
-scripts/release.ps1
-scripts/rollback.ps1
-scripts/setup-python-tools.ps1
-scripts/test-runner.ps1
-scripts/test-suite.ps1
-scripts/verify-release.ps1
-services/orchestrator-go/go.mod
-services/orchestrator-go/main.go
-test-implementation.ts
-tests/.artifacts/integration-tests/minimal-fixture-results.json
-tests/conftest.py
-tests/e2e/README.md
-tests/e2e/cli-pipeline.test.ts
-tests/e2e/data-quality.test.ts
-tests/e2e/run-e2e-tests.ts
-tests/e2e/test-utilities.ts
-tests/fixtures/maps/case_complex.html
-tests/fixtures/maps/case_complex/index.html
-tests/fixtures/maps/case_dom_shift/index.html
-tests/fixtures/maps/case_i18n_mixed/index.html
-tests/fixtures/maps/case_minimal.html
-tests/fixtures/maps/case_minimal/index.html
-tests/golden/case_complex.json
-tests/golden/case_i18n_mixed.json
-tests/golden/case_minimal.json
-tests/integration/pipeline.test.ts
-tests/jest.config.test.js
-tests/negative/error-conditions.test.ts
-tests/performance/large-dataset.test.ts
-tests/setup.ts
-tests/unit/deduplication.test.ts
-tests/unit/parser.extraction.test.ts
-tests/unit/schema.validation.test.ts
-tests/unit/test_schema_validation_python.py
-tests/utils/dom-guards.ts
-tools/doctor.mjs
-tools/inventory.js
-tools/monitor/post_release.js
-tools/release/rc.js
-tools/release/rollback.js
-tsconfig.base.json
-tsconfig.json
-tsconfig.test.json
-validate-python-tooling.py
+# Project Tree (post-cleanup)
+```
+├─.cspell.json
+├─.depcheck.json
+├─.editorconfig
+├─.eslintignore
+├─.eslintrc.json
+├─.gitattributes
+├─.gitignore
+├─.gitleaks.toml
+├─.hintrc
+├─.knip.json
+├─.prettierrc
+├─.pytest_cache
+│ ├─.gitignore
+│ ├─CACHEDIR.TAG
+│ ├─README.md
+│ └─v
+│   └─cache
+│     ├─lastfailed
+│     ├─nodeids
+│     └─stepwise
+├─.qoder
+│ └─rules
+│   ├─00-readthis-first.md
+│   ├─Bmad-Fullstack-App.md
+│   └─Extensions.md
+├─.ruff_cache
+│ ├─.gitignore
+│ └─CACHEDIR.TAG
+├─.tsprune.json
+├─.vscode
+│ └─settings.json
+├─CHANGELOG.md
+├─CLEANUP_MANIFEST.json
+├─CLEANUP_RULES.md
+├─CODEOWNERS
+├─COMMIT_MESSAGE.txt
+├─CRAWLEE_MCP_INTEGRATION_SUMMARY.md
+├─CSPELL_DICTIONARY_FIX.md
+├─CSPELL_IMPLEMENTATION.md
+├─DATA_CONTRACT.md
+├─DATA_QUALITY_REPORT.md
+├─DAY2_OPS_HARDENING_SUMMARY.md
+├─DEADCODE_CONSOLIDATION_SUMMARY.md
+├─DEADCODE_REPORT.json
+├─DIAGNOSIS.md
+├─FINAL_VERIFICATION_SUMMARY.md
+├─GA_LAUNCH_SUMMARY.md
+├─HOWTO-RUN.md
+├─INVENTORY.md
+├─MAINTENANCE.md
+├─OPS_REPORT.md
+├─PATCH_NOTES.md
+├─PRODUCTION_HARDENING_SUMMARY.md
+├─PROVENANCE.json
+├─README.md
+├─REFACTORING_CHANGELOG.md
+├─RELEASE_COMPLETION_SUMMARY.md
+├─RELEASE_NOTES.md
+├─RELEASE_PROCESS.md
+├─RETENTION_REPORT.md
+├─SECURITY.md
+├─STRUCTURE.md
+├─TASKS.md
+├─TREE.md
+├─WORKSPACE_INVENTORY.json
+├─apps
+│ ├─e2e
+│ │ ├─DIAGNOSIS.md
+│ │ ├─HOWTO-RUN.md
+│ │ ├─apps
+│ │ │ └─e2e
+│ │ │   └─scenarios
+│ │ │     └─sim.cases.json
+│ │ ├─package.json
+│ │ ├─playwright.config.ts
+│ │ ├─scenarios
+│ │ │ └─sim.cases.json
+│ │ ├─test-results
+│ │ │ └─.last-run.json
+│ │ ├─test.cdx.json
+│ │ ├─tests
+│ │ │ ├─_metrics.ts
+│ │ │ ├─_setup.routes.ts
+│ │ │ ├─ab.final.spec.ts
+│ │ │ ├─crawlee.smoke.spec.ts
+│ │ │ ├─gmaps.real.spec.ts
+│ │ │ ├─gmaps.sim.spec.ts
+│ │ │ ├─load.real.spec.ts
+│ │ │ ├─real.matrix.spec.ts
+│ │ │ ├─routes.har.README.md
+│ │ │ ├─sim.matrix.spec.ts
+│ │ │ └─simple.test.ts
+│ │ └─tools
+│ │   └─gen-scenarios.ts
+│ ├─scraper-playwright
+│ │ ├─.env.example
+│ │ ├─.eslintrc.cjs
+│ │ ├─DIAGNOSIS.md
+│ │ ├─README.md
+│ │ ├─datasets
+│ │ │ ├─.keep
+│ │ │ ├─datasets
+│ │ │ │ └─default
+│ │ │ │   └─data.json
+│ │ │ ├─reviews.ndjson
+│ │ │ ├─scraper-output.ndjson
+│ │ │ └─test-reviews.ndjson
+│ │ ├─dist
+│ │ │ ├─cli.js
+│ │ │ ├─crawler.js
+│ │ │ ├─index.js
+│ │ │ ├─launcher.js
+│ │ │ ├─main.js
+│ │ │ ├─playwright.js
+│ │ │ └─test-google-maps.js
+│ │ ├─package.json
+│ │ ├─src
+│ │ │ ├─cli.ts
+│ │ │ ├─crawler.ts
+│ │ │ ├─index.ts
+│ │ │ ├─launcher.ts
+│ │ │ ├─main.ts
+│ │ │ ├─playwright.ts
+│ │ │ └─test-google-maps.ts
+│ │ ├─test-results.json
+│ │ ├─tsconfig.json
+│ │ ├─tsconfig.tsbuildinfo
+│ │ └─types.d.ts
+│ └─userscript
+│   ├─.eslintrc.cjs
+│   ├─DIAGNOSIS.md
+│   ├─dist
+│   │ └─argus.user.js
+│   ├─package.json
+│   ├─selector_map.json
+│   ├─src
+│   │ ├─dom.ts
+│   │ ├─extractor.ts
+│   │ ├─globals.d.ts
+│   │ ├─index.ts
+│   │ ├─locators.ts
+│   │ ├─log.ts
+│   │ ├─logging.ts
+│   │ ├─normalize.ts
+│   │ ├─polyfills
+│   │ │ └─gm.ts
+│   │ ├─progress.ts
+│   │ ├─pseudo.ts
+│   │ ├─scheduler.ts
+│   │ ├─storage.ts
+│   │ └─transport.ts
+│   ├─tools
+│   │ ├─mcp-selector-audit.md
+│   │ └─mcp-ui-drift.yaml
+│   ├─tsconfig.json
+│   └─tsconfig.tsbuildinfo
+├─archive
+│ ├─artifacts
+│ │ ├─_dot
+│ │ │ ├─pytest
+│ │ │ │ ├─failure-test_from_raw_valid_complete_review.json
+│ │ │ │ ├─failure-test_invalid_schema_version.json
+│ │ │ │ └─failure-test_schema_compliance_missing_fields.json
+│ │ │ └─test-2025-08-28T03-46-05-042Z-w37q4n
+│ │ │   ├─performance-Performance-Tests-Browser-Automation-Performance-should-handle-resource-blocking-efficiently.json
+│ │ │   ├─performance-Performance-Tests-Browser-Automation-Performance-should-simulate-scrolling-performance.json
+│ │ │   ├─performance-Performance-Tests-Concurrent-Processing-should-handle-multiple-concurrent-extractions.json
+│ │ │   ├─performance-Performance-Tests-Concurrent-Processing-should-limit-concurrent-browser-contexts.json
+│ │ │   ├─performance-Performance-Tests-Large-Dataset-Processing-should-efficiently-deduplicate-large-datasets.json
+│ │ │   ├─performance-Performance-Tests-Large-Dataset-Processing-should-handle-100k-reviews-with-memory-limit.json
+│ │ │   ├─performance-Performance-Tests-Large-Dataset-Processing-should-process-10k-reviews-within-30-seconds.json
+│ │ │   ├─performance-Performance-Tests-Memory-Management-should-handle-extremely-large-single-reviews.json
+│ │ │   ├─performance-Performance-Tests-Memory-Management-should-not-leak-memory-during-repeated-operations.json
+│ │ │   ├─performance-Performance-Tests-Parsing-Performance-should-handle-malformed-HTML-gracefully.json
+│ │ │   └─performance-Performance-Tests-Parsing-Performance-should-parse-complex-HTML-fixtures-efficiently.json
+│ │ ├─tests-20250827_030427
+│ │ │ ├─node_build.log
+│ │ │ ├─node_env.log
+│ │ │ ├─node_lint.log
+│ │ │ ├─node_test.log
+│ │ │ └─node_typecheck.log
+│ │ ├─tests-20250827_033030
+│ │ │ ├─node_build.log
+│ │ │ ├─node_env.log
+│ │ │ ├─node_lint.log
+│ │ │ ├─node_test.log
+│ │ │ └─node_typecheck.log
+│ │ ├─tests-20250827_033435
+│ │ │ ├─go_env.log
+│ │ │ ├─go_test.log
+│ │ │ ├─node_build.log
+│ │ │ ├─node_env.log
+│ │ │ ├─node_lint.log
+│ │ │ ├─node_test.log
+│ │ │ ├─node_typecheck.log
+│ │ │ ├─pw_build.log
+│ │ │ ├─pw_run.log
+│ │ │ ├─python_env.log
+│ │ │ ├─python_mypy.log
+│ │ │ ├─python_pytest.log
+│ │ │ └─python_ruff.log
+│ │ ├─tests-20250827_033810
+│ │ │ ├─node_build.log
+│ │ │ ├─node_env.log
+│ │ │ ├─node_lint.log
+│ │ │ ├─node_test.log
+│ │ │ └─node_typecheck.log
+│ │ ├─tests-20250827_034025
+│ │ │ ├─go_env.log
+│ │ │ ├─go_test.log
+│ │ │ ├─node_build.log
+│ │ │ ├─node_env.log
+│ │ │ ├─node_lint.log
+│ │ │ ├─node_test.log
+│ │ │ ├─node_typecheck.log
+│ │ │ ├─pw_build.log
+│ │ │ ├─pw_run.log
+│ │ │ ├─python_env.log
+│ │ │ ├─python_mypy.log
+│ │ │ ├─python_pytest.log
+│ │ │ └─python_ruff.log
+│ │ └─tests-20250827_034146
+│ │   ├─go_env.log
+│ │   ├─go_test.log
+│ │   ├─node_build.log
+│ │   ├─node_env.log
+│ │   ├─node_lint.log
+│ │   ├─node_test.log
+│ │   ├─node_typecheck.log
+│ │   ├─pw_build.log
+│ │   ├─pw_run.log
+│ │   ├─python_env.log
+│ │   ├─python_mypy.log
+│ │   ├─python_pytest.log
+│ │   └─python_ruff.log
+│ ├─spikes
+│ │ ├─SPIKE-001
+│ │ │ ├─README.md
+│ │ │ ├─ab.results.json
+│ │ │ ├─baseline.detail.json
+│ │ │ └─improve.txt
+│ │ └─SPIKE-UNKNOWN
+│ │   ├─README.md
+│ │   ├─ab.results.json
+│ │   ├─baseline.detail.json
+│ │   └─improve.txt
+│ └─tests
+│   ├─fixtures
+│   │ └─gmaps_sample.html
+│   ├─metrics
+│   │ └─real.json
+│   ├─reports
+│   │ ├─.keep
+│   │ ├─history.json
+│   │ └─results.json
+│   └─results
+│     ├─ab
+│     │ ├─ab.results.json
+│     │ └─error.log
+│     └─hybrid
+│       ├─metrics.mcp.1756461098814.json
+│       ├─metrics.mcp.1756461326575.json
+│       ├─metrics.mcp.1756461351309.json
+│       ├─metrics.mcp.1756461913832.json
+│       ├─metrics.mcp.1756461996613.json
+│       └─metrics.mcp.1756462030414.json
+├─attic
+│ └─2025-08-28T16-12-48-658Z
+│   └─README.md
+├─clean-build-run.ps1
+├─config
+│ └─cspell-words.txt
+├─coverage
+│ ├─lcov-report
+│ │ ├─base.css
+│ │ ├─block-navigation.js
+│ │ ├─favicon.png
+│ │ ├─index.html
+│ │ ├─prettify.css
+│ │ ├─prettify.js
+│ │ ├─sort-arrow-sprite.png
+│ │ └─sorter.js
+│ ├─lcov.info
+│ └─tmp
+│   ├─coverage-19020-1756395921088-0.json
+│   ├─coverage-19436-1756395867423-0.json
+│   └─coverage-4432-1756395920713-0.json
+├─cspell.json
+├─data
+│ └─raw
+│   └─seed_urls.txt
+├─datasets
+│ └─reviews.ndjson
+├─debug-output.txt
+├─docs
+│ ├─CLEANUP.md
+│ ├─REPORT.md
+│ ├─WORKSPACE.md
+│ ├─architecture.md
+│ ├─migration-guide.md
+│ └─retry-example.md
+├─export
+│ └─reviews.safe.jsonl
+├─generate-report.js
+├─jest.config.ts
+├─knip-ignore.json
+├─knip.json
+├─libs
+│ ├─js-core
+│ │ ├─.eslintignore
+│ │ ├─README.md
+│ │ ├─dist
+│ │ │ ├─extractors
+│ │ │ │ ├─gmaps.d.ts
+│ │ │ │ ├─gmaps.d.ts.map
+│ │ │ │ ├─gmaps.js
+│ │ │ │ └─gmaps.js.map
+│ │ │ ├─id
+│ │ │ │ ├─review_id.d.ts
+│ │ │ │ ├─review_id.d.ts.map
+│ │ │ │ ├─review_id.js
+│ │ │ │ └─review_id_node.d.ts.map
+│ │ │ ├─index.d.ts
+│ │ │ ├─index.js
+│ │ │ ├─obs
+│ │ │ │ ├─events.d.ts
+│ │ │ │ └─events.js
+│ │ │ ├─queue
+│ │ │ │ ├─memoryQueue.d.ts
+│ │ │ │ └─memoryQueue.js
+│ │ │ ├─sanitize
+│ │ │ │ ├─pii.d.ts
+│ │ │ │ ├─pii.d.ts.map
+│ │ │ │ ├─pii.js
+│ │ │ │ ├─pii.js.map
+│ │ │ │ ├─pseudo.d.ts
+│ │ │ │ ├─pseudo.d.ts.map
+│ │ │ │ ├─pseudo.js
+│ │ │ │ └─pseudo.js.map
+│ │ │ ├─schema
+│ │ │ │ ├─review.d.ts
+│ │ │ │ ├─review.d.ts.map
+│ │ │ │ ├─review.js
+│ │ │ │ └─review.js.map
+│ │ │ └─session
+│ │ │   ├─sessionPool.d.ts
+│ │ │   └─sessionPool.js
+│ │ ├─package.json
+│ │ ├─sbom
+│ │ │ └─sbom.test.cdx.json
+│ │ ├─sbom.test.cdx.json
+│ │ ├─src
+│ │ │ ├─__tests__
+│ │ │ │ ├─domain-utils.test.ts
+│ │ │ │ ├─request-queue.test.ts
+│ │ │ │ ├─retry.test.ts
+│ │ │ │ └─session.test.ts
+│ │ │ ├─dataset.ts
+│ │ │ ├─domain-utils.ts
+│ │ │ ├─errors.ts
+│ │ │ ├─extractors
+│ │ │ │ └─gmaps.ts
+│ │ │ ├─gmaps
+│ │ │ │ ├─progress.ts
+│ │ │ │ ├─schema.ts
+│ │ │ │ ├─scroll.ts
+│ │ │ │ └─selectors.ts
+│ │ │ ├─id
+│ │ │ │ ├─review_id.ts
+│ │ │ │ └─review_id_node.ts
+│ │ │ ├─index.ts
+│ │ │ ├─net
+│ │ │ │ └─blocklist.ts
+│ │ │ ├─obs
+│ │ │ │ └─events.ts
+│ │ │ ├─persist.ts
+│ │ │ ├─plugin.ts
+│ │ │ ├─queue
+│ │ │ │ └─memoryQueue.ts
+│ │ │ ├─queue.ts
+│ │ │ ├─request-queue.ts
+│ │ │ ├─retry.ts
+│ │ │ ├─sanitize
+│ │ │ │ ├─pii.ts
+│ │ │ │ └─pseudo.ts
+│ │ │ ├─schema
+│ │ │ │ ├─review.schema.json
+│ │ │ │ └─review.ts
+│ │ │ ├─session
+│ │ │ │ └─sessionPool.ts
+│ │ │ ├─session.ts
+│ │ │ └─util
+│ │ │   ├─retry.ts
+│ │ │   └─text.ts
+│ │ ├─test
+│ │ │ ├─pii.fuzz.spec.ts
+│ │ │ ├─sanitize
+│ │ │ │ └─pii.spec.ts
+│ │ │ └─smoke.spec.ts
+│ │ ├─tsconfig.json
+│ │ ├─tsconfig.tsbuildinfo
+│ │ ├─uas.json
+│ │ └─vitest.config.ts
+│ ├─runner-crawlee
+│ │ ├─--generateTrace
+│ │ ├─dist
+│ │ │ ├─index.js
+│ │ │ └─tsconfig.tsbuildinfo
+│ │ ├─package.json
+│ │ ├─src
+│ │ │ ├─extractor.ts
+│ │ │ ├─index.ts
+│ │ │ ├─middleware
+│ │ │ │ ├─rate.ts
+│ │ │ │ └─robots.ts
+│ │ │ ├─test-extractor.ts
+│ │ │ └─types
+│ │ │   └─robots-txt-parse.d.ts
+│ │ ├─storage
+│ │ │ ├─key_value_stores
+│ │ │ │ └─default
+│ │ │ │   ├─SDK_CRAWLER_STATISTICS_0.json
+│ │ │ │   └─SDK_SESSION_POOL_STATE.json
+│ │ │ └─request_queues
+│ │ │   └─default
+│ │ │     └─GyBryNqOTsT7drB.json
+│ │ └─tsconfig.json
+│ └─runner-hybrid
+│   ├─dist
+│   │ ├─config
+│   │ │ └─defaults.js
+│   │ ├─index.js
+│   │ ├─mcp.js
+│   │ ├─pw_crawlee.js
+│   │ └─userscript_harness.js
+│   ├─package.json
+│   ├─src
+│   │ ├─config
+│   │ │ └─defaults.ts
+│   │ ├─index.ts
+│   │ ├─mcp.ts
+│   │ ├─pw_crawlee.ts
+│   │ └─userscript_harness.ts
+│   └─tsconfig.json
+├─metrics
+│ ├─perf.baseline.detail.json
+│ ├─perf.baseline.json
+│ ├─perf.check.txt
+│ └─perf.spike.txt
+├─package.json
+├─perf-spikes
+│ ├─README.md
+│ ├─SPIKE-001-PREWARM-MCP.md
+│ ├─SPIKE-002-PANE-READY-HEURISTIC.md
+│ └─TEMPLATE.md
+├─pnpm-lock.yaml
+├─pnpm-workspace.yaml
+├─problems-report.json
+├─py
+│ ├─.ruff_cache
+│ │ ├─.gitignore
+│ │ ├─0.6.8
+│ │ │ ├─12495125165147422495
+│ │ │ ├─14267699162131016063
+│ │ │ ├─442664218189608151
+│ │ │ ├─7777908077075624311
+│ │ │ └─8187727612934087784
+│ │ └─CACHEDIR.TAG
+│ ├─README.md
+│ ├─analysis
+│ │ ├─requirements.txt
+│ │ └─src
+│ │   └─__init__.py
+│ ├─ingest
+│ │ ├─process_ndjson.py
+│ │ ├─processor_python
+│ │ │ ├─__init__.py
+│ │ │ ├─__pycache__
+│ │ │ │ ├─__init__.cpython-313.pyc
+│ │ │ │ ├─etl.cpython-313.pyc
+│ │ │ │ └─schema.cpython-313.pyc
+│ │ │ ├─api_client.py
+│ │ │ ├─cli.py
+│ │ │ ├─cx_map.py
+│ │ │ ├─etl.py
+│ │ │ ├─modules
+│ │ │ │ ├─__init__.py
+│ │ │ │ └─link_extractor.py
+│ │ │ └─schema.py
+│ │ ├─requirements.txt
+│ │ ├─run_ingest.ps1
+│ │ └─src
+│ │   ├─__init__.py
+│ │   ├─dedup.py
+│ │   ├─processor.py
+│ │   └─schema.py
+│ ├─pyproject.toml
+│ ├─pytest.ini
+│ ├─schema.py
+│ ├─src
+│ │ ├─processor_python
+│ │ │ ├─__init__.py
+│ │ │ ├─__pycache__
+│ │ │ │ ├─__init__.cpython-313.pyc
+│ │ │ │ └─schema.cpython-313.pyc
+│ │ │ ├─etl.py
+│ │ │ └─schema.py
+│ │ └─processor_python.egg-info
+│ │   ├─PKG-INFO
+│ │   ├─SOURCES.txt
+│ │   ├─dependency_links.txt
+│ │   ├─requires.txt
+│ │   └─top_level.txt
+│ └─tests
+│   ├─__pycache__
+│   │ ├─test_link_extractor.cpython-313-pytest-8.2.0.pyc
+│   │ └─test_link_extractor.cpython-313-pytest-8.4.1.pyc
+│   └─test_link_extractor.py
+├─pyproject.toml
+├─pyrightconfig.json
+├─python
+│ ├─.pytest_cache
+│ │ ├─.gitignore
+│ │ ├─CACHEDIR.TAG
+│ │ ├─README.md
+│ │ └─v
+│ │   └─cache
+│ │     ├─nodeids
+│ │     └─stepwise
+│ ├─.ruff_cache
+│ │ ├─.gitignore
+│ │ ├─0.6.8
+│ │ │ ├─3339221760996419052
+│ │ │ └─9554412690506800321
+│ │ └─CACHEDIR.TAG
+│ ├─pyproject.toml
+│ └─src
+│   ├─argus_workspace.egg-info
+│   │ ├─PKG-INFO
+│   │ ├─SOURCES.txt
+│   │ ├─dependency_links.txt
+│   │ ├─requires.txt
+│   │ └─top_level.txt
+│   ├─processor_python
+│   │ ├─__init__.py
+│   │ ├─__pycache__
+│   │ │ ├─__init__.cpython-313.pyc
+│   │ │ ├─etl.cpython-313.pyc
+│   │ │ └─schema.cpython-313.pyc
+│   │ ├─etl.py
+│   │ ├─quality
+│   │ │ ├─__init__.py
+│   │ │ ├─__pycache__
+│   │ │ │ ├─__init__.cpython-313.pyc
+│   │ │ │ ├─gates.cpython-313.pyc
+│   │ │ │ └─types.cpython-313.pyc
+│   │ │ ├─gates.py
+│   │ │ └─types.py
+│   │ └─schema.py
+│   └─processor_python.egg-info
+│     ├─PKG-INFO
+│     ├─SOURCES.txt
+│     ├─dependency_links.txt
+│     ├─requires.txt
+│     └─top_level.txt
+├─python-dev-requirements.txt
+├─sbom
+│ ├─combined.cdx.json
+│ ├─sbom._argus_e2e.cdx.json
+│ ├─sbom._argus_js-core.cdx.json
+│ ├─sbom._argus_runner-crawlee.cdx.json
+│ ├─sbom._argus_scraper-playwright.cdx.json
+│ └─sbom._argus_userscript.cdx.json
+├─schemas
+│ └─review.schema.json
+├─scripts
+│ ├─clean-build-run.ps1
+│ ├─cleanup.ts
+│ ├─manual-test-suite.ps1
+│ ├─ps
+│ │ ├─cleanup.ps1
+│ │ ├─repo-hardening.ps1
+│ │ ├─run.ps1
+│ │ └─setup.ps1
+│ ├─python-check.ps1
+│ ├─release.ps1
+│ ├─rollback.ps1
+│ ├─setup-python-tools.ps1
+│ ├─test-runner.ps1
+│ ├─test-suite.ps1
+│ └─verify-release.ps1
+├─services
+│ └─orchestrator-go
+│   ├─go.mod
+│   └─main.go
+├─stryker.conf.json
+├─test-data-quality.js
+├─test-data-quality.ts
+├─test-dist
+│ └─test.txt
+├─test-report.md
+├─test.txt
+├─tests
+│ ├─.artifacts
+│ │ └─integration-tests
+│ │   └─minimal-fixture-results.json
+│ ├─__pycache__
+│ │ ├─conftest.cpython-313-pytest-8.2.0.pyc
+│ │ └─conftest.cpython-313.pyc
+│ ├─conftest.py
+│ ├─e2e
+│ │ ├─README.md
+│ │ ├─cli-pipeline.test.ts
+│ │ ├─data-quality.test.ts
+│ │ └─run-e2e-tests.ts
+│ ├─fixtures
+│ │ └─maps
+│ │   ├─case_complex
+│ │   │ └─index.html
+│ │   ├─case_complex.html
+│ │   ├─case_dom_shift
+│ │   │ └─index.html
+│ │   ├─case_i18n_mixed
+│ │   │ └─index.html
+│ │   ├─case_minimal
+│ │   │ └─index.html
+│ │   └─case_minimal.html
+│ ├─golden
+│ │ ├─case_complex.json
+│ │ ├─case_i18n_mixed.json
+│ │ └─case_minimal.json
+│ ├─integration
+│ │ └─pipeline.test.ts
+│ ├─jest.config.test.js
+│ ├─negative
+│ │ └─error-conditions.test.ts
+│ ├─performance
+│ │ └─large-dataset.test.ts
+│ ├─setup.ts
+│ ├─unit
+│ │ ├─__pycache__
+│ │ │ └─test_schema_validation_python.cpython-313-pytest-8.2.0.pyc
+│ │ ├─deduplication.test.ts
+│ │ ├─parser.extraction.test.ts
+│ │ ├─schema.validation.test.ts
+│ │ └─test_schema_validation_python.py
+│ └─utils
+│   └─dom-guards.ts
+├─tools
+│ ├─cleanup
+│ │ ├─finalize.ts
+│ │ ├─restructure.ts
+│ │ └─rules.json
+│ ├─data
+│ │ ├─export_safe.ts
+│ │ └─quality.ts
+│ ├─doctor.mjs
+│ ├─e2e
+│ │ ├─auto_promote.ts
+│ │ ├─generate-results.ts
+│ │ ├─simulate-failures.ts
+│ │ ├─simulate-promotion.ts
+│ │ ├─simulate-runs.ts
+│ │ └─triage.ts
+│ ├─inventory.js
+│ ├─monitor
+│ │ └─post_release.js
+│ ├─ops
+│ │ ├─kpi.ts
+│ │ └─retention.ts
+│ ├─perf
+│ │ ├─ab.ts
+│ │ ├─baseline.detail.ts
+│ │ ├─baseline.ts
+│ │ ├─check-regress.ts
+│ │ ├─improve-gate.ts
+│ │ └─spike-close.ts
+│ ├─release
+│ │ ├─ga.js
+│ │ ├─provenance.js
+│ │ └─rc.js
+│ ├─sbom
+│ │ ├─assert.js
+│ │ ├─from-pnpm.ts
+│ │ ├─gen-workspaces.ts
+│ │ └─merge.ts
+│ ├─schema
+│ │ └─export-jsonschema.ts
+│ └─tidy
+│   ├─apply-deletions.js
+│   └─plan.mjs
+├─tsconfig.base.json
+├─tsconfig.json
+├─tsconfig.test.json
+├─tsprune-ignore.txt
+└─validate-python-tooling.py
+```

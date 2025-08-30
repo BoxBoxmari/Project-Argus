@@ -1,0 +1,3 @@
+mcp: base_p95=2 cur_p95=2 limit=2.2 ok=true
+crawlee: base_p95=2 cur_p95=2 limit=2.2 ok=true
+userscript: base_p95=2 cur_p95=2 limit=2.2 ok=true
